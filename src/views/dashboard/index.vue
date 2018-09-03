@@ -8,19 +8,13 @@
             <el-button type="text" @click="moreTodo">查看更多>>></el-button>
           </div>
           <el-table :data="todoList" v-loading.body="toodoListLoading" border stripe style="width: 100%" height="400">
-            <el-table-column prop="no" label="贷款编号"></el-table-column>
-            <el-table-column prop="type" label="贷款类型"></el-table-column>
-            <el-table-column prop="desc" label="待办事项"></el-table-column>
-            <el-table-column label="操作" width="100">
+            <el-table-column prop="taskId" label="贷款编号"></el-table-column>
+            <!-- <el-table-column prop="type" label="贷款类型"></el-table-column> -->
+            <el-table-column prop="name" label="姓名"></el-table-column>
+            <el-table-column prop="phone" label="电话"></el-table-column>
+            <el-table-column label="操作" width="200">
               <template slot-scope="scope">
-                <el-dropdown>
-                  <el-button type="primary">
-                    选项<i class="el-icon-arrow-down el-icon--right"></i>
-                  </el-button>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>办理</el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
+                <el-button type="primary" size="mini" @click="goNext(scope.row)">办理</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -80,6 +74,11 @@ export default {
       notice: null
     }
   },
+  computed: {
+    ...mapGetters([
+      'user_id'
+    ])
+  },
   created () {
     this.GetTodoList()
     this.GetQuickEntrance()
@@ -88,7 +87,7 @@ export default {
   methods: {
     GetTodoList () {
       this.toodoListLoading = true
-      getTodoList().then(response => {
+      getTodoList(this.user_id).then(response => {
         this.todoList = response.data.data
         this.toodoListLoading = false
       })
@@ -109,11 +108,6 @@ export default {
     moreNotice () {
       this.$router.push({ path: '/quickpath/notice' })
     }
-  },
-  computed: {
-    ...mapGetters([
-      'account'
-    ])
   }
 }
 </script>
@@ -129,7 +123,6 @@ export default {
           font-weight: bold;
         }
         .el-button {
-          float: right;
           padding: 3px 0;
         }
       }

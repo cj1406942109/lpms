@@ -80,7 +80,7 @@ export const constantRouterMap = [
       name: '面签',
       meta: { title: '面签', icon: 'visa-interview' }
     }, {
-      path: 'visa-interview/edit-info',
+      path: 'visa-interview/edit-info/:checklistId',
       hidden: true,
       component: () => import('@/views/loan-mortgage/visa-interview/editInfo')
     }, {

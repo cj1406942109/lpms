@@ -622,7 +622,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'account'
+      'user_id'
     ])
   },
   methods: {
@@ -673,7 +673,7 @@ export default {
           type: 'info',
           message: '正在处理...'
         })
-        wasteSheet(JSON.stringify(Date()), this.$route.params.taskId, this.account.id).then(response => {
+        wasteSheet(JSON.stringify(Date()), this.$route.params.taskId, this.user_id).then(response => {
           this.formLoading = false
           if (response.data.status === 1) {
             this.$message({
@@ -708,7 +708,7 @@ export default {
               type: 'info',
               message: '正在处理...'
             })
-            saveInterviewSuggestion(JSON.stringify(this.interviewSuggestionForm), this.$route.params.taskId, this.account.id).then(response => {
+            saveInterviewSuggestion(JSON.stringify(this.interviewSuggestionForm), this.$route.params.taskId, this.user_id).then(response => {
               this.formLoading = false
               if (response.data.status === 1) {
                 this.loanNum = response.data.data

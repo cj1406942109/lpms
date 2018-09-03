@@ -142,7 +142,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'account'
+      'user_id'
     ])
   },
   methods: {
@@ -173,7 +173,7 @@ export default {
               message: '正在处理...'
             })
             this.formLoading = true
-            saveCheckList(JSON.stringify(this.clientForm), this.account.id).then(response => {
+            saveCheckList(JSON.stringify(this.clientForm), this.user_id).then(response => {
               this.formLoading = false
               if (response.data.status === 1) {
                 this.loanNum = response.data.data

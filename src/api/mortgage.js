@@ -1,7 +1,7 @@
 import qs from 'qs'
 import request from '@/utils/request'
 
-// 接单
+// ***********************接单开始***************************
 export function saveCheckList (checklist, employeeId) {
   return request({
     url: '/checklist/save',
@@ -12,14 +12,15 @@ export function saveCheckList (checklist, employeeId) {
     })
   })
 }
-export function emptyCheckList () {
+export function getCheckList (checklistId) {
   return request({
-    url: '/empty/m/checklist',
+    url: `/checklist/${checklistId}`,
     method: 'get'
   })
 }
+// ***********************接单结束***************************
 
-// 面谈
+// ***********************面谈开始***************************
 // 根据id获取某人的面谈任务
 export function getInterview (id) {
   return request({
@@ -58,21 +59,75 @@ export function wasteSheet (time, taskId, employeeId) {
     })
   })
 }
+// ***********************面谈结束***************************
 
-// 面签
-export function getVisaInterview () {
-  return request({
-    url: '/visaInterview/getVisaInterview',
-    method: 'get'
-  })
-}
-
+// ***********************面签开始***************************
+// 获取所有面签列表
 export function getVisaInterviewList () {
   return request({
-    url: '/visaInterview/getVisaInterviewList',
+    url: '/task/m/visa',
     method: 'get'
   })
 }
+// 根据用户id获取面签
+export function getVisaInterview (id) {
+  return request({
+    url: `/task/m/visa/${id}`,
+    method: 'get'
+  })
+}
+// 根据id获取面签部分的资料目录表
+export function getVisaInterviewform (catalogId) {
+  return request({
+    url: `/visa/catalog/${catalogId}`,
+    method: 'get'
+  })
+}
+// 保存资料目录表
+export function saveVisaInterviewCatalog (catalog, taskId, employeeId) {
+  return request({
+    url: '/visa/catalog/save',
+    method: 'post',
+    data: qs.stringify({
+      catalog,
+      taskId,
+      employeeId
+    })
+  })
+}
+
+// 根据id获取面签部分的个人贷款申请表
+export function getVisaInterviewForm (formId) {
+  return request({
+    url: `/visa/form/${formId}`,
+    method: 'get'
+  })
+}
+// 保存个人贷款申请表
+export function saveVisaInterviewForm (form, taskId) {
+  return request({
+    url: '/visa/form/save',
+    method: 'post',
+    data: qs.stringify({
+      form,
+      taskId
+    })
+  })
+}
+// 保存面签
+export function saveVisaInterview (time, address, taskId) {
+  return request({
+    url: '/visa/save',
+    method: 'post',
+    data: qs.stringify({
+      time,
+      address,
+      taskId
+    })
+  })
+}
+
+// ***********************面签结束***************************
 
 // 评估下单
 export function getEvaluateOrderList () {

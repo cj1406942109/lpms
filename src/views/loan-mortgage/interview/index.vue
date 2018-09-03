@@ -45,13 +45,11 @@ export default {
   methods: {
     GetInterviewList () {
       getInterviewList().then(response => {
-        console.log(response)
         this.interviewList = response.data.data
         this.interviewListLoading = false
       })
     },
     goNext (item) {
-      console.log(item)
       this.$router.push({ path: `/loan-mortgage/interview/edit-info/${item.taskId}` })
     }
   }

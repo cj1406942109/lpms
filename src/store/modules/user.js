@@ -1,11 +1,19 @@
 import { loginByUsername, logout } from '@/api/login'
-import { getToken, setToken, removeToken, getAccount, setAccount, removeAccount, getUsername, setUsername, removeUsername } from '@/utils/auth'
+import {
+  getToken, setToken, removeToken,
+  getAccount, setAccount, removeAccount,
+  getUsername, setUsername, removeUsername,
+  getUserId, setUserId, removeUserId,
+  getDepartmentId, setDepartmentId, removeDepartmentId
+} from '@/utils/auth'
 
 const user = {
   state: {
     token: getToken(),
     account: getAccount(),
-    username: getUsername()
+    username: getUsername(),
+    user_id: getUserId(),
+    department_id: getDepartmentId()
   },
   mutations: {
     SET_TOKEN: (state, token) => {
@@ -16,6 +24,12 @@ const user = {
     },
     SET_USERNAME: (state, username) => {
       state.username = username
+    },
+    SET_USER_ID: (state, user_id) => {
+      state.user_id = user_id
+    },
+    SET_DEPARTMENT_ID: (state, department_id) => {
+      state.department_id = department_id
     }
   },
 
@@ -25,12 +39,17 @@ const user = {
       const username = userInfo.name.trim()
       return new Promise((resolve, reject) => {
         loginByUsername(username, userInfo.password).then(response => {
-          setAccount(response.data.data)
-          setToken(response.headers.token)
-          setUsername(response.data.data.name)
-          commit('SET_ACCOUNT', JSON.stringify(response.data.data))
-          commit('SET_TOKEN', response.headers.token)
-          commit('SET_USERNAME', response.data.data.name)
+          const responseData = response.data.data
+          setAccount(responseData.account)
+          setToken(responseData.token)
+          setUsername(responseData.name)
+          setUserId(responseData.id)
+          setDepartmentId(responseData.department_id)
+          commit('SET_ACCOUNT', responseData.account)
+          commit('SET_TOKEN', responseData.token)
+          commit('SET_USERNAME', responseData.name)
+          commit('SET_USER_ID', responseData.id)
+          commit('SET_DEPARTMENT_ID', responseData.department_id)
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -60,9 +79,13 @@ const user = {
           removeToken()
           removeAccount()
           removeUsername()
+          removeUserId()
+          removeDepartmentId()
           commit('SET_TOKEN', '')
           commit('SET_ACCOUNT', '')
           commit('SET_USERNAME', '')
+          commit('SET_USER_ID', '')
+          commit('SET_DEPARTMENT_ID', '')
           resolve()
         }).catch(error => {
           reject(error)

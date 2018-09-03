@@ -93,7 +93,7 @@ export default {
           this.loading = true
           this.$store.dispatch('LoginByUsername', this.loginForm).then((res) => {
             this.loading = false
-            if (res.data.status === 1) {
+            if (res.data.success) {
               // 登录成功，跳转到首页
               this.$router.push({ path: '/' })
             } else {

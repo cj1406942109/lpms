@@ -9,7 +9,9 @@ const service = axios.create({
   // baseURL: process.env.BASE_API, // api的base_url
   // baseURL: 'http://192.168.10.225:3000',
   // baseURL: 'http://192.168.10.211:8080',
-  baseURL: 'http://47.93.43.106:8090',
+  // baseURL: 'http://47.93.43.106:8090',
+  baseURL: 'http://aidr.vip:8080/loan',
+  // baseURL: 'http://116.62.156.52:8080/loan',
   // headers: { 'Content-type': 'application/x-www-form-urlencoded' },
   timeout: 15000 // 请求超时时间
 })

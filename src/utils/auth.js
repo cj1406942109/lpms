@@ -15,11 +15,11 @@ export function removeToken () {
 }
 
 export function getAccount () {
-  return Cookies.get('account') ? JSON.parse(Cookies.get('account')) : ''
+  return Cookies.get('account')
 }
 
 export function setAccount (account) {
-  return Cookies.set('account', JSON.stringify(account))
+  return Cookies.set('account', account)
 }
 
 export function removeAccount () {
@@ -36,4 +36,28 @@ export function setUsername (username) {
 
 export function removeUsername () {
   return Cookies.remove('username')
+}
+
+export function getUserId () {
+  return Cookies.get('user_id')
+}
+
+export function setUserId (user_id) {
+  return Cookies.set('user_id', user_id)
+}
+
+export function removeUserId () {
+  return Cookies.remove('user_id')
+}
+
+export function getDepartmentId () {
+  return Cookies.get('department_id')
+}
+
+export function setDepartmentId (department_id) {
+  return Cookies.set('department_id', department_id)
+}
+
+export function removeDepartmentId () {
+  return Cookies.remove('department_id')
 }

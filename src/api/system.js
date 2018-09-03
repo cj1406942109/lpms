@@ -22,3 +22,11 @@ export function getEmployee (id) {
     method: 'get'
   })
 }
+
+// 表格
+export function getTableList () {
+  return request({
+    url: '/tableValue/allValue',
+    method: 'get'
+  })
+}
