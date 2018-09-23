@@ -160,3 +160,14 @@ export function getMakeLoansList () {
     method: 'get'
   })
 }
+
+// 静态索引
+export function getStaticIndexByKey (key) {
+  return request({
+    url: '/tableValue/value/{key}',
+    method: 'get',
+    params: {
+      key
+    }
+  })
+}
