@@ -253,7 +253,8 @@
                   <el-input type="text" v-model="dataTableForm.purpose_contact_remark" size="small"></el-input>
                 </td>
               </tr>
-              <template v-if="loanType=='抵押经营'">
+              <!-- 抵押消费对应id为20,抵押经营对应id为21 -->
+              <template v-if="loanType==21">
               <tr>
                 <td>10</td>
                 <td>
@@ -389,17 +390,12 @@
           <br>
           <el-form-item label="婚姻状态">
             <el-select v-model="loanApplicationForm.proposer_marriage_state" placeholder="请选择">
-              <el-option label="未婚" value="未婚"></el-option>
-              <el-option label="已婚" value="已婚"></el-option>
-              <el-option label="离异" value="离异"></el-option>
-              <el-option label="丧偶" value="丧偶"></el-option>
+              <el-option v-for="item in maritalStatus.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="家庭结构">
             <el-select v-model="loanApplicationForm.proposer_family" placeholder="请选择">
-              <el-option label="有未成年子女" value="有未成年子女"></el-option>
-              <el-option label="有子女都成年" value="有子女都成年"></el-option>
-              <el-option label="无子女" value="无子女"></el-option>
+              <el-option v-for="item in familyStructure.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="家庭人数">
@@ -419,7 +415,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="身份证号码">
-            <el-input v-model="loanApplicationForm.proposer_id_card" clearable placeholder="二代身份证号码" style="width:300px;"></el-input>
+            <el-input v-model="loanApplicationForm.proposer_id_card" clearable placeholder="二代居民身份证号码" style="width:300px;"></el-input>
           </el-form-item>
           <br>
           <el-form-item label="居住情况">
@@ -432,13 +428,10 @@
           <el-form-item label="本地居住">
             <el-input v-model="loanApplicationForm.proposer_local_resident" clearable style="width:150px;"><template slot="append">年</template></el-input>
             <el-select v-model="loanApplicationForm.proposer_lodging_info" placeholder="请选择住房情况">
-              <el-option label="本地有住房" value="本地有住房"></el-option>
-              <el-option label="异地自有住房" value="异地自有住房"></el-option>
-              <el-option label="无自有住房" value="无自有住房"></el-option>
+              <el-option v-for="item in localLiving1.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
             </el-select>
             <el-select v-model="loanApplicationForm.proposer_loan_state" placeholder="请选择贷款情况">
-              <el-option label="有贷款" value="有贷款"></el-option>
-              <el-option label="无贷款" value="无贷款"></el-option>
+              <el-option v-for="item in localLiving2.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <br>
@@ -464,10 +457,7 @@
           <br>
           <el-form-item label="证件种类">
             <el-select v-model="loanApplicationForm.proposer_spouse_paper_type" placeholder="请选择证件种类">
-              <el-option label="身份证" value="身份证"></el-option>
-              <el-option label="临时身份证" value="临时身份证"></el-option>
-              <el-option label="户口簿" value="户口簿"></el-option>
-              <el-option label="其他" value="其他"></el-option>
+              <el-option v-for="item in credentialType.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="证件号码">
@@ -491,21 +481,12 @@
             <br>
             <el-form-item label="单位性质">
               <el-select v-model="loanApplicationForm.proposer_company_type" placeholder="请选择单位性质">
-                <el-option label="事业/机关" value="事业/机关"></el-option>
-                <el-option label="国有" value="国有"></el-option>
-                <el-option label="私营" value="私营"></el-option>
-                <el-option label="股份" value="股份"></el-option>
-                <el-option label="个体" value="个体"></el-option>
-                <el-option label="军/警" value="军/警"></el-option>
-                <el-option label="其他" value="其他"></el-option>
+                <el-option v-for="item in unitNature.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="职务名称">
               <el-select v-model="loanApplicationForm.proposer_company_duty" placeholder="请选择职务名称">
-                <el-option label="普通员工/科员" value="普通员工/科员"></el-option>
-                <el-option label="科室负责人或科级" value="科室负责人或科级"></el-option>
-                <el-option label="部门负责人或处级" value="部门负责人或处级"></el-option>
-                <el-option label="单位负责人或局级以上" value="单位负责人或局级以上"></el-option>
+                <el-option v-for="item in jobTitle.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
               </el-select>
             </el-form-item>
           </template>
@@ -552,9 +533,7 @@
           <br>
           <el-form-item label="还款方式">
             <el-select v-model="loanApplicationForm.loan_repayment_type" placeholder="请选择还款方式">
-              <el-option label="按月付息到期还本" value="按月付息到期还本"></el-option>
-              <el-option label="按月等额本息" value="按月等额本息"></el-option>
-              <el-option label="按月等额本金" value="按月等额本金"></el-option>
+              <el-option v-for="item in paymentMethod.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <br>
@@ -568,9 +547,7 @@
           </el-form-item>
           <el-form-item label="是您的">
             <el-select v-model="loanApplicationForm.loan_contact_rela" placeholder="请选择关系">
-              <el-option label="父母" value="父母"></el-option>
-              <el-option label="子女" value="子女"></el-option>
-              <el-option label="其他关系" value="其他关系"></el-option>
+              <el-option v-for="item in isYour.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <br>
@@ -626,7 +603,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getCheckList, saveVisaInterview } from '@/api/mortgage'
+import { getStaticIndexByKey, getCheckList, saveVisaInterview } from '@/api/mortgage'
 
 export default {
   name: 'sign-contract',
@@ -772,7 +749,44 @@ export default {
       formStep: 1,
       formLoading: false,
       dialogVisible: false,
-      loanType: ''
+      loanType: '',
+      loanNum: '',
+      maritalStatus: {
+        key: 'mortgagevisamaritalstatus',
+        value: []
+      },
+      familyStructure: {
+        key: 'mortgagevisafamilystructure',
+        value: []
+      },
+      localLiving1: {
+        key: 'mortgagevisalocalliving1',
+        value: []
+      },
+      localLiving2: {
+        key: 'mortgagevisalocalliving2',
+        value: []
+      },
+      credentialType: {
+        key: 'mortgagevisacredentialtype',
+        value: []
+      },
+      unitNature: {
+        key: 'mortgagevisaunitnature',
+        value: []
+      },
+      jobTitle: {
+        key: 'mortgagevisajobtitle',
+        value: []
+      },
+      paymentMethod: {
+        key: 'mortgagevisarepaymentmethod',
+        value: []
+      },
+      isYour: {
+        key: 'mortgagevisaisyour',
+        value: []
+      }
     }
   },
   computed: {
@@ -785,6 +799,15 @@ export default {
       // console.log(response)
       this.loanType = response.data.data.loan_type
     })
+    this.getStaticIndex(this.maritalStatus)
+    this.getStaticIndex(this.familyStructure)
+    this.getStaticIndex(this.localLiving1)
+    this.getStaticIndex(this.localLiving2)
+    this.getStaticIndex(this.credentialType)
+    this.getStaticIndex(this.unitNature)
+    this.getStaticIndex(this.jobTitle)
+    this.getStaticIndex(this.paymentMethod)
+    this.getStaticIndex(this.isYour)
   },
   methods: {
     submitForm (formName) {
@@ -874,6 +897,19 @@ export default {
     nextOperation () {
       this.$msgbox.close()
       this.$router.push({ path: '/loan-mortgage/evaluate-order' })
+    },
+    getStaticIndex (staticIndex) {
+      getStaticIndexByKey(staticIndex.key).then(response => {
+        if (response.data.status) {
+          staticIndex.value = response.data.data[staticIndex.key]
+        } else {
+          this.$message({
+            showClose: true,
+            message: '获取静态索引失败，请检查网络！',
+            type: 'error'
+          })
+        }
+      })
     }
   }
 }
