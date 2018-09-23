@@ -1,6 +1,8 @@
 import qs from 'qs'
 import request from '@/utils/request'
 
+// 抵押贷款api
+
 // ***********************接单开始***************************
 export function saveCheckList (checklist, employeeId) {
   return request({

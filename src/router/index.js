@@ -129,6 +129,24 @@ export const constantRouterMap = [
     meta: { title: '二手房贷款', icon: 'house' }
   },
   {
+    path: '/loan',
+    component: Layout,
+    redirect: 'noredirect',
+    name: '贷款管理',
+    meta: { title: '贷款管理', icon: 'set' },
+    children: [{
+      path: 'order',
+      component: () => import('@/views/loan/order'),
+      name: '订单管理',
+      meta: { title: '订单管理', icon: 'order' }
+    }, {
+      path: 'assign',
+      component: () => import('@/views/loan/assign'),
+      name: '业务分配',
+      meta: { title: '业务分配', icon: 'assign' }
+    }]
+  },
+  {
     path: '/system',
     component: Layout,
     redirect: 'noredirect',
