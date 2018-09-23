@@ -130,7 +130,7 @@ export default {
         ],
         client_phone: [
           { required: true, message: '手机号不能为空', trigger: 'blur' },
-          { pattern: /1[0-9]{10}/, message: '手机号格式错误', trigger: 'blur' }
+          { pattern: /^1[0-9]{10}$/, message: '手机号格式错误', trigger: 'blur' }
         ],
         client_id_number: [
           { pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}[0-9Xx]$)/, message: '证件号码格式错误', trigger: 'blur' }

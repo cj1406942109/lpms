@@ -472,16 +472,13 @@
           </el-form-item>
           <el-form-item label="客户还款方式" prop="repayment_type">
             <el-select v-model="interviewSuggestionForm.repayment_type" placeholder="请选择还款方式">
-              <el-option label="按月等额本息" value="1"></el-option>
-              <el-option label="按月等额本金" value="2"></el-option>
-              <el-option label="按月付息" value="3"></el-option>
+              <el-option v-for="item in repaymentMethod.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <br>
           <el-form-item label="客户用途">
             <el-select v-model="interviewSuggestionForm.client_purpose_type" placeholder="请选择方式">
-              <el-option label="客户自己提供" value="1"></el-option>
-              <el-option label="我公司提供" value="2"></el-option>
+              <el-option v-for="item in purpose.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
             </el-select>
             <el-input v-model="interviewSuggestionForm.client_purpose" style="width:400px;"></el-input>
           </el-form-item>
@@ -516,7 +513,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { saveInterviewSuggestion, wasteSheet } from '@/api/mortgage'
+import { getStaticIndexByKey, saveInterviewSuggestion, wasteSheet } from '@/api/mortgage'
 export default {
   data () {
     return {
@@ -617,7 +614,15 @@ export default {
       },
       loanNum: '',
       dialogVisible: false,
-      formLoading: false
+      formLoading: false,
+      repaymentMethod: {
+        key: 'mortgageviewrepaymentmethod',
+        value: []
+      },
+      purpose: {
+        key: 'mortgageviewpurpose',
+        value: []
+      }
     }
   },
   computed: {
@@ -688,12 +693,7 @@ export default {
             })
           }
         })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
-      })
+      }).catch(() => {})
     },
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
@@ -721,12 +721,7 @@ export default {
                 })
               }
             })
-          }).catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消'
-            })
-          })
+          }).catch(() => {})
         } else {
           console.log('error submit!!')
           return false
@@ -735,7 +730,24 @@ export default {
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()
+    },
+    getStaticIndex (staticIndex) {
+      getStaticIndexByKey(staticIndex.key).then(response => {
+        if (response.data.status) {
+          staticIndex.value = response.data.data[staticIndex.key]
+        } else {
+          this.$message({
+            showClose: true,
+            message: '获取静态索引失败，请检查网络！',
+            type: 'error'
+          })
+        }
+      })
     }
+  },
+  created () {
+    this.getStaticIndex(this.repaymentMethod)
+    this.getStaticIndex(this.purpose)
   }
 }
 </script>
