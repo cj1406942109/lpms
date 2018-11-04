@@ -50,12 +50,11 @@ export function saveInterviewSuggestion (advice, taskId, employeeId) {
   })
 }
 // 废单
-export function wasteSheet (time, taskId, employeeId) {
+export function wasteSheet (taskId, employeeId) {
   return request({
     url: '/view/suspend',
     method: 'post',
     data: qs.stringify({
-      time,
       taskId,
       employeeId
     })
@@ -78,8 +77,18 @@ export function getVisaInterview (id) {
     method: 'get'
   })
 }
+
+// 根据贷款id，检查面签状态
+export function checkVisaStatus (loanId) {
+  return request({
+    url: '/task/m/checkVisaStatus',
+    method: 'get',
+    params: { loanId }
+  })
+}
+
 // 根据id获取面签部分的资料目录表
-export function getVisaInterviewform (catalogId) {
+export function getVisaInterviewCatalog (catalogId) {
   return request({
     url: `/visa/catalog/${catalogId}`,
     method: 'get'
@@ -131,6 +140,186 @@ export function saveVisaInterview (time, address, taskId) {
 
 // ***********************面签结束***************************
 
+// ***********************评估下单开始***************************
+// 根据员工id获取评估下单列表
+export function getOrderListById (employeeId) {
+  return request({
+    url: `/task/m/order/${employeeId}`,
+    method: 'get'
+  })
+}
+export function checkOrderStatus (loanId) {
+  return request({
+    url: '/task/m/checkOrderStatus',
+    method: 'get',
+    params: {
+      loanId
+    }
+  })
+}
+export function setOrderStatus (time, company, taskId) {
+  return request({
+    url: '/order/state/save',
+    method: 'post',
+    data: qs.stringify({
+      time,
+      company,
+      taskId
+    })
+  })
+}
+export function saveReports (time, type, reports, taskId) {
+  return request({
+    url: '/order/report/save',
+    method: 'post',
+    data: qs.stringify({
+      time,
+      type,
+      reports,
+      taskId
+    })
+  })
+}
+// ***********************评估下单结束***************************
+
+// ***********************审批开始***************************
+
+export function getApproveListById (employeeId) {
+  return request({
+    url: `/task/m/approve/${employeeId}`,
+    method: 'get'
+  })
+}
+export function confirmCatalogComplete (taskId, employeeId, catalog) {
+  return request({
+    url: '/approve/completeData',
+    method: 'post',
+    data: qs.stringify({
+      taskId,
+      employeeId,
+      catalog
+    })
+  })
+}
+
+export function finishBaoshen (time, taskId) {
+  return request({
+    url: '/approve/submit',
+    method: 'post',
+    data: qs.stringify({
+      time,
+      taskId
+    })
+  })
+}
+
+export function getLoanCondition () {
+  return request({
+    url: '/loanCondition/all',
+    method: 'get'
+  })
+}
+
+export function confirmApproveStatus (approve, taskId) {
+  return request({
+    url: '/approve/save',
+    method: 'post',
+    data: qs.stringify({
+      approve,
+      taskId
+    })
+  })
+}
+export function saveReport (time, reports, taskId) {
+  return request({
+    url: '/approve/report/save',
+    method: 'post',
+    data: qs.stringify({
+      time,
+      reports,
+      taskId
+    })
+  })
+}
+
+// ***********************审批结束***************************
+
+// ***********************抵押结束***************************
+
+export function getMortgageListById (employeeId) {
+  return request({
+    url: `/task/m/mortgage/${employeeId}`,
+    method: 'get'
+  })
+}
+
+export function confirmMortgage (time, taskId) {
+  return request({
+    url: '/mortgage/confirm',
+    method: 'post',
+    data: qs.stringify({
+      time,
+      taskId
+    })
+  })
+}
+
+export function guaranteeFlow (needStamp, stampTime, guaranteeTime, taskId) {
+  return request({
+    url: '/mortgage/guarantee',
+    method: 'post',
+    data: qs.stringify({
+      needStamp,
+      stampTime,
+      guaranteeTime,
+      taskId
+    })
+  })
+}
+// ***********************抵押结束***************************
+
+// ***********************收费开始***************************
+
+export function getChargeListById (employeeId) {
+  return request({
+    url: `/task/m/charge/${employeeId}`,
+    method: 'get'
+  })
+}
+
+export function confirmCharge (time, taskId) {
+  return request({
+    url: '/charge/confirm',
+    method: 'post',
+    data: qs.stringify({
+      time,
+      taskId
+    })
+  })
+}
+
+// ***********************收费结束***************************
+
+// ***********************放款开始***************************
+
+export function getLoanListById (employeeId) {
+  return request({
+    url: `/task/m/loan/${employeeId}`,
+    method: 'get'
+  })
+}
+
+export function confirmLoan (taskId) {
+  return request({
+    url: '/loan/confirm',
+    method: 'post',
+    data: qs.stringify({
+      taskId
+    })
+  })
+}
+
+// ***********************放款结束***************************
 // 评估下单
 export function getEvaluateOrderList () {
   return request({

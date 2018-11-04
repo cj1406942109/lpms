@@ -2,9 +2,10 @@
   <div class="app-container">
     <h2>正在抵押列表</h2>
     <el-table :data="mortgageList" v-loading.body="mortgageListLoading" style="width: 100%" border stripe>
-      <el-table-column prop="no" label="编号" width="300"></el-table-column>
-      <el-table-column prop="clientName" label="客户姓名"></el-table-column>
-      <el-table-column prop="contactInfo" label="联系方式"></el-table-column>
+      <el-table-column type="index" label="序号" width="100"></el-table-column>
+      <el-table-column prop="loanId" label="贷款编号" width="300"></el-table-column>
+      <el-table-column prop="name" label="客户姓名"></el-table-column>
+      <el-table-column prop="phone" label="联系方式"></el-table-column>
       <el-table-column prop="status" label="当前状态" width="200">
         <template slot-scope="scope">
           <el-tag
@@ -12,16 +13,9 @@
             close-transition>{{scope.row.status}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="200">
+      <el-table-column label="操作" width="250">
         <template slot-scope="scope">
-          <el-dropdown>
-            <el-button type="primary">
-              选项<i class="el-icon-arrow-down el-icon--right"></i>
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="goNext(scope.row)">办理</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+          <el-button type="primary" size="mini" @click="goNext(scope.row)">办理</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -29,7 +23,8 @@
 </template>
 
 <script>
-import { getMortgageList } from '@/api/mortgage'
+import { mapGetters } from 'vuex'
+import { getMortgageListById } from '@/api/mortgage'
 export default {
   name: 'evaluate-order',
   data () {
@@ -38,18 +33,26 @@ export default {
       mortgageListLoading: true
     }
   },
+  computed: {
+    ...mapGetters([
+      'user_id'
+    ])
+  },
   created () {
     this.GetMortgageList()
   },
   methods: {
     GetMortgageList () {
-      getMortgageList().then(response => {
-        this.mortgageList = response.data
+      getMortgageListById(this.user_id).then(response => {
+        console.log(response)
         this.mortgageListLoading = false
+        if (response.data.status) {
+          this.mortgageList = response.data.data
+        }
       })
     },
     goNext (item) {
-      this.$router.push({ path: '/loan-mortgage/mortgage/edit-info' })
+      this.$router.push({ path: `/loan-mortgage/mortgage/edit-info/${item.taskId}` })
     }
   }
 }

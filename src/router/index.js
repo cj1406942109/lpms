@@ -80,7 +80,7 @@ export const constantRouterMap = [
       name: '面签',
       meta: { title: '面签', icon: 'visa-interview' }
     }, {
-      path: 'visa-interview/edit-info/:checklistId',
+      path: 'visa-interview/edit-info/:taskId/:checklistId/:loanId',
       hidden: true,
       component: () => import('@/views/loan-mortgage/visa-interview/editInfo')
     }, {
@@ -89,7 +89,7 @@ export const constantRouterMap = [
       name: '评估下单',
       meta: { title: '评估下单', icon: 'evaluate' }
     }, {
-      path: 'evaluate-order/edit-info',
+      path: 'evaluate-order/edit-info/:taskId/:loanId',
       hidden: true,
       component: () => import('@/views/loan-mortgage/evaluate-order/editInfo')
     }, {
@@ -98,7 +98,7 @@ export const constantRouterMap = [
       name: '审批',
       meta: { title: '审批', icon: 'approve' }
     }, {
-      path: 'examine-approve/edit-info',
+      path: 'examine-approve/edit-info/:taskId/:loanType/:catalogId',
       hidden: true,
       component: () => import('@/views/loan-mortgage/examine-approve/editInfo')
     }, {
@@ -107,9 +107,18 @@ export const constantRouterMap = [
       name: '抵押',
       meta: { title: '抵押', icon: 'mortgage' }
     }, {
-      path: 'mortgage/edit-info',
+      path: 'mortgage/edit-info/:taskId',
       hidden: true,
       component: () => import('@/views/loan-mortgage/mortgage/editInfo')
+    }, {
+      path: 'charge',
+      component: () => import('@/views/loan-mortgage/charge'),
+      name: '收费',
+      meta: { title: '收费', icon: 'charge' }
+    }, {
+      path: 'charge/edit-info/:taskId',
+      hidden: true,
+      component: () => import('@/views/loan-mortgage/charge/editInfo')
     }, {
       path: 'make-loans',
       component: () => import('@/views/loan-mortgage/make-loans'),
@@ -139,6 +148,10 @@ export const constantRouterMap = [
       component: () => import('@/views/loan/order'),
       name: '订单管理',
       meta: { title: '订单管理', icon: 'order' }
+    }, {
+      path: 'order/status/:orderId',
+      hidden: true,
+      component: () => import('@/views/loan/order/status')
     }, {
       path: 'assign',
       component: () => import('@/views/loan/assign'),
@@ -172,11 +185,6 @@ export const constantRouterMap = [
       name: '权限管理',
       meta: { title: '权限管理', icon: 'permission' }
     }, {
-      path: 'order',
-      component: () => import('@/views/system/order'),
-      name: '订单管理',
-      meta: { title: '订单管理', icon: 'order' }
-    }, {
       path: 'table',
       component: () => import('@/views/system/table'),
       name: '表格管理',
@@ -198,5 +206,6 @@ export const constantRouterMap = [
 export default new Router({
   // mode: 'history', //后端支持可开
   scrollBehavior: () => ({ y: 0 }),
+  base: process.env.NODE_ENV === 'production' ? '/loan/' : '',
   routes: constantRouterMap
 })

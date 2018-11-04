@@ -1,102 +1,114 @@
 <template>
   <div class="app-container">
     <div class="form-wrapper">
-      <h2>确定抵押时间</h2>
-      <span style="margin-left:100px;">请尽快与银行确定抵押时间，若已确定好，请告诉客户并在下方输入确定的抵押时间。</span><br><br>
-      <el-form :model="mortgageTimeForm" ref="mortgageTimeForm" label-width="200px" inline>
-        <el-form-item label="约定时间" prop="datetime">
-          <el-date-picker type="datetime" placeholder="选择日期和时间" v-model="mortgageTimeForm.date"></el-date-picker>
-        </el-form-item>
-        <br>
-        <br>
-        <el-form-item label=" ">
-          <el-button type="primary" @click="submitForm('mortgageTimeForm')">提交</el-button>
-          <el-button @click="resetForm('mortgageTimeForm')">重置</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
-    <div class="form-wrapper">
-      <h2>确定抵押状态</h2>
-      <el-form :model="mortgageStatusForm" ref="mortgageStatusForm" label-width="200px" inline>
-        <el-form-item label="签约状态" prop="status">
-          <el-radio-group v-model="mortgageStatusForm.status"><el-radio :label="1">签约完成</el-radio><el-radio :label="0">因事未完成，重新约定时间抵押</el-radio></el-radio-group>
-        </el-form-item>
-        <el-form-item label="未完成原因" prop="failedReason" v-show="mortgageStatusForm.status === 0">
-          <el-select v-model="mortgageStatusForm.failedReason" placeholder="请选择原因">
-            <el-option label="原因1" value="1"></el-option>
-            <el-option label="其他" value="2"></el-option>
-          </el-select>
-        </el-form-item>
-        <br>
-        <el-form-item label=" ">
-          <el-button type="primary" @click="finishMortgage">提交</el-button>
-          <el-button @click="resetForm('mortgageStatusForm')">重置</el-button>
-        </el-form-item>
-      </el-form>
+      <h2>抵押进度</h2>
+      <el-steps :active="activeStep" align-center finish-status="success">
+        <el-step title="确定抵押状态"></el-step>
+        <el-step title="担保流程"></el-step>
+      </el-steps>
+      <div class="form-wrapper" v-if="activeStep==0">
+        <h3>确定抵押状态</h3>
+        <el-form :model="mortgageStatusForm" ref="mortgageStatusForm" label-width="200px" inline>
+          <el-form-item label="完成时间" prop="datetime">
+            <el-date-picker type="date" placeholder="选择日期" v-model="mortgageStatusForm.time" value-format="yyyy-MM-dd"></el-date-picker>
+          </el-form-item>
+          <el-form-item label=" ">
+            <el-button type="primary" @click="confirmMortgage">提交</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div class="form-wrapper" v-if="activeStep==1">
+        <h3>担保流程</h3>
+        <el-form :model="guaranteeForm" ref="guaranteeForm" label-width="200px" inline>
+          <el-form-item label="是否需要盖章">
+            <el-radio-group v-model="guaranteeForm.needStamp">
+              <el-radio :label="true" >是</el-radio>
+              <el-radio :label="false">否</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="盖章通过时间" v-if="guaranteeForm.needStamp">
+            <el-date-picker type="date" placeholder="选择日期" v-model="guaranteeForm.stampTime" value-format="yyyy-MM-dd"></el-date-picker>
+          </el-form-item>
+          <el-form-item label="出担保函时间">
+            <el-date-picker type="date" placeholder="选择日期" v-model="guaranteeForm.guaranteeTime" value-format="yyyy-MM-dd"></el-date-picker>
+          </el-form-item>
+          <el-form-item label=" ">
+            <el-button type="primary" @click="guaranteeFlow">提交</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+      <el-dialog :visible.sync="dialogVisible" width="30%" center>
+        <div slot="title"><i class="el-icon-success" style="color:#67C23A;font-size:22px;vertical-align:middle;margin-right:5px;"></i>接单成功</div>
+        <div>贷款编号为：<a style="color:blue">{{loanNum}}</a></div>
+        <div>贷款状态为：<a style="color:blue">正在面谈（等待填写面谈相关表格）</a></div>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="checkStatus">查看贷款状态</el-button>
+          <el-button type="primary" @click="nextOperation">办理下一业务</el-button>
+        </span>
+      </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
+import { confirmMortgage, guaranteeFlow } from '@/api/mortgage'
 export default {
   name: 'sign-contract',
   data () {
     return {
-      mortgageTimeForm: {
-        date: ''
-      },
+      activeStep: 0,
       mortgageStatusForm: {
-        status: '',
-        failedReason: ''
+        time: null
+      },
+      guaranteeForm: {
+        needStamp: null,
+        stampTime: null,
+        guaranteeTime: null
       },
       pickerOptions: {
         disabledDate (time) {
           return time.getTime() < Date.now()
         }
-      }
+      },
+      dialogVisible: false,
+      loanNum: ''
     }
   },
   methods: {
-    submitForm (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('success')
+    confirmMortgage () {
+      confirmMortgage(this.mortgageStatusForm.time, this.$route.params.taskId).then(response => {
+        console.log(response)
+        if (response.data.status) {
+          this.$message({
+            type: 'success',
+            message: '确定抵押状态成功'
+          })
+          this.activeStep++
         } else {
-          console.log('error submit!!')
-          return false
+          this.$message({
+            type: 'error',
+            message: '确定抵押状态失败，请稍候重试'
+          })
         }
       })
     },
-    resetForm (formName) {
-      this.$refs[formName].resetFields()
-    },
-    finishMortgage () {
-      const h = this.$createElement
-      // h(param1, param2, param3)
-      // @param1: 一个 HTML 标签，组件设置，或一个函数 {String | Object | Function}
-      //    必须 Return 上述其中一个, 如'div'
-      // @param2: {Object}, 一个对应属性的数据对象
-      // @param3: 内部节点
-      this.$msgbox({
-        type: 'success',
-        center: true,
-        title: '抵押完成',
-        message: h('p', null, [
-          '贷款编号为：',
-          h('span', { style: 'color: blue' }, ['145245415']),
-          h('br', null, []),
-          '目前贷款状态为：',
-          h('span', { style: 'color: blue' }, ['正在放款']),
-          h('br', null, []),
-          h('el-button', { style: 'margin-top: 20px', on: { click: this.checkStatus }}, '查看贷款状态'),
-          h('el-button', { style: 'margin-top: 20px', on: { click: this.returnList }}, '返回抵押列表'),
-          h('el-button', { style: 'margin-top: 20px', attrs: { type: 'primary' }, on: { click: this.nextOperation }}, '办理下一业务')
-        ]),
-        showConfirmButton: false
+    guaranteeFlow () {
+      guaranteeFlow(this.guaranteeForm.needStamp, this.guaranteeForm.stampTime, this.guaranteeForm.guaranteeTime, this.$route.params.taskId).then(response => {
+        if (response.data.status === 1) {
+          this.loanNum = response.data.data
+          this.dialogVisible = true
+        } else {
+          this.$message({
+            showClose: true,
+            message: '保存失败，请稍候重试！',
+            type: 'error'
+          })
+        }
       })
     },
     checkStatus () {
       this.$msgbox.close()
+      this.$router.push({ path: `/loan/order/status/${this.loanNum}` })
     },
     returnList () {
       this.$msgbox.close()
@@ -104,7 +116,7 @@ export default {
     },
     nextOperation () {
       this.$msgbox.close()
-      this.$router.push({ path: '/loan-mortgage/make-loans' })
+      this.$router.push({ path: '/loan-mortgage/examine-approve' })
     }
   }
 }

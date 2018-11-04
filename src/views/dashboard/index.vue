@@ -12,7 +12,7 @@
             <!-- <el-table-column prop="type" label="贷款类型"></el-table-column> -->
             <el-table-column prop="name" label="姓名"></el-table-column>
             <el-table-column prop="phone" label="电话"></el-table-column>
-            <el-table-column label="操作" width="200">
+            <el-table-column label="操作" width="250">
               <template slot-scope="scope">
                 <el-button type="primary" size="mini" @click="goNext(scope.row)">办理</el-button>
               </template>

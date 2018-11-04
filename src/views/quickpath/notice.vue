@@ -11,7 +11,7 @@
             close-transition>{{scope.row.tag}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="200">
+      <el-table-column label="操作" width="250">
         <template slot-scope="scope">
           <el-dropdown>
             <el-button type="primary">

@@ -6,7 +6,7 @@
       <el-table-column prop="type" label="贷款类型"></el-table-column>
       <el-table-column prop="status" label="当前状态"></el-table-column>
       <el-table-column prop="desc" label="待办事项"></el-table-column>
-      <el-table-column label="操作" width="200">
+      <el-table-column label="操作" width="250">
         <template slot-scope="scope">
           <el-dropdown>
             <el-button type="primary">

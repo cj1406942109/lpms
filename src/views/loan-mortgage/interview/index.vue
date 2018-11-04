@@ -2,27 +2,16 @@
   <div class="app-container">
     <h2>正在面谈列表</h2>
     <el-table :data="interviewList" v-loading.body="interviewListLoading" style="width: 100%" border stripe>
-      <el-table-column prop="taskId" label="编号" width="300"></el-table-column>
+      <el-table-column type="index" label="序号" width="100"></el-table-column>
+      <el-table-column prop="loanId" label="贷款编号"></el-table-column>
       <el-table-column prop="name" label="客户姓名"></el-table-column>
       <el-table-column prop="phone" label="联系方式"></el-table-column>
       <el-table-column prop="state" label="当前状态" width="200">
-        <!-- <template slot-scope="scope">
-          <el-tag
-            :type="scope.row.state === '表格未填写' ? 'warning' : 'success'"
-            close-transition>{{scope.row.state}}</el-tag>
-        </template> -->
       </el-table-column>
-      <el-table-column label="操作" width="200">
+      <el-table-column label="操作" width="250">
         <template slot-scope="scope">
-          <!-- <el-dropdown>
-            <el-button type="primary">
-              选项<i class="el-icon-arrow-down el-icon--right"></i>
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="goNext(scope.row)">办理</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown> -->
           <el-button type="primary" size="mini" @click="goNext(scope.row)">办理</el-button>
+          <el-button type="danger" size="mini" @click="wasteSheetOperation(scope.row)">废单</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -30,7 +19,8 @@
 </template>
 
 <script>
-import { getInterviewList } from '@/api/mortgage'
+import { mapGetters } from 'vuex'
+import { getInterviewList, wasteSheet } from '@/api/mortgage'
 export default {
   name: 'interview',
   data () {
@@ -42,15 +32,50 @@ export default {
   created () {
     this.GetInterviewList()
   },
+  computed: {
+    ...mapGetters([
+      'user_id'
+    ])
+  },
   methods: {
     GetInterviewList () {
       getInterviewList().then(response => {
-        this.interviewList = response.data.data
         this.interviewListLoading = false
+        if (response.data.status) {
+          this.interviewList = response.data.data
+        }
       })
     },
     goNext (item) {
       this.$router.push({ path: `/loan-mortgage/interview/edit-info/${item.taskId}` })
+    },
+    wasteSheetOperation (item) {
+      console.log(item)
+      this.$confirm('废单操作将结束当前贷款的所有流程，是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'info',
+          message: '正在处理...'
+        })
+        wasteSheet(item.taskId, this.user_id).then(response => {
+          if (response.data.status === 1) {
+            this.$message({
+              type: 'success',
+              message: '操作成功!'
+            })
+            this.GetInterviewList()
+          } else {
+            this.$message({
+              showClose: true,
+              message: '操作失败，请稍候重试！',
+              type: 'error'
+            })
+          }
+        })
+      }).catch(() => {})
     }
   }
 }
