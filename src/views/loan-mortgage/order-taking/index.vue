@@ -37,13 +37,13 @@
           <div v-for="(item, index) in clientForm.mortgageHouses" :key="item.id" class="house-info">
             <el-form-item :label="'房产' + (index + 1) + '：'" style="font-weight:bold"><el-button @click.prevent="removeHouseProperty(item)" type="danger">删除</el-button></el-form-item>
             <el-form-item label="面积（性质）" :prop="'mortgageHouses.' + index + '.area'" :rules="[{ required: true, message: '面积不能为空' }, { type: 'number', message: '面积必须为数字值' }]">
-              <el-input clearable v-model.number="item.area"><template slot="append">平米</template></el-input>
+              <el-input clearable v-model.number="item.area" type="number"><template slot="append">平米</template></el-input>
             </el-form-item>
             <el-form-item label="询价结果" :prop="'mortgageHouses.' + index + '.enquiry_result'" :rules="[{ required: true, message: '询价结果不能为空' }, { type: 'number', message: '询价结果必须为数字值' }]">
-              <el-input clearable v-model.number="item.enquiry_result"><template slot="append">元/平米</template></el-input>
+              <el-input clearable v-model.number="item.enquiry_result" type="number"><template slot="append">元/平米</template></el-input>
             </el-form-item>
             <el-form-item label="总价" :prop="'mortgageHouses.' + index + '.total_price'" :rules="[{ required: true, message: '总价不能为空' }, { type: 'integer', message: '总价必须为整数值' }]">
-              <el-input clearable v-model.number="item.total_price"><template slot="append">元</template></el-input>
+              <el-input clearable v-model.number="item.total_price" type="number"><template slot="append">元</template></el-input>
             </el-form-item>
           </div>
           <el-form-item label=" ">
@@ -72,10 +72,10 @@
             </el-select>
           </el-form-item>
           <el-form-item label="申请贷款金额" prop="loan_amount">
-            <el-input clearable v-model.number="clientForm.loan_amount"><template slot="append">元</template></el-input>
+            <el-input clearable v-model.number="clientForm.loan_amount" type="number"><template slot="append">元</template></el-input>
           </el-form-item>
           <el-form-item label="申请贷款期限" prop="loan_period">
-            <el-input clearable v-model.number="clientForm.loan_period"><template slot="append">月</template></el-input>
+            <el-input clearable v-model.number="clientForm.loan_period" type="number"><template slot="append">月</template></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -106,14 +106,14 @@ export default {
   data () {
     return {
       clientForm: {
-        finish_time: '',
-        client_name: '',
-        client_phone: '',
-        client_id_type: '',
-        client_id_number: '',
-        client_work_type: '',
-        client_work_unit: '',
-        loan_type: '',
+        finish_time: null,
+        client_name: null,
+        client_phone: null,
+        client_id_type: null,
+        client_id_number: null,
+        client_work_type: null,
+        client_work_unit: null,
+        loan_type: null,
         loan_amount: null,
         loan_period: null,
         mortgageHouses: [{
@@ -121,9 +121,9 @@ export default {
           enquiry_result: null,
           total_price: null
         }],
-        checklist_source: '',
-        agent_name: '',
-        remark: ''
+        checklist_source: null,
+        agent_name: null,
+        remark: null
       },
       rules: {
         client_name: [
@@ -225,7 +225,6 @@ export default {
     checkStatus () {
       // 根据贷款编号查询状态
       this.dialogVisible = false
-      this.$msgbox.close()
       this.$router.push({ path: `/loan/order/status/${this.loanNum}` })
     },
     nextOperation () {
