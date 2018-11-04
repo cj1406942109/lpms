@@ -204,7 +204,7 @@ export default {
             this.formLoading = true
             saveCheckList(JSON.stringify(this.clientForm), this.user_id).then(response => {
               this.formLoading = false
-              if (response.data.status === 1) {
+              if (response.data.status) {
                 this.loanNum = response.data.data
                 this.dialogVisible = true
               } else {

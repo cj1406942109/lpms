@@ -19,12 +19,12 @@
                 <el-input clearable v-model="interviewSuggestionForm.proposed_clerk"></el-input>
               </el-form-item>
               <el-form-item label="拟上报金额" prop="proposed_amount">
-                <el-input clearable v-model.number="interviewSuggestionForm.proposed_amount"><template slot="append">元</template></el-input>
+                <el-input clearable v-model.number="interviewSuggestionForm.proposed_amount" type="number"><template slot="append">元</template></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="10">
               <el-form-item label="费率" prop="rate">
-                <el-input clearable v-model.number="interviewSuggestionForm.rate"><template slot="append">%</template></el-input>
+                <el-input clearable v-model.number="interviewSuggestionForm.rate" type="number" max="100"><template slot="append">%</template></el-input>
               </el-form-item>
               <el-form-item label="客户还款方式" prop="repayment_type">
                 <el-select v-model="interviewSuggestionForm.repayment_type" placeholder="请选择还款方式">
@@ -71,16 +71,16 @@ export default {
     return {
       // 面谈建议表
       interviewSuggestionForm: {
-        finish_time: '',
-        proposed_institution: '',
-        proposed_clerk: '',
-        proposed_amount: '',
-        proposed_time: '',
-        rate: '',
-        repayment_type: '',
-        client_purpose_type: '',
-        client_purpose: '',
-        survey_opinion: ''
+        finish_time: null,
+        proposed_institution: null,
+        proposed_clerk: null,
+        proposed_amount: null,
+        proposed_time: null,
+        rate: null,
+        repayment_type: null,
+        client_purpose_type: null,
+        client_purpose: null,
+        survey_opinion: null
       },
       rules: {
         proposed_amount: [
@@ -110,15 +110,15 @@ export default {
   },
   methods: {
     checkStatus () {
-      this.$msgbox.close()
+      this.dialogVisible = false
       this.$router.push({ path: `/loan/order/status/${this.loanNum}` })
     },
     returnList () {
-      this.$msgbox.close()
+      this.dialogVisible = false
       this.$router.push({ path: '/loan-mortgage/interview' })
     },
     nextOperation () {
-      this.$msgbox.close()
+      this.dialogVisible = false
       this.$router.push({ path: '/loan-mortgage/visa-interview' })
     },
     submitForm (formName) {

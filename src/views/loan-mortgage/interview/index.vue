@@ -30,7 +30,7 @@ export default {
     }
   },
   created () {
-    this.GetInterviewList()
+    this.getInterviewList()
   },
   computed: {
     ...mapGetters([
@@ -38,11 +38,16 @@ export default {
     ])
   },
   methods: {
-    GetInterviewList () {
+    getInterviewList () {
       getInterviewList().then(response => {
         this.interviewListLoading = false
         if (response.data.status) {
           this.interviewList = response.data.data
+        } else {
+          this.$message({
+            type: 'error',
+            message: '面谈列表获取失败，请稍候重试'
+          })
         }
       })
     },
@@ -61,16 +66,16 @@ export default {
           message: '正在处理...'
         })
         wasteSheet(item.taskId, this.user_id).then(response => {
-          if (response.data.status === 1) {
+          if (response.data.status) {
             this.$message({
               type: 'success',
-              message: '操作成功!'
+              message: '废单操作执行成功'
             })
             this.GetInterviewList()
           } else {
             this.$message({
               showClose: true,
-              message: '操作失败，请稍候重试！',
+              message: '操作失败，请稍候重试',
               type: 'error'
             })
           }
