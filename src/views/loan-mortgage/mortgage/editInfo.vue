@@ -40,9 +40,10 @@
       <el-dialog :visible.sync="dialogVisible" width="30%" center>
         <div slot="title"><i class="el-icon-success" style="color:#67C23A;font-size:22px;vertical-align:middle;margin-right:5px;"></i>接单成功</div>
         <div>贷款编号为：<a style="color:blue">{{loanNum}}</a></div>
-        <div>贷款状态为：<a style="color:blue">正在面谈（等待填写面谈相关表格）</a></div>
+        <div>贷款状态为：<a style="color:blue">正在收费（等待填写收费相关表格）</a></div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="checkStatus">查看贷款状态</el-button>
+          <el-button @click="returnList">返回面谈列表</el-button>
           <el-button type="primary" @click="nextOperation">办理下一业务</el-button>
         </span>
       </el-dialog>
@@ -107,16 +108,16 @@ export default {
       })
     },
     checkStatus () {
-      this.$msgbox.close()
+      this.dialogVisible = false
       this.$router.push({ path: `/loan/order/status/${this.loanNum}` })
     },
     returnList () {
-      this.$msgbox.close()
+      this.dialogVisible = false
       this.$router.push({ path: '/loan-mortgage/mortgage' })
     },
     nextOperation () {
-      this.$msgbox.close()
-      this.$router.push({ path: '/loan-mortgage/examine-approve' })
+      this.dialogVisible = false
+      this.$router.push({ path: '/loan-mortgage/charge' })
     }
   }
 }

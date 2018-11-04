@@ -8,9 +8,9 @@
       <el-table-column prop="phone" label="联系方式"></el-table-column>
       <el-table-column prop="status" label="当前状态" width="200">
         <template slot-scope="scope">
-          <el-tag
+          <!-- <el-tag
             :type="scope.row.status === '待确定抵押时间' ? 'warning' : 'info'"
-            close-transition>{{scope.row.status}}</el-tag>
+            close-transition>{{scope.row.status}}</el-tag> -->
         </template>
       </el-table-column>
       <el-table-column label="操作" width="250">
