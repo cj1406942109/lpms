@@ -51,7 +51,7 @@
       </div>
     </div>
     <el-dialog :visible.sync="dialogVisible" width="30%" center>
-      <div slot="title"><i class="el-icon-success" style="color:#67C23A;font-size:22px;vertical-align:middle;margin-right:5px;"></i>接单成功</div>
+      <div slot="title"><i class="el-icon-success" style="color:#67C23A;font-size:22px;vertical-align:middle;margin-right:5px;"></i>面谈成功</div>
       <div>贷款编号为：<a style="color:blue">{{loanNum}}</a></div>
       <div>贷款状态为：<a style="color:blue">正在面签（等待填写面签相关信息）</a></div>
       <span slot="footer" class="dialog-footer">
