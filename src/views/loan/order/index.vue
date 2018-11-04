@@ -58,7 +58,7 @@
       <el-table :data="orderList" v-loading.body="orderListLoading" style="width: 100%" border stripe>
         <el-table-column type="index" label="序号" width="100"></el-table-column>
         <el-table-column prop="loanId" label="贷款编号"></el-table-column>
-        <el-table-column prop="loanType" label="贷款类型">
+        <el-table-column prop="loanType" label="借款品种">
           <template slot-scope="scope">
             <el-tag :type="tagLoanType(scope.row.loanType)">{{formateLoanType(scope.row.loanType)}}</el-tag>
           </template>

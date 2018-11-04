@@ -7,9 +7,9 @@
 export function formateLoanType (loanType) {
   switch (parseInt(loanType)) {
     case 20:
-      return '抵押贷款'
+      return '抵押消费'
     case 21:
-      return '二手房贷款'
+      return '抵押经营'
     default:
       return '未知类型'
   }
