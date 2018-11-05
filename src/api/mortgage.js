@@ -24,7 +24,7 @@ export function getCheckList (checklistId) {
 
 // ***********************面谈开始***************************
 // 根据id获取某人的面谈任务
-export function getInterview (id) {
+export function getInterviewById (id) {
   return request({
     url: `/task/m/view/${id}`,
     method: 'get'
@@ -60,6 +60,24 @@ export function wasteSheet (taskId, employeeId) {
     })
   })
 }
+// 获取可分配用户列表
+export function getAssignUserList (departmentId) {
+  return request({
+    url: `/employee/allModel/${departmentId}`,
+    method: 'get'
+  })
+}
+// 分配任务
+export function assignTaskToUser (taskId, employeeId) {
+  return request({
+    url: '/task/m/assign',
+    method: 'post',
+    data: qs.stringify({
+      taskId,
+      employeeId
+    })
+  })
+}
 // ***********************面谈结束***************************
 
 // ***********************面签开始***************************
@@ -71,7 +89,7 @@ export function getVisaInterviewList () {
   })
 }
 // 根据用户id获取面签
-export function getVisaInterview (id) {
+export function getVisaInterviewById (id) {
   return request({
     url: `/task/m/visa/${id}`,
     method: 'get'

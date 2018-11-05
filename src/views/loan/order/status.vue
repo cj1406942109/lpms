@@ -7,7 +7,7 @@
     </div>
     <ul v-if="order" class="basic-info">
       <li>贷款编号：<span>{{order.loanId}}</span></li>
-      <li>借款品种<span>{{formateLoanType(order.loanType)}}</span></li>
+      <li>借款品种：<span>{{formateLoanType(order.loanType)}}</span></li>
       <li>客户姓名：<span>{{order.clientName}}</span></li>
       <li>身份证号：<span>{{order.idcard}}</span></li>
       <li>联系方式：<span>{{order.phone}}</span></li>

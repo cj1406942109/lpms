@@ -71,8 +71,8 @@ export default {
           { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
         ],
         password: [
-          { required: true, message: '密码不能为空', trigger: 'blur' },
-          { min: 6, max: 16, message: '密码长度为6到16位', trigger: ['blur', 'change'] }
+          { required: true, message: '密码不能为空', trigger: 'blur' }
+          // { min: 6, max: 16, message: '密码长度为6到16位', trigger: ['blur', 'change'] }
         ]
       },
       loading: false,
