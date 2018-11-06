@@ -94,7 +94,7 @@ export default {
       })
     },
     guaranteeFlow () {
-      guaranteeFlow(this.guaranteeForm.needStamp, this.guaranteeForm.stampTime, this.guaranteeForm.guaranteeTime, this.$route.params.taskId).then(response => {
+      guaranteeFlow(this.guaranteeForm.needStamp, this.guaranteeForm.stampTime, this.guaranteeForm.guaranteeTime, this.$route.params.taskId, this.$route.params.loanId).then(response => {
         if (response.data.status === 1) {
           this.loanNum = response.data.data
           this.dialogVisible = true

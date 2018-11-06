@@ -52,7 +52,7 @@ export default {
       })
     },
     goNext (item) {
-      this.$router.push({ path: `/loan-mortgage/mortgage/edit-info/${item.taskId}` })
+      this.$router.push({ path: `/loan-mortgage/mortgage/edit-info/${item.taskId}/${item.loanId}` })
     }
   }
 }

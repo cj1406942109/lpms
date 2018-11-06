@@ -107,7 +107,7 @@ export const constantRouterMap = [
       name: '抵押',
       meta: { title: '抵押', icon: 'mortgage' }
     }, {
-      path: 'mortgage/edit-info/:taskId',
+      path: 'mortgage/edit-info/:taskId/:loanId',
       hidden: true,
       component: () => import('@/views/loan-mortgage/mortgage/editInfo')
     }, {

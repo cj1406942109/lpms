@@ -282,7 +282,7 @@ export function confirmMortgage (time, taskId) {
   })
 }
 
-export function guaranteeFlow (needStamp, stampTime, guaranteeTime, taskId) {
+export function guaranteeFlow (needStamp, stampTime, guaranteeTime, taskId, loanId) {
   return request({
     url: '/mortgage/guarantee',
     method: 'post',
@@ -290,7 +290,8 @@ export function guaranteeFlow (needStamp, stampTime, guaranteeTime, taskId) {
       needStamp,
       stampTime,
       guaranteeTime,
-      taskId
+      taskId,
+      loanId
     })
   })
 }

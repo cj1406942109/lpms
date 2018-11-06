@@ -37,13 +37,13 @@
           <div v-for="(item, index) in clientForm.mortgageHouses" :key="item.id" class="house-info">
             <el-form-item :label="'房产' + (index + 1) + '：'" style="font-weight:bold"><el-button @click.prevent="removeHouseProperty(item)" type="danger">删除</el-button></el-form-item>
             <el-form-item label="面积（性质）" :prop="'mortgageHouses.' + index + '.area'" :rules="[{ required: true, message: '面积不能为空' }, { type: 'number', message: '面积必须为数字值' }]">
-              <el-input clearable v-model.number="item.area" type="number"><template slot="append">平米</template></el-input>
+              <el-input clearable v-model.number="item.area" type="number" @input="calcTotalPrice(item.area, item.enquiry_result, index)"><template slot="append">平米</template></el-input>
             </el-form-item>
             <el-form-item label="询价结果" :prop="'mortgageHouses.' + index + '.enquiry_result'" :rules="[{ required: true, message: '询价结果不能为空' }, { type: 'number', message: '询价结果必须为数字值' }]">
-              <el-input clearable v-model.number="item.enquiry_result" type="number"><template slot="append">元/平米</template></el-input>
+              <el-input clearable v-model.number="item.enquiry_result" type="number" @input="calcTotalPrice(item.area, item.enquiry_result, index)"><template slot="append">元/平米</template></el-input>
             </el-form-item>
-            <el-form-item label="总价" :prop="'mortgageHouses.' + index + '.total_price'" :rules="[{ required: true, message: '总价不能为空' }, { type: 'integer', message: '总价必须为整数值' }]">
-              <el-input clearable v-model.number="item.total_price" type="number"><template slot="append">元</template></el-input>
+            <el-form-item label="总价" :prop="'mortgageHouses.' + index + '.total_price'">
+              <el-input v-model.number="item.total_price" type="number" readonly><template slot="append">元</template></el-input>
             </el-form-item>
           </div>
           <el-form-item label=" ">
@@ -188,6 +188,17 @@ export default {
         enquiry_result: null,
         total_price: null
       })
+    },
+    calcTotalPrice (area, singlePrice, index) {
+      if (area && singlePrice) {
+        if (parseFloat(area).toString() !== 'NaN' && parseFloat(singlePrice).toString() !== 'NaN') {
+          this.clientForm.mortgageHouses[index].total_price = area * singlePrice
+        } else {
+          this.clientForm.mortgageHouses[index].total_price = null
+        }
+      } else {
+        this.clientForm.mortgageHouses[index].total_price = null
+      }
     },
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {

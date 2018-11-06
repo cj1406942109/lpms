@@ -64,7 +64,7 @@ service.interceptors.response.use(
     console.log('err: ' + error)// for debug
     Message({
       // message: error.message,
-      message: '网络错误，请检查网络是否可用',
+      message: error.error + ': ' + error.message,
       type: 'error',
       duration: 5 * 1000
     })

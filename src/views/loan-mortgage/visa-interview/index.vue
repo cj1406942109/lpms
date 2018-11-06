@@ -16,7 +16,7 @@
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="goNext(scope.row)">办理</el-button>
-          <el-button type="success" size="mini" @click="assignTask(scope.row)" v-if="user_id != '40f2c37fecfb42da9429b3622e898686'">分配</el-button>
+          <el-button type="success" size="mini" @click="assignTask(scope.row)">分配</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -37,7 +37,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getVisaInterviewList, getVisaInterviewById, assignTaskToUser, getAssignUserList } from '@/api/mortgage'
+import {
+  getVisaInterviewList,
+  // getVisaInterviewById,
+  assignTaskToUser,
+  getAssignUserList
+} from '@/api/mortgage'
 export default {
   name: 'visa-interview',
   data () {
@@ -64,21 +69,21 @@ export default {
   },
   methods: {
     GetVisaInterviewList () {
-      if (this.user_id === '40f2c37fecfb42da9429b3622e898686') {
-        getVisaInterviewById(this.user_id).then(response => {
-          this.visaInterviewListLoading = false
-          if (response.data.status) {
-            this.visaInterviewList = response.data.data
-          }
-        })
-      } else {
-        getVisaInterviewList().then(response => {
-          this.visaInterviewListLoading = false
-          if (response.data.status) {
-            this.visaInterviewList = response.data.data
-          }
-        })
-      }
+      // if (this.user_id === '40f2c37fecfb42da9429b3622e898686') {
+      //   getVisaInterviewById(this.user_id).then(response => {
+      //     this.visaInterviewListLoading = false
+      //     if (response.data.status) {
+      //       this.visaInterviewList = response.data.data
+      //     }
+      //   })
+      // } else {
+      // }
+      getVisaInterviewList().then(response => {
+        this.visaInterviewListLoading = false
+        if (response.data.status) {
+          this.visaInterviewList = response.data.data
+        }
+      })
     },
     goNext (item) {
       console.log(item)

@@ -11,7 +11,7 @@
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="goNext(scope.row)">办理</el-button>
-          <el-button type="success" size="mini" @click="assignTask(scope.row)" v-if="user_id != '0f165b4a1e8747a1a143fc23773f2a61'">分配</el-button>
+          <el-button type="success" size="mini" @click="assignTask(scope.row)">分配</el-button>
           <el-button type="danger" size="mini" @click="wasteSheetOperation(scope.row)">废单</el-button>
         </template>
       </el-table-column>
@@ -33,7 +33,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getInterviewList, getInterviewById, wasteSheet, assignTaskToUser, getAssignUserList } from '@/api/mortgage'
+import {
+  getInterviewList,
+  // getInterviewById,
+  wasteSheet,
+  assignTaskToUser,
+  getAssignUserList
+} from '@/api/mortgage'
 export default {
   name: 'interview',
   data () {
@@ -60,31 +66,31 @@ export default {
   },
   methods: {
     getInterviewList () {
-      if (this.user_id === '823d84b92c314b16b39c63f78a1eee82') {
-        getInterviewById(this.user_id).then(response => {
-          this.interviewListLoading = false
-          if (response.data.status) {
-            this.interviewList = response.data.data
-          } else {
-            this.$message({
-              type: 'error',
-              message: '面谈列表获取失败，请稍候重试'
-            })
-          }
-        })
-      } else {
-        getInterviewList().then(response => {
-          this.interviewListLoading = false
-          if (response.data.status) {
-            this.interviewList = response.data.data
-          } else {
-            this.$message({
-              type: 'error',
-              message: '面谈列表获取失败，请稍候重试'
-            })
-          }
-        })
-      }
+      // if (this.user_id === '823d84b92c314b16b39c63f78a1eee82') {
+      //   getInterviewById(this.user_id).then(response => {
+      //     this.interviewListLoading = false
+      //     if (response.data.status) {
+      //       this.interviewList = response.data.data
+      //     } else {
+      //       this.$message({
+      //         type: 'error',
+      //         message: '面谈列表获取失败，请稍候重试'
+      //       })
+      //     }
+      //   })
+      // } else {
+      // }
+      getInterviewList().then(response => {
+        this.interviewListLoading = false
+        if (response.data.status) {
+          this.interviewList = response.data.data
+        } else {
+          this.$message({
+            type: 'error',
+            message: '面谈列表获取失败，请稍候重试'
+          })
+        }
+      })
     },
     goNext (item) {
       this.$router.push({ path: `/loan-mortgage/interview/edit-info/${item.taskId}` })
