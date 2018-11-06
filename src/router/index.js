@@ -45,12 +45,12 @@ export const constantRouterMap = [
     children: [{
       path: 'todo',
       component: () => import('@/views/quickpath/todo'),
-      name: '待办事项',
+      name: '快速访问-待办事项',
       meta: { title: '待办事项', icon: 'todo', noCache: true }
     }, {
       path: 'notice',
       component: () => import('@/views/quickpath/notice'),
-      name: '通知公告',
+      name: '快速访问-通知公告',
       meta: { title: '通知公告', icon: 'notice' }
     }]
   },
@@ -63,70 +63,84 @@ export const constantRouterMap = [
     children: [{
       path: 'order-taking',
       component: () => import('@/views/loan-mortgage/order-taking'),
-      name: '接单',
+      name: '抵押贷款-接单',
       meta: { title: '接单', icon: 'order_on' }
     }, {
       path: 'interview',
       component: () => import('@/views/loan-mortgage/interview'),
-      name: '面谈',
+      name: '抵押贷款-面谈',
       meta: { title: '面谈', icon: 'talk' }
     }, {
       path: 'interview/edit-info/:taskId',
       hidden: true,
+      name: '抵押贷款-面谈建议',
+      meta: { title: '面谈建议' },
       component: () => import('@/views/loan-mortgage/interview/editInfo')
     }, {
       path: 'visa-interview',
       component: () => import('@/views/loan-mortgage/visa-interview'),
-      name: '面签',
+      name: '抵押贷款-面签',
       meta: { title: '面签', icon: 'visa-interview' }
     }, {
       path: 'visa-interview/edit-info/:taskId/:checklistId/:loanId',
       hidden: true,
+      name: '抵押贷款-面签表格',
+      meta: { title: '面签表格' },
       component: () => import('@/views/loan-mortgage/visa-interview/editInfo')
     }, {
       path: 'evaluate-order',
       component: () => import('@/views/loan-mortgage/evaluate-order'),
-      name: '评估下单',
+      name: '抵押贷款-评估下单',
       meta: { title: '评估下单', icon: 'evaluate' }
     }, {
       path: 'evaluate-order/edit-info/:taskId/:loanId',
       hidden: true,
+      name: '抵押贷款-评估下单表格',
+      meta: { title: '评估下单表格' },
       component: () => import('@/views/loan-mortgage/evaluate-order/editInfo')
     }, {
       path: 'examine-approve',
       component: () => import('@/views/loan-mortgage/examine-approve'),
-      name: '审批',
+      name: '抵押贷款-审批',
       meta: { title: '审批', icon: 'approve' }
     }, {
       path: 'examine-approve/edit-info/:taskId/:loanType/:catalogId',
       hidden: true,
+      name: '抵押贷款-审批表格',
+      meta: { title: '审批表格' },
       component: () => import('@/views/loan-mortgage/examine-approve/editInfo')
     }, {
       path: 'mortgage',
       component: () => import('@/views/loan-mortgage/mortgage'),
-      name: '抵押',
+      name: '抵押贷款-抵押',
       meta: { title: '抵押', icon: 'mortgage' }
     }, {
       path: 'mortgage/edit-info/:taskId/:loanId',
       hidden: true,
+      name: '抵押贷款-抵押表格',
+      meta: { title: '抵押表格' },
       component: () => import('@/views/loan-mortgage/mortgage/editInfo')
     }, {
       path: 'charge',
       component: () => import('@/views/loan-mortgage/charge'),
-      name: '收费',
+      name: '抵押贷款-收费',
       meta: { title: '收费', icon: 'charge' }
     }, {
       path: 'charge/edit-info/:taskId',
       hidden: true,
+      name: '抵押贷款-收费表格',
+      meta: { title: '收费表格' },
       component: () => import('@/views/loan-mortgage/charge/editInfo')
     }, {
       path: 'make-loans',
       component: () => import('@/views/loan-mortgage/make-loans'),
-      name: '放款',
+      name: '抵押贷款-放款',
       meta: { title: '放款', icon: 'make-loans' }
     }, {
       path: 'make-loans/edit-info',
       hidden: true,
+      name: '抵押贷款-放款表格',
+      meta: { title: '放款表格' },
       component: () => import('@/views/loan-mortgage/make-loans/editInfo')
     }]
   },
@@ -135,26 +149,39 @@ export const constantRouterMap = [
     component: Layout,
     redirect: 'noredirect',
     name: '二手房贷款',
-    meta: { title: '二手房贷款', icon: 'house' }
+    meta: { title: '二手房贷款', icon: 'house' },
+    children: [{
+      path: 'order-taking',
+      component: () => import('@/views/loan-house/order-taking'),
+      name: '二手房贷款-接单',
+      meta: { title: '接单', icon: 'order_on' }
+    }, {
+      path: 'visa-interview',
+      component: () => import('@/views/loan-house/visa-interview'),
+      name: '二手房贷款-面签',
+      meta: { title: '面签', icon: 'visa-interview' }
+    }]
   },
   {
-    path: '/loan',
+    path: '/loan-management',
     component: Layout,
     redirect: 'noredirect',
     name: '贷款管理',
     meta: { title: '贷款管理', icon: 'set' },
     children: [{
       path: 'order',
-      component: () => import('@/views/loan/order'),
+      component: () => import('@/views/loan-management/order'),
       name: '订单管理',
       meta: { title: '订单管理', icon: 'order' }
     }, {
       path: 'order/status/:orderId',
       hidden: true,
-      component: () => import('@/views/loan/order/status')
+      name: '贷款状态',
+      meta: { title: '贷款状态' },
+      component: () => import('@/views/loan-management/order/status')
     }, {
       path: 'assign',
-      component: () => import('@/views/loan/assign'),
+      component: () => import('@/views/loan-management/assign'),
       name: '业务分配',
       meta: { title: '业务分配', icon: 'assign' }
     }]

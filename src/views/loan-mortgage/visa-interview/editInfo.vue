@@ -915,7 +915,7 @@ export default {
     },
     checkStatus () {
       this.dialogVisible = false
-      this.$router.push({ path: `/loan/order/status/${this.loanNum}` })
+      this.$router.push({ path: `/loan-management/order/status/${this.loanNum}` })
     },
     returnList () {
       this.dialogVisible = false

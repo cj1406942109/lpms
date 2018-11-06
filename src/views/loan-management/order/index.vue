@@ -206,7 +206,7 @@ export default {
       })
     },
     goDetail (item) {
-      this.$router.push({ path: `/loan/order/status/${item.loanId}` })
+      this.$router.push({ path: `/loan-management/order/status/${item.loanId}` })
     },
     deleteOrder (item) {
       this.dialogFormVisible = true

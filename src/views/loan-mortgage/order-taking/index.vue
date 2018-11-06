@@ -236,7 +236,7 @@ export default {
     checkStatus () {
       // 根据贷款编号查询状态
       this.dialogVisible = false
-      this.$router.push({ path: `/loan/order/status/${this.loanNum}` })
+      this.$router.push({ path: `/loan-management/order/status/${this.loanNum}` })
     },
     nextOperation () {
       this.dialogVisible = false
