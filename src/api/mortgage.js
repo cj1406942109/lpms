@@ -339,37 +339,6 @@ export function confirmLoan (taskId) {
 }
 
 // ***********************放款结束***************************
-// 评估下单
-export function getEvaluateOrderList () {
-  return request({
-    url: '/evaluateOrder/getEvaluateOrderList',
-    method: 'get'
-  })
-}
-
-// 审批
-export function getExamineApproveList () {
-  return request({
-    url: '/examineApprove/getExamineApproveList',
-    method: 'get'
-  })
-}
-
-// 抵押
-export function getMortgageList () {
-  return request({
-    url: '/mortgage/getMortgageList',
-    method: 'get'
-  })
-}
-
-// 放款
-export function getMakeLoansList () {
-  return request({
-    url: '/makeLoans/getMakeLoansList',
-    method: 'get'
-  })
-}
 
 // 静态索引
 export function getStaticIndexByKey (key) {
