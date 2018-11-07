@@ -39,25 +39,25 @@ export function removeUsername () {
 }
 
 export function getUserId () {
-  return Cookies.get('user_id')
+  return Cookies.get('userId')
 }
 
-export function setUserId (user_id) {
-  return Cookies.set('user_id', user_id)
+export function setUserId (userId) {
+  return Cookies.set('userId', userId)
 }
 
 export function removeUserId () {
-  return Cookies.remove('user_id')
+  return Cookies.remove('userId')
 }
 
 export function getDepartmentId () {
-  return Cookies.get('department_id')
+  return Cookies.get('departmentId')
 }
 
-export function setDepartmentId (department_id) {
-  return Cookies.set('department_id', department_id)
+export function setDepartmentId (departmentId) {
+  return Cookies.set('departmentId', departmentId)
 }
 
 export function removeDepartmentId () {
-  return Cookies.remove('department_id')
+  return Cookies.remove('departmentId')
 }

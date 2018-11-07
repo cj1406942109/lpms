@@ -59,9 +59,9 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('LoginByUsername', this.loginForm).then(res => {
+          this.$store.dispatch('LoginByUsername', this.loginForm).then(data => {
             this.loading = false
-            if (res.data.result) {
+            if (data) {
               // 登录成功，跳转到首页
               this.$router.push({ path: '/' })
             }
