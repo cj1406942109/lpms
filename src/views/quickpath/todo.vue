@@ -2,21 +2,14 @@
   <div class="app-container">
     <h2>待办事项</h2>
     <el-table :data="todoList" v-loading.body="toodoListLoading" border stripe style="width: 100%">
-      <el-table-column prop="no" label="贷款编号"></el-table-column>
-      <el-table-column prop="type" label="贷款类型"></el-table-column>
-      <el-table-column prop="status" label="当前状态"></el-table-column>
-      <el-table-column prop="desc" label="待办事项"></el-table-column>
+      <el-table-column type="index" label="序号" width="100"></el-table-column>
+      <el-table-column prop="taskId" label="贷款编号" width="300"></el-table-column>
+      <!-- <el-table-column prop="type" label="贷款类型"></el-table-column> -->
+      <el-table-column prop="clientName" label="姓名"></el-table-column>
+      <el-table-column prop="clientPhone" label="电话"></el-table-column>
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
-          <el-dropdown>
-            <el-button type="primary">
-              选项<i class="el-icon-arrow-down el-icon--right"></i>
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>办理</el-dropdown-item>
-              <el-dropdown-item>延迟</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+          <el-button type="primary" size="mini" @click="goNext(scope.row)">办理</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -34,6 +27,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { getTodoList } from '@/api/dashboard'
 
 export default {
@@ -45,13 +39,18 @@ export default {
     }
   },
   created () {
-    this.GetTodoList()
+    this.getTodoList()
+  },
+  computed: {
+    ...mapGetters([
+      'userId'
+    ])
   },
   methods: {
-    GetTodoList () {
+    getTodoList () {
       this.toodoListLoading = true
-      getTodoList().then(response => {
-        this.todoList = response.data.data
+      getTodoList(this.userId).then(data => {
+        this.todoList = data
         this.toodoListLoading = false
       })
     },
@@ -60,6 +59,9 @@ export default {
     },
     handleCurrentChange (val) {
       console.log(`当前页: ${val}`)
+    },
+    goNext (item) {
+      console.log(item)
     }
   }
 }

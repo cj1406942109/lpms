@@ -3,7 +3,7 @@ const getters = {
   token: state => state.user.token,
   account: state => state.user.account,
   username: state => state.user.username,
-  user_id: state => state.user.user_id,
-  department_id: state => state.user.department_id
+  userId: state => state.user.userId,
+  departmentId: state => state.user.departmentId
 }
 export default getters

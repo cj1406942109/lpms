@@ -51,18 +51,33 @@ for (let i = 0; i < parseInt(Math.random() * 7); i++) {
 
 export default {
   getNotice: () => {
-    return notice
+    return {
+      data: notice,
+      extra: 0,
+      result: true,
+      statusCode: 200
+    }
   },
   getNoticeList: () => {
-    return noticeList
+    return {
+      data: noticeList,
+      extra: 0,
+      result: true,
+      statusCode: 200
+    }
   },
   getTodoList: () => {
     return todoList
   },
   getQuickEntrance: () => {
     return {
-      diya: entranceList1,
-      ershoufang: entranceList2
+      data: {
+        diya: entranceList1,
+        ershoufang: entranceList2
+      },
+      extra: 0,
+      result: true,
+      statusCode: 200
     }
   }
 }

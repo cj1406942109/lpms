@@ -8,10 +8,11 @@
             <el-button type="text" @click="moreTodo">查看更多>>></el-button>
           </div>
           <el-table :data="todoList" v-loading.body="toodoListLoading" border stripe style="width: 100%" height="400">
-            <el-table-column prop="taskId" label="贷款编号"></el-table-column>
+            <el-table-column type="index" label="序号" width="100"></el-table-column>
+            <el-table-column prop="taskId" label="贷款编号" width="300"></el-table-column>
             <!-- <el-table-column prop="type" label="贷款类型"></el-table-column> -->
-            <el-table-column prop="name" label="姓名"></el-table-column>
-            <el-table-column prop="phone" label="电话"></el-table-column>
+            <el-table-column prop="clientName" label="姓名"></el-table-column>
+            <el-table-column prop="clientPhone" label="电话"></el-table-column>
             <el-table-column label="操作" width="250">
               <template slot-scope="scope">
                 <el-button type="primary" size="mini" @click="goNext(scope.row)">办理</el-button>
@@ -60,8 +61,8 @@
 </template>
 
 <script>
-import { getTodoList, getQuickEntrance, getNotice } from '@/api/dashboard'
 import { mapGetters } from 'vuex'
+import { getTodoList, getQuickEntrance, getNotice } from '@/api/dashboard'
 
 export default {
   name: 'dashboard',
@@ -76,30 +77,30 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'user_id'
+      'userId'
     ])
   },
   created () {
-    this.GetTodoList()
+    this.getTodoList()
     this.GetQuickEntrance()
     this.GetNotice()
   },
   methods: {
-    GetTodoList () {
-      this.toodoListLoading = true
-      getTodoList(this.user_id).then(response => {
-        this.todoList = response.data.data
+    getTodoList () {
+      getTodoList(this.userId).then(data => {
+        console.log(data)
+        this.todoList = data
         this.toodoListLoading = false
       })
     },
     GetQuickEntrance () {
-      getQuickEntrance().then(response => {
-        this.quickEntrance = response.data
+      getQuickEntrance().then(data => {
+        this.quickEntrance = data
       })
     },
     GetNotice () {
-      getNotice().then(response => {
-        this.notice = response.data
+      getNotice().then(data => {
+        this.notice = data
       })
     },
     moreTodo () {
@@ -107,6 +108,9 @@ export default {
     },
     moreNotice () {
       this.$router.push({ path: '/quickpath/notice' })
+    },
+    goNext (item) {
+      console.log(item)
     }
   }
 }

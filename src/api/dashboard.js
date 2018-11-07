@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getTodoList (employeeId) {
   return request({
-    url: `/task/m/${employeeId}`,
+    url: `/mortgage/employee/${employeeId}`,
     method: 'get'
   })
 }

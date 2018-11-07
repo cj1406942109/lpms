@@ -2,6 +2,7 @@
   <div class="app-container">
     <h2>公告通知</h2>
     <el-table :data="noticeList" v-loading.body="noticeListLoading" style="width: 100%" border stripe>
+      <el-table-column type="index" label="序号" width="100"></el-table-column>
       <el-table-column prop="date" label="发布时间" width="300"></el-table-column>
       <el-table-column prop="title" label="标题"></el-table-column>
       <el-table-column prop="tag" label="标记" width="200">
@@ -13,14 +14,7 @@
       </el-table-column>
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
-          <el-dropdown>
-            <el-button type="primary">
-              选项<i class="el-icon-arrow-down el-icon--right"></i>
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="goDetail(scope.row)">查看详情</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+          <el-button type="primary" size="mini" @click="goDetail(scope.row)">查看详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -39,13 +33,12 @@ export default {
     }
   },
   created () {
-    this.GetNoticeList()
+    this.getNoticeList()
   },
   methods: {
-    GetNoticeList () {
-      this.noticeListLoading = true
-      getNoticeList().then(response => {
-        this.noticeList = response.data
+    getNoticeList () {
+      getNoticeList().then(data => {
+        this.noticeList = data
         this.noticeListLoading = false
       })
     },
