@@ -17,6 +17,10 @@ import '@/icons' // icon
 import '@/permission' // permission control
 import '@/mock' // simulation data
 
+// 全局注册组件
+import flowCompleteDialog from '@/components/FlowCompleteDialog'
+Vue.component('flow-complete-dialog', flowCompleteDialog)
+
 Vue.use(ElementUI, { zhLocale })
 
 Vue.config.productionTip = false

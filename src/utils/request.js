@@ -30,7 +30,17 @@ service.interceptors.request.use(config => {
 
 // respone拦截器
 service.interceptors.response.use(
-  response => response,
+  response => {
+    if (response.data.result) {
+      return response
+    } else {
+      Message({
+        type: 'error',
+        message: `${response.data.data}`
+      })
+      return null
+    }
+  },
   // {
   //   /**
   //    * code为非20000是抛错 可结合自己业务进行修改
@@ -61,12 +71,11 @@ service.interceptors.response.use(
   //   }
   // },
   error => {
-    console.log('err: ' + error)// for debug
+    console.log(error)// for debug
     Message({
       // message: error.message,
-      message: error.error + ': ' + error.message,
-      type: 'error',
-      duration: 5 * 1000
+      message: error.message,
+      type: 'error'
     })
     return Promise.reject(error)
   }

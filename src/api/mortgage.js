@@ -4,16 +4,16 @@ import request from '@/utils/request'
 // 抵押贷款api
 
 // ***********************接单开始***************************
-export function saveCheckList (checklist, employeeId) {
-  return request({
-    url: '/checklist/save',
-    method: 'post',
-    data: qs.stringify({
-      checklist,
-      employeeId
-    })
-  })
-}
+// export function saveCheckList (checklist, employeeId) {
+//   return request({
+//     url: '/checklist/save',
+//     method: 'post',
+//     data: qs.stringify({
+//       checklist,
+//       employeeId
+//     })
+//   })
+// }
 export function getCheckList (checklistId) {
   return request({
     url: `/checklist/${checklistId}`,
@@ -350,3 +350,70 @@ export function getStaticIndexByKey (key) {
     }
   })
 }
+
+// ************************* 以下为v2 *******************************
+
+// ************************* 主任务开始 *******************************
+
+/**
+ * 创建新的抵押任务
+ * @param {*} employeeId 员工id
+ */
+export function createTask (employeeId) {
+  return request({
+    url: '/mortgage',
+    method: 'post',
+    data: qs.stringify({
+      employeeId
+    })
+  })
+}
+
+// ************************* 主任务结束 *******************************
+
+// ************************* 接单开始 *******************************
+/**
+ * 保存接单表
+ * @param {*} checkList 接单表对象
+ * @param {*} checklistId 接单表id
+ */
+export function saveCheckList ({
+  datetime,
+  clientName,
+  clientPhone,
+  clientIdType,
+  clientIdNumber,
+  clientWorkType,
+  clientWorkUnit,
+  loanVariety,
+  loanAmount,
+  loanPeriod,
+  checklistSource,
+  agentName,
+  remark
+}, checklistId) {
+  return request({
+    url: '/checklist/save',
+    method: 'post',
+    data: qs.stringify({
+      checklistId,
+      datetime,
+      clientName,
+      clientPhone,
+      clientIdType,
+      clientIdNumber,
+      clientWorkType,
+      clientWorkUnit,
+      loanVariety,
+      loanAmount,
+      loanPeriod,
+      checklistSource,
+      agentName,
+      remark
+    })
+  })
+}
+
+// ************************* 接单结束 *******************************
+
+// ************************* 以上为v2 *******************************

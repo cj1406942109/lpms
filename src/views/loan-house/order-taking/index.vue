@@ -2,12 +2,12 @@
   <div class="app-container">
     <h2>客户情况登记明细表</h2>
     <el-form :model="clientForm" :rules="rules" ref="clientForm" label-width="200px">
+      <el-form-item label="完成时间" prop="">
+        <el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
+      </el-form-item>
       <el-row :gutter="20">
         <el-col :span="10">
-          <el-form-item label="完成时间" prop="">
-            <el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
-          </el-form-item>
-          <h3>借款人基本情况</h3>
+          <h3>借款人基本信息</h3>
           <el-form-item label="姓名" prop="">
             <el-input clearable></el-input>
           </el-form-item>
@@ -23,53 +23,183 @@
           <el-form-item label="月均收入" prop="">
             <el-input clearable><template slot="append">元</template></el-input>
           </el-form-item>
+          <el-form-item label="联系地址" prop="">
+            <el-input clearable></el-input>
+          </el-form-item>
+          <el-form-item label="户口所在地" prop="">
+            <el-input clearable></el-input>
+          </el-form-item>
+          <el-form-item label="证件类型" prop="">
+            <el-select placeholder="请选择证件类型">
+              <el-option label="" value=""></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="证件号码" prop="">
+            <el-input clearable></el-input>
+          </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item label=" ">
-            <el-button @click.prevent="addHouseProperty" type="primary">添加房产信息</el-button>
+          <h3>借款人配偶基本信息</h3>
+          <el-form-item label="姓名" prop="">
+            <el-input clearable></el-input>
           </el-form-item>
-          <div v-for="(item, index) in clientForm.mortgageHouses" :key="item.id" class="house-info">
-            <el-form-item :label="'房产' + (index + 1) + '：'" style="font-weight:bold"><el-button @click.prevent="removeHouseProperty(item)" type="danger">删除</el-button></el-form-item>
-            <el-form-item label="面积（性质）" :prop="'mortgageHouses.' + index + '.area'" :rules="[{ required: true, message: '面积不能为空' }, { type: 'number', message: '面积必须为数字值' }]">
-              <el-input clearable v-model.number="item.area" type="number" @input="calcTotalPrice(item.area, item.enquiry_result, index)"><template slot="append">平米</template></el-input>
-            </el-form-item>
-            <el-form-item label="询价结果" :prop="'mortgageHouses.' + index + '.enquiry_result'" :rules="[{ required: true, message: '询价结果不能为空' }, { type: 'number', message: '询价结果必须为数字值' }]">
-              <el-input clearable v-model.number="item.enquiry_result" type="number" @input="calcTotalPrice(item.area, item.enquiry_result, index)"><template slot="append">元/平米</template></el-input>
-            </el-form-item>
-            <el-form-item label="总价" :prop="'mortgageHouses.' + index + '.total_price'">
-              <el-input v-model.number="item.total_price" type="number" readonly><template slot="append">元</template></el-input>
-            </el-form-item>
-          </div>
-          <el-form-item label=" ">
-            <el-alert title="如没有房产，请点击删除按钮" type="warning" style="height:35px;"></el-alert>
+          <el-form-item label="联系方式" prop="">
+            <el-input clearable></el-input>
+          </el-form-item>
+          <el-form-item label="工作单位" prop="">
+            <el-input clearable></el-input>
+          </el-form-item>
+          <el-form-item label="单位电话" prop="">
+            <el-input clearable></el-input>
+          </el-form-item>
+          <el-form-item label="户口所在地" prop="">
+            <el-input clearable></el-input>
+          </el-form-item>
+          <el-form-item label="证件类型" prop="">
+            <el-select placeholder="请选择证件类型">
+              <el-option label="" value=""></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="证件号码" prop="">
+            <el-input clearable></el-input>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row :gutter="20" style="margin-top:20px;">
+      <el-row :gutter="20">
         <el-col :span="10">
-          <el-form-item label="单子来源渠道" prop="checklist_source">
-            <el-select v-model="clientForm.checklist_source" placeholder="请选择来源渠道">
-              <el-option v-for="item in listSource.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
-            </el-select>
+          <h3>产权人基本信息</h3>
+          <el-form-item label="姓名" prop="">
+            <el-input clearable></el-input>
           </el-form-item>
-          <el-form-item label="中介名称" prop="agent_name">
-            <el-input clearable v-model="clientForm.agent_name"></el-input>
+          <el-form-item label="联系方式" prop="">
+            <el-input clearable></el-input>
           </el-form-item>
-          <el-form-item label="其他备注事项" prop="remark">
-            <el-input clearable type="textarea" v-model="clientForm.remark" :autosize="{ minRows: 4, maxRows: 6}"></el-input>
+          <el-form-item label="身份证号" prop="">
+            <el-input clearable></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item label="借款品种" prop="loan_type">
-            <el-select v-model="clientForm.loan_type" placeholder="请选择借款品种">
-              <el-option v-for="item in loanType.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
+          <h3>产权人配偶基本信息</h3>
+          <el-form-item label="姓名" prop="">
+            <el-input clearable></el-input>
+          </el-form-item>
+          <el-form-item label="联系方式" prop="">
+            <el-input clearable></el-input>
+          </el-form-item>
+          <el-form-item label="身份证号" prop="">
+            <el-input clearable></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="10">
+          <h3>客户借款基本信息</h3>
+          <el-form-item label="贷款银行" prop="">
+            <el-input clearable></el-input>
+          </el-form-item>
+          <el-form-item label="评估公司" prop="">
+            <el-input clearable></el-input>
+          </el-form-item>
+          <el-form-item label="房屋成交价" prop="">
+            <el-input clearable><template slot="append">万元</template></el-input>
+          </el-form-item>
+          <el-form-item label="房屋评估价" prop="">
+            <el-input clearable><template slot="append">万元</template></el-input>
+          </el-form-item>
+          <el-form-item label="贷款金额" prop="">
+            <el-input clearable><template slot="append">万元</template></el-input>
+          </el-form-item>
+          <el-form-item label="贷款年限" prop="">
+            <el-input clearable><template slot="append">年</template></el-input>
+          </el-form-item>
+          <el-form-item label="担保方式" prop="">
+            <el-select placeholder="请选择担保方式">
+              <el-option label="" value=""></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="申请贷款金额" prop="loan_amount">
-            <el-input clearable v-model.number="clientForm.loan_amount" type="number"><template slot="append">元</template></el-input>
+          <el-form-item label="还款方式" prop="">
+            <el-select placeholder="请选择还款方式">
+              <el-option label="" value=""></el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="申请贷款期限" prop="loan_period">
-            <el-input clearable v-model.number="clientForm.loan_period" type="number"><template slot="append">月</template></el-input>
+          <el-form-item label="贷款类型" prop="">
+            <el-select placeholder="请选择贷款类型">
+              <el-option label="" value=""></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="首付款金额" prop="">
+            <el-input clearable><template slot="append">元</template></el-input>
+          </el-form-item>
+          <el-form-item label="首付款交付方式" prop="">
+            <el-select placeholder="请选择交付方式">
+              <el-option label="" value=""></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="成交是否真实">
+            <el-radio-group>
+              <el-radio :label="true" >是</el-radio>
+              <el-radio :label="false">否</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="客户情况是否真实">
+            <el-radio-group>
+              <el-radio :label="true" >是</el-radio>
+              <el-radio :label="false">否</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="卖方存折办理" prop="">
+            <el-select placeholder="请选择办理情况">
+              <el-option label="" value=""></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="备注" prop="">
+            <el-input clearable type="textarea" :autosize="{ minRows: 4, maxRows: 6}"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <h3>保证人基本信息</h3>
+          <el-form-item label="姓名" prop="">
+            <el-input clearable></el-input>
+          </el-form-item>
+          <el-form-item label="联系方式" prop="">
+            <el-input clearable></el-input>
+          </el-form-item>
+          <el-form-item label="身份证号" prop="">
+            <el-input clearable></el-input>
+          </el-form-item>
+          <el-form-item label="工作单位" prop="">
+            <el-input clearable></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <h3>房屋基本信息</h3>
+          <el-form-item label="房屋地址" prop="">
+            <el-input clearable></el-input>
+          </el-form-item>
+          <el-form-item label="房产证号" prop="">
+            <el-input clearable></el-input>
+          </el-form-item>
+          <el-form-item label="土地证号" prop="">
+            <el-input clearable></el-input>
+          </el-form-item>
+          <el-form-item label="房屋所属区局" prop="">
+            <el-input clearable></el-input>
+          </el-form-item>
+          <el-form-item label="建成年份" prop="">
+            <el-input clearable><template slot="append">年</template></el-input>
+          </el-form-item>
+          <el-form-item label="房屋类型" prop="">
+            <el-select placeholder="请选择房屋类型">
+              <el-option label="" value=""></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="房屋建筑面积" prop="">
+            <el-input clearable><template slot="append">平米</template></el-input>
+          </el-form-item>
+          <el-form-item label="土地属性" prop="">
+            <el-select placeholder="请选择土地属性">
+              <el-option label="" value=""></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
       </el-row>

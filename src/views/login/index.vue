@@ -25,38 +25,14 @@
       <el-footer>
         <span>{{new Date().getFullYear()}} &copy; <abbr title="Intelligent Medical">IM</abbr> </span>
         <span>Powered by <abbr title="WuHan University">WHU</abbr> |
-          <a target="_blank" href="javascript:;">LiBingTeam</a>
+          <a target="_blank" href="http://libingteam.com">LiBingTeam</a>
         </span>
       </el-footer>
     </el-container>
-    <!-- <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left" label-width="0px"
-      class="card-box login-form">
-      <h3 class="title">日晟行贷款管理系统</h3>
-      <el-form-item prop="userName">
-        <span class="svg-container svg-container_login">
-          <svg-icon icon-class="user" />
-        </span>
-        <el-input name="username" type="text" v-model="loginForm.name" autoComplete="on" placeholder="用户名" />
-      </el-form-item>
-      <el-form-item prop="userPassword">
-        <span class="svg-container">
-          <svg-icon icon-class="password"></svg-icon>
-        </span>
-        <el-input name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="on"
-          placeholder="密码"></el-input>
-          <span class="show-pwd" @click="showPwd"><svg-icon icon-class="eye" /></span>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">
-          登录
-        </el-button>
-      </el-form-item>
-    </el-form> -->
   </div>
 </template>
 
 <script>
-
 export default {
   name: 'login',
   data () {
@@ -75,40 +51,22 @@ export default {
           // { min: 6, max: 16, message: '密码长度为6到16位', trigger: ['blur', 'change'] }
         ]
       },
-      loading: false,
-      pwdType: 'password'
+      loading: false
     }
   },
   methods: {
-    showPwd () {
-      if (this.pwdType === 'password') {
-        this.pwdType = ''
-      } else {
-        this.pwdType = 'password'
-      }
-    },
     handleLogin () {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('LoginByUsername', this.loginForm).then((res) => {
+          this.$store.dispatch('LoginByUsername', this.loginForm).then(res => {
             this.loading = false
-            if (res.data.success) {
+            if (res.data.result) {
               // 登录成功，跳转到首页
               this.$router.push({ path: '/' })
-            } else {
-              // 登录出错提示
-              this.$message({
-                message: res.data.message,
-                type: 'error',
-                duration: 5 * 1000
-              })
             }
-          }).catch(() => {
-            this.loading = false
           })
         } else {
-          console.log('error submit!!')
           return false
         }
       })
