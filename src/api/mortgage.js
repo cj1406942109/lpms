@@ -418,6 +418,65 @@ export function saveCheckList ({
 
 // ************************* 接单结束 *******************************
 
+// ************************* 面谈开始 *******************************
+
+/**
+ * 获取面谈列表
+ */
+export function getViewList () {
+  return request({
+    url: '/mortgage/view',
+    method: 'get'
+  })
+}
+/**
+ * 根据员工id获取面谈列表
+ * @param {*} employeeId 员工id
+ */
+export function getViewListByEmployeeId (employeeId) {
+  return request({
+    url: `/mortgage/view/employee/${employeeId}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 保存面谈数据
+ * @param {*} param0 面谈建议表
+ * @param {*} viewId 面谈id
+ */
+export function saveView ({
+  finishTime,
+  proposedInstitution,
+  proposedClerk,
+  proposedAmount,
+  proposedTime,
+  rate,
+  repaymentType,
+  clientPurposeType,
+  clientPurpose,
+  surveyOpinion
+}, viewId) {
+  return request({
+    url: `/mortgage/view/${viewId}`,
+    method: 'post',
+    data: qs.stringify({
+      viewId,
+      finishTime,
+      proposedInstitution,
+      proposedClerk,
+      proposedAmount,
+      proposedTime,
+      rate,
+      repaymentType,
+      clientPurposeType,
+      clientPurpose,
+      surveyOpinion
+    })
+  })
+}
+// ************************* 面谈结束 *******************************
+
 // ************************* 表单字段及静态索引管理开始 *******************************
 
 /**

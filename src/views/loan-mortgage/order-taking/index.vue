@@ -14,7 +14,7 @@
             <el-input clearable v-model="checklistForm.clientPhone" placeholder="请填写手机号"></el-input>
           </el-form-item>
           <el-form-item label="证件类型" prop="clientIdType">
-            <el-select v-model="checklistForm.clientIdType" placeholder="请选择证件类型">
+            <el-select v-model="checklistForm.clientIdType" placeholder="请选择">
               <el-option v-for="item in cardType.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
@@ -22,7 +22,7 @@
             <el-input clearable v-model="checklistForm.clientIdNumber"></el-input>
           </el-form-item>
           <el-form-item label="工作种类" prop="clientWorkType">
-            <el-select v-model="checklistForm.clientWorkType" placeholder="请选择工作种类">
+            <el-select v-model="checklistForm.clientWorkType" placeholder="请选择">
               <el-option v-for="item in workType.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
@@ -54,7 +54,7 @@
       <el-row :gutter="20" style="margin-top:20px;">
         <el-col :span="10">
           <el-form-item label="单子来源渠道" prop="checklistSource">
-            <el-select v-model="checklistForm.checklistSource" placeholder="请选择来源渠道">
+            <el-select v-model="checklistForm.checklistSource" placeholder="请选择">
               <el-option v-for="item in listSource.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
@@ -67,7 +67,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item label="借款品种" prop="loanVariety">
-            <el-select v-model="checklistForm.loanVariety" placeholder="请选择借款品种">
+            <el-select v-model="checklistForm.loanVariety" placeholder="请选择">
               <el-option v-for="item in loanVariety.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
@@ -79,7 +79,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item label=" ">
+      <el-form-item label="">
         <el-button type="primary" :loading="formLoading" @click="submitForm('checklistForm')">提交</el-button>
         <el-button @click="resetForm('checklistForm')">重置</el-button>
       </el-form-item>
@@ -155,7 +155,7 @@ export default {
       loanStatus: '',
       dialogVisible: false,
       listPath: '',
-      nextPath: '',
+      nextPath: '/loan-mortgage/interview',
       cardType: {
         key: 'mortgagechecklistcardtype',
         value: []
@@ -224,7 +224,7 @@ export default {
             })
             this.formLoading = true
             createTask(this.userId).then(data => {
-              console.log(data)
+              // console.log(data)
               const checklistId = data.id
               saveCheckList(this.checklistForm, checklistId).then(data => {
                 this.formLoading = false

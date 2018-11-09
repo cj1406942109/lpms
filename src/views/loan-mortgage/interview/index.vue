@@ -3,9 +3,9 @@
     <h2>正在面谈列表</h2>
     <el-table :data="interviewList" v-loading.body="interviewListLoading" style="width: 100%" border stripe>
       <el-table-column type="index" label="序号" width="100"></el-table-column>
-      <el-table-column prop="loanId" label="贷款编号"></el-table-column>
-      <el-table-column prop="name" label="客户姓名"></el-table-column>
-      <el-table-column prop="phone" label="联系方式"></el-table-column>
+      <el-table-column prop="rootId" label="贷款编号" width="300"></el-table-column>
+      <el-table-column prop="clientName" label="客户姓名"></el-table-column>
+      <el-table-column prop="clientPhone" label="联系方式"></el-table-column>
       <el-table-column prop="state" label="当前状态" width="200">
       </el-table-column>
       <el-table-column label="操作" width="250">
@@ -34,8 +34,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import {
-  getInterviewList,
-  // getInterviewById,
+  getViewList,
+  getViewListByEmployeeId,
   wasteSheet,
   assignTaskToUser,
   getAssignUserList
@@ -61,39 +61,26 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'user_id'
+      'userId',
+      'permission'
     ])
   },
   methods: {
     getInterviewList () {
-      // if (this.user_id === '823d84b92c314b16b39c63f78a1eee82') {
-      //   getInterviewById(this.user_id).then(response => {
-      //     this.interviewListLoading = false
-      //     if (response.data.status) {
-      //       this.interviewList = response.data.data
-      //     } else {
-      //       this.$message({
-      //         type: 'error',
-      //         message: '面谈列表获取失败，请稍候重试'
-      //       })
-      //     }
-      //   })
-      // } else {
-      // }
-      getInterviewList().then(response => {
-        this.interviewListLoading = false
-        if (response.data.status) {
-          this.interviewList = response.data.data
-        } else {
-          this.$message({
-            type: 'error',
-            message: '面谈列表获取失败，请稍候重试'
-          })
-        }
-      })
+      if (this.permission.includes('mortgage_view_getViewList')) {
+        getViewList().then(data => {
+          this.interviewListLoading = false
+          this.interviewList = data
+        })
+      } else {
+        getViewListByEmployeeId(this.userId).then(data => {
+          this.interviewListLoading = false
+          this.interviewList = data
+        })
+      }
     },
     goNext (item) {
-      this.$router.push({ path: `/loan-mortgage/interview/edit-info/${item.taskId}` })
+      this.$router.push({ path: `/loan-mortgage/interview/edit-info/${item.id}` })
     },
     assignTask (item) {
       this.selectedTask = item
@@ -141,7 +128,7 @@ export default {
           type: 'info',
           message: '正在处理...'
         })
-        wasteSheet(item.taskId, this.user_id).then(response => {
+        wasteSheet(item.taskId, this.userId).then(response => {
           if (response.data.status) {
             this.$message({
               type: 'success',

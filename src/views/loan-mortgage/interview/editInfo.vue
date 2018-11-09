@@ -6,40 +6,41 @@
         <el-form :model="interviewSuggestionForm" ref="interviewSuggestionForm" label-width="200px" :rules="rules">
           <el-row>
             <el-col :span="10">
-              <el-form-item label="完成时间" prop="finish_time">
-                <el-date-picker type="date" placeholder="选择日期" v-model="interviewSuggestionForm.finish_time" value-format="yyyy-MM-dd"></el-date-picker>
+              <el-form-item label="完成时间" prop="finishTime">
+                <el-date-picker type="date" placeholder="选择日期" v-model="interviewSuggestionForm.finishTime" value-format="timestamp"></el-date-picker>
               </el-form-item>
-              <el-form-item label="拟申请机构" prop="proposed_institution">
-                <el-input clearable v-model="interviewSuggestionForm.proposed_institution"></el-input>
+              <el-form-item label="拟申请机构" prop="proposedInstitution">
+                <el-input clearable v-model="interviewSuggestionForm.proposedInstitution"></el-input>
               </el-form-item>
-              <el-form-item label="拟签约时间" prop="proposed_time">
-                <el-date-picker type="date" placeholder="选择日期" v-model="interviewSuggestionForm.proposed_time" value-format="yyyy-MM-dd"></el-date-picker>
+              <el-form-item label="拟签约时间" prop="proposedTime">
+                <el-date-picker type="date" placeholder="选择日期" v-model="interviewSuggestionForm.proposedTime" value-format="timestamp"></el-date-picker>
               </el-form-item>
-              <el-form-item label="拟对接人" prop="proposed_clerk">
-                <el-input clearable v-model="interviewSuggestionForm.proposed_clerk"></el-input>
+              <el-form-item label="拟对接人" prop="proposedClerk">
+                <el-input clearable v-model="interviewSuggestionForm.proposedClerk"></el-input>
               </el-form-item>
-              <el-form-item label="拟上报金额" prop="proposed_amount">
-                <el-input clearable v-model.number="interviewSuggestionForm.proposed_amount" type="number"><template slot="append">元</template></el-input>
+              <el-form-item label="拟上报金额" prop="proposedAmount">
+                <el-input clearable v-model.number="interviewSuggestionForm.proposedAmount" type="number"><template slot="append">元</template></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="10">
               <el-form-item label="费率" prop="rate">
                 <el-input clearable v-model.number="interviewSuggestionForm.rate" type="number" max="100"><template slot="append">%</template></el-input>
               </el-form-item>
-              <el-form-item label="客户还款方式" prop="repayment_type">
-                <el-select v-model="interviewSuggestionForm.repayment_type" placeholder="请选择还款方式">
+              <el-form-item label="客户还款方式" prop="repaymentType">
+                <el-select v-model="interviewSuggestionForm.repaymentType" placeholder="请选择">
                   <el-option v-for="item in repaymentMethod.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="客户用途">
-                <el-select v-model="interviewSuggestionForm.client_purpose_type" placeholder="请选择方式">
+              <el-form-item label="客户用途" prop="clientPurposeType">
+                <el-select v-model="interviewSuggestionForm.clientPurposeType" placeholder="请选择">
                   <el-option v-for="item in purpose.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
                 </el-select>
-                <el-input clearable v-model="interviewSuggestionForm.client_purpose">
-                </el-input>
               </el-form-item>
-              <el-form-item label="调查意见" prop="survey_opinion">
-                <el-input clearable type="textarea" v-model="interviewSuggestionForm.survey_opinion" :autosize="{ minRows: 2, maxRows: 4}"></el-input>
+              <el-form-item label="" prop="clientPurpose">
+                <el-input clearable v-model="interviewSuggestionForm.clientPurpose" style="width:auto"></el-input>
+              </el-form-item>
+              <el-form-item label="调查意见" prop="surveyOpinion">
+                <el-input clearable type="textarea" v-model="interviewSuggestionForm.surveyOpinion" :autosize="{ minRows: 2, maxRows: 4}"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -50,49 +51,59 @@
         </el-form>
       </div>
     </div>
-    <el-dialog :visible.sync="dialogVisible" width="30%" center>
-      <div slot="title"><i class="el-icon-success" style="color:#67C23A;font-size:22px;vertical-align:middle;margin-right:5px;"></i>面谈成功</div>
-      <div>贷款编号为：<a style="color:blue">{{loanNum}}</a></div>
-      <div>贷款状态为：<a style="color:blue">正在面签（等待填写面签相关信息）</a></div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="checkStatus">查看贷款状态</el-button>
-        <el-button @click="returnList">返回面谈列表</el-button>
-        <el-button type="primary" @click="nextOperation">办理下一业务</el-button>
-      </span>
-    </el-dialog>
+    <flow-complete-dialog
+      :loanId="loanId"
+      :loanStatus="loanStatus"
+      :dialogVisible="dialogVisible"
+      :listPath="listPath"
+      :nextPath="nextPath"
+    ></flow-complete-dialog>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { getStaticIndexByKey, saveInterviewSuggestion } from '@/api/mortgage'
+import { getStaticIndexByKey, saveView } from '@/api/mortgage'
 export default {
   data () {
     return {
       // 面谈建议表
       interviewSuggestionForm: {
-        finish_time: null,
-        proposed_institution: null,
-        proposed_clerk: null,
-        proposed_amount: null,
-        proposed_time: null,
+        finishTime: null,
+        proposedInstitution: null,
+        proposedClerk: null,
+        proposedAmount: null,
+        proposedTime: null,
         rate: null,
-        repayment_type: null,
-        client_purpose_type: null,
-        client_purpose: null,
-        survey_opinion: null
+        repaymentType: null,
+        clientPurposeType: null,
+        clientPurpose: null,
+        surveyOpinion: null
       },
       rules: {
-        proposed_amount: [
+        finishTime: [{ required: true, message: '完成时间不能为空', trigger: 'blur' }],
+        proposedInstitution: [{ required: true, message: '拟申请机构不能为空', trigger: 'blur' }],
+        proposedClerk: [{ required: true, message: '拟对接人不能为空', trigger: 'blur' }],
+        proposedAmount: [
+          { required: true, message: '拟上报金额不能为空', trigger: 'blur' },
           { type: 'integer', message: '拟上报金额必须为整数值' }
         ],
+        proposedTime: [{ required: true, message: '拟签约时间不能为空', trigger: 'blur' }],
         rate: [
-          { type: 'number', message: '费率必须为数字值' }
-        ]
+          { required: true, message: '费率不能为空', trigger: 'blur' },
+          { type: 'number', min: 0, max: 100, message: '费率必须为0到100之间的数字' }
+        ],
+        repaymentType: [{ required: true, message: '请选择客户还款方式', trigger: 'blur' }],
+        clientPurposeType: [{ required: true, message: '请选择客户用途类型', trigger: 'blur' }],
+        clientPurpose: [{ required: true, message: '客户用途不能为空', trigger: 'blur' }],
+        surveyOpinion: [{ required: true, message: '调查意见不能为空', trigger: 'blur' }]
       },
-      loanNum: '',
-      dialogVisible: false,
       formLoading: false,
+      loanId: '',
+      loanStatus: '',
+      dialogVisible: false,
+      listPath: '/loan-mortgage/interview',
+      nextPath: '/loan-mortgage/visa-interview',
       repaymentMethod: {
         key: 'mortgageviewrepaymentmethod',
         value: []
@@ -105,22 +116,10 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'user_id'
+      'userId'
     ])
   },
   methods: {
-    checkStatus () {
-      this.dialogVisible = false
-      this.$router.push({ path: `/loan-management/order/status/${this.loanNum}` })
-    },
-    returnList () {
-      this.dialogVisible = false
-      this.$router.push({ path: '/loan-mortgage/interview' })
-    },
-    nextOperation () {
-      this.dialogVisible = false
-      this.$router.push({ path: '/loan-mortgage/visa-interview' })
-    },
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -134,22 +133,14 @@ export default {
               type: 'info',
               message: '正在处理...'
             })
-            saveInterviewSuggestion(JSON.stringify(this.interviewSuggestionForm), this.$route.params.taskId, this.user_id).then(response => {
+            saveView(this.interviewSuggestionForm, this.$route.params.id).then(data => {
               this.formLoading = false
-              if (response.data.status === 1) {
-                this.loanNum = response.data.data
-                this.dialogVisible = true
-              } else {
-                this.$message({
-                  showClose: true,
-                  message: '保存失败，请稍候重试！',
-                  type: 'error'
-                })
-              }
+              this.loanId = data.rootId
+              this.loanStatus = data.des
+              this.dialogVisible = true
             })
           }).catch(() => {})
         } else {
-          console.log('error submit!!')
           return false
         }
       })
@@ -158,16 +149,8 @@ export default {
       this.$refs[formName].resetFields()
     },
     getStaticIndex (staticIndex) {
-      getStaticIndexByKey(staticIndex.key).then(response => {
-        if (response.data.status) {
-          staticIndex.value = response.data.data[staticIndex.key]
-        } else {
-          this.$message({
-            showClose: true,
-            message: '获取静态索引失败，请检查网络！',
-            type: 'error'
-          })
-        }
+      getStaticIndexByKey(staticIndex.key).then(data => {
+        staticIndex.value = data[staticIndex.key]
       })
     }
   },
@@ -183,9 +166,5 @@ export default {
       padding: 20px;
       background-color: #fff;
       margin-bottom: 20px;
-      .el-input {
-        width: auto;
-      }
   }
 </style>
-

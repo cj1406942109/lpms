@@ -61,3 +61,15 @@ export function setDepartmentId (departmentId) {
 export function removeDepartmentId () {
   return Cookies.remove('departmentId')
 }
+
+export function getPermission () {
+  return sessionStorage.getItem('permission')
+}
+
+export function setPermission (permission) {
+  return sessionStorage.setItem('permission', permission)
+}
+
+export function removePermission () {
+  return sessionStorage.removeItem('permission')
+}

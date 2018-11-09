@@ -5,6 +5,7 @@ const getters = {
   phone: state => state.user.phone,
   username: state => state.user.username,
   userId: state => state.user.userId,
-  departmentId: state => state.user.departmentId
+  departmentId: state => state.user.departmentId,
+  permission: state => state.user.permission
 }
 export default getters

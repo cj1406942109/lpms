@@ -71,7 +71,7 @@ export const constantRouterMap = [
       name: '抵押贷款-面谈',
       meta: { title: '面谈', icon: 'talk' }
     }, {
-      path: 'interview/edit-info/:taskId',
+      path: 'interview/edit-info/:id',
       hidden: true,
       name: '抵押贷款-面谈建议',
       meta: { title: '面谈建议' },

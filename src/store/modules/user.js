@@ -4,7 +4,8 @@ import {
   getPhone, setPhone, removePhone,
   getUsername, setUsername, removeUsername,
   getUserId, setUserId, removeUserId,
-  getDepartmentId, setDepartmentId, removeDepartmentId
+  getDepartmentId, setDepartmentId, removeDepartmentId,
+  getPermission, setPermission, removePermission
 } from '@/utils/auth'
 
 const user = {
@@ -12,7 +13,8 @@ const user = {
     phone: getPhone(),
     username: getUsername(),
     userId: getUserId(),
-    departmentId: getDepartmentId()
+    departmentId: getDepartmentId(),
+    permission: getPermission()
   },
   mutations: {
     SET_PHONE: (state, phone) => {
@@ -26,6 +28,9 @@ const user = {
     },
     SET_DEPARTMENT_ID: (state, departmentId) => {
       state.departmentId = departmentId
+    },
+    SET_PERMISSION: (state, permission) => {
+      state.permission = permission
     }
   },
 
@@ -42,10 +47,12 @@ const user = {
             setUsername(data.name)
             setUserId(data.id)
             setDepartmentId(data.departmentId)
+            setPermission(data.permission)
             commit('SET_PHONE', data.phone)
             commit('SET_USERNAME', data.name)
             commit('SET_USER_ID', data.id)
             commit('SET_DEPARTMENT_ID', data.departmentId)
+            commit('SET_PERMISSION', data.permission)
           }
           resolve(data)
         }).catch(error => {
@@ -62,10 +69,12 @@ const user = {
           removeUsername()
           removeUserId()
           removeDepartmentId()
+          removePermission()
           commit('SET_PHONE', '')
           commit('SET_USERNAME', '')
           commit('SET_USER_ID', '')
           commit('SET_DEPARTMENT_ID', '')
+          commit('SET_PERMISSION', [])
           resolve()
         }).catch(error => {
           reject(error)
