@@ -34,15 +34,15 @@
           <el-form-item label=" ">
             <el-button @click.prevent="addHouseProperty" type="primary">添加房产信息</el-button>
           </el-form-item>
-          <div v-for="(item, index) in checklistForm.mortgageHouses" :key="item.id" class="house-info">
+          <div v-for="(item, index) in checklistForm.houses" :key="item.id" class="house-info">
             <el-form-item :label="'房产' + (index + 1) + '：'" style="font-weight:bold"><el-button @click.prevent="removeHouseProperty(item)" type="danger">删除</el-button></el-form-item>
-            <el-form-item label="面积（性质）" :prop="'mortgageHouses.' + index + '.area'" :rules="[{ required: true, message: '面积不能为空' }, { type: 'number', message: '面积必须为数字值' }]">
+            <el-form-item label="面积（性质）" :prop="'houses.' + index + '.area'" :rules="[{ required: true, message: '面积不能为空' }, { type: 'number', message: '面积必须为数字值' }]">
               <el-input clearable v-model.number="item.area" type="number" @input="calcTotalPrice(item.area, item.enquiryResult, index)"><template slot="append">平米</template></el-input>
             </el-form-item>
-            <el-form-item label="询价结果" :prop="'mortgageHouses.' + index + '.enquiryResult'" :rules="[{ required: true, message: '询价结果不能为空' }, { type: 'number', message: '询价结果必须为数字值' }]">
+            <el-form-item label="询价结果" :prop="'houses.' + index + '.enquiryResult'" :rules="[{ required: true, message: '询价结果不能为空' }, { type: 'number', message: '询价结果必须为数字值' }]">
               <el-input clearable v-model.number="item.enquiryResult" type="number" @input="calcTotalPrice(item.area, item.enquiryResult, index)"><template slot="append">元/平米</template></el-input>
             </el-form-item>
-            <el-form-item label="总价" :prop="'mortgageHouses.' + index + '.totalPrice'">
+            <el-form-item label="总价" :prop="'houses.' + index + '.totalPrice'">
               <el-input v-model.number="item.totalPrice" type="number" readonly><template slot="append">元</template></el-input>
             </el-form-item>
           </div>
@@ -93,15 +93,6 @@
       :listPath="listPath"
       :nextPath="nextPath"
     ></flow-complete-dialog>
-    <el-dialog :visible.sync="dialogVisible" width="30%" center>
-      <div slot="title"><i class="el-icon-success" style="color:#67C23A;font-size:22px;vertical-align:middle;margin-right:5px;"></i>接单成功</div>
-      <div>贷款编号为：<a style="color:blue">{{loanNum}}</a></div>
-      <div>贷款状态为：<a style="color:blue">正在面谈（等待填写面谈相关表格）</a></div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="checkStatus">查看贷款状态</el-button>
-        <el-button type="primary" @click="nextOperation">办理下一业务</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -124,7 +115,7 @@ export default {
         loanVariety: null,
         loanAmount: null,
         loanPeriod: null,
-        mortgageHouses: [{
+        houses: [{
           area: null,
           enquiryResult: null,
           totalPrice: null
@@ -185,24 +176,24 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'user_id'
+      'userId'
     ])
   },
   methods: {
     removeHouseProperty (house) {
-      const index = this.checklistForm.mortgageHouses.indexOf(house)
+      const index = this.checklistForm.houses.indexOf(house)
       if (index !== -1) {
         this.$confirm('是否清除该条房产信息？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.checklistForm.mortgageHouses.splice(index, 1)
+          this.checklistForm.houses.splice(index, 1)
         }).catch(() => {})
       }
     },
     addHouseProperty () {
-      this.checklistForm.mortgageHouses.push({
+      this.checklistForm.houses.push({
         area: null,
         enquiry_result: null,
         total_price: null
@@ -211,27 +202,16 @@ export default {
     calcTotalPrice (area, singlePrice, index) {
       if (area && singlePrice) {
         if (parseFloat(area).toString() !== 'NaN' && parseFloat(singlePrice).toString() !== 'NaN') {
-          this.checklistForm.mortgageHouses[index].total_price = area * singlePrice
+          this.checklistForm.houses[index].total_price = area * singlePrice
         } else {
-          this.checklistForm.mortgageHouses[index].total_price = null
+          this.checklistForm.houses[index].total_price = null
         }
       } else {
-        this.checklistForm.mortgageHouses[index].total_price = null
+        this.checklistForm.houses[index].total_price = null
       }
     },
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
-        createTask(this.user_id).then(response => {
-          // console.log(response)
-          if (response.result) {
-            // saveCheckList(this.)
-          } else {
-            this.$message({
-              type: 'error',
-              message: `${response.data}, ${response.extra}`
-            })
-          }
-        })
         if (valid) {
           this.$confirm('请确认客户交接表填写无误，是否提交？', '提示', {
             confirmButtonText: '确定',
@@ -243,49 +223,28 @@ export default {
               message: '正在处理...'
             })
             this.formLoading = true
-            saveCheckList(JSON.stringify(this.checklistForm), this.user_id).then(response => {
-              this.formLoading = false
-              if (response.data.status) {
-                this.loanNum = response.data.data
+            createTask(this.userId).then(data => {
+              console.log(data)
+              const checklistId = data.id
+              saveCheckList(this.checklistForm, checklistId).then(data => {
+                this.formLoading = false
+                this.loanId = data.rootId
+                this.loanStatus = data.des
                 this.dialogVisible = true
-              } else {
-                this.$message({
-                  showClose: true,
-                  message: '保存失败，请稍候重试！',
-                  type: 'error'
-                })
-              }
+              })
             })
           }).catch(() => {})
-          this.dialogVisible = false
         } else {
           return false
         }
       })
     },
-    checkStatus () {
-      // 根据贷款编号查询状态
-      this.dialogVisible = false
-      this.$router.push({ path: `/loan-management/order/status/${this.loanNum}` })
-    },
-    nextOperation () {
-      this.dialogVisible = false
-      this.$router.push({ path: '/loan-mortgage/interview' })
-    },
     resetForm (formName) {
       this.$refs[formName].resetFields()
     },
     getStaticIndex (staticIndex) {
-      getStaticIndexByKey(staticIndex.key).then(response => {
-        if (response.data.status) {
-          staticIndex.value = response.data.data[staticIndex.key]
-        } else {
-          this.$message({
-            showClose: true,
-            message: '获取静态索引失败，请检查网络！',
-            type: 'error'
-          })
-        }
+      getStaticIndexByKey(staticIndex.key).then(data => {
+        staticIndex.value = data[staticIndex.key]
       })
     }
   },

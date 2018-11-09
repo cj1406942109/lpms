@@ -14,16 +14,16 @@ export function removeToken () {
   return Cookies.remove(TokenKey)
 }
 
-export function getAccount () {
-  return Cookies.get('account')
+export function getPhone () {
+  return Cookies.get('phone')
 }
 
-export function setAccount (account) {
-  return Cookies.set('account', account)
+export function setPhone (phone) {
+  return Cookies.set('phone', phone)
 }
 
-export function removeAccount () {
-  return Cookies.remove('account')
+export function removePhone () {
+  return Cookies.remove('phone')
 }
 
 export function getUsername () {

@@ -10,7 +10,7 @@
             </div>
             <el-form :model="loginForm" ref="loginForm" :rules="loginRules" status-icon>
               <el-form-item label="用户名" prop="name">
-                <el-input v-model="loginForm.name" placeholder="请输入用户名"></el-input>
+                <el-input v-model="loginForm.name" placeholder="请输入手机号"></el-input>
               </el-form-item>
               <el-form-item label="密码" prop="password">
                 <el-input type="password" v-model="loginForm.password" auto-complete="off" @keyup.enter.native="handleLogin" placeholder="请输入密码"></el-input>
@@ -38,13 +38,14 @@ export default {
   data () {
     return {
       loginForm: {
-        name: '123456@qq.com',
-        password: '123456'
+        name: '15827258233',
+        password: 'cj123456'
       },
       loginRules: {
         name: [
           { required: true, message: '用户名不能为空', trigger: 'blur' },
-          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+          // { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+          { pattern: /^1[0-9]{10}$/, message: '手机号格式有误', trigger: ['blur', 'change'] }
         ],
         password: [
           { required: true, message: '密码不能为空', trigger: 'blur' }

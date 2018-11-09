@@ -1,6 +1,7 @@
 import { login, logout } from '@/api/login'
 import {
-  getAccount, setAccount, removeAccount,
+  setToken, removeToken,
+  getPhone, setPhone, removePhone,
   getUsername, setUsername, removeUsername,
   getUserId, setUserId, removeUserId,
   getDepartmentId, setDepartmentId, removeDepartmentId
@@ -8,14 +9,14 @@ import {
 
 const user = {
   state: {
-    account: getAccount(),
+    phone: getPhone(),
     username: getUsername(),
     userId: getUserId(),
     departmentId: getDepartmentId()
   },
   mutations: {
-    SET_ACCOUNT: (state, account) => {
-      state.account = account
+    SET_PHONE: (state, phone) => {
+      state.phone = phone
     },
     SET_USERNAME: (state, username) => {
       state.username = username
@@ -33,13 +34,15 @@ const user = {
     LoginByUsername ({ commit }, userInfo) {
       const username = userInfo.name.trim()
       return new Promise((resolve, reject) => {
-        login(username, userInfo.password).then(data => {
+        login(username, userInfo.password).then(response => {
+          setToken(response.headers.token)
+          const data = response.data.data
           if (data) {
-            setAccount(data.account)
+            setPhone(data.phone)
             setUsername(data.name)
             setUserId(data.id)
             setDepartmentId(data.departmentId)
-            commit('SET_ACCOUNT', data.account)
+            commit('SET_PHONE', data.phone)
             commit('SET_USERNAME', data.name)
             commit('SET_USER_ID', data.id)
             commit('SET_DEPARTMENT_ID', data.departmentId)
@@ -53,12 +56,13 @@ const user = {
     // 登出
     Logout ({ commit, state }) {
       return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
-          removeAccount()
+        logout().then(() => {
+          removeToken()
+          removePhone()
           removeUsername()
           removeUserId()
           removeDepartmentId()
-          commit('SET_ACCOUNT', '')
+          commit('SET_PHONE', '')
           commit('SET_USERNAME', '')
           commit('SET_USER_ID', '')
           commit('SET_DEPARTMENT_ID', '')

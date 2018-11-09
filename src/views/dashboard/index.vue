@@ -9,7 +9,7 @@
           </div>
           <el-table :data="todoList" v-loading.body="toodoListLoading" border stripe style="width: 100%" height="400">
             <el-table-column type="index" label="序号" width="100"></el-table-column>
-            <el-table-column prop="taskId" label="贷款编号" width="300"></el-table-column>
+            <el-table-column prop="rootId" label="贷款编号" width="300"></el-table-column>
             <!-- <el-table-column prop="type" label="贷款类型"></el-table-column> -->
             <el-table-column prop="clientName" label="姓名"></el-table-column>
             <el-table-column prop="clientPhone" label="电话"></el-table-column>
@@ -88,7 +88,6 @@ export default {
   methods: {
     getTodoList () {
       getTodoList(this.userId).then(data => {
-        console.log(data)
         this.todoList = data
         this.toodoListLoading = false
       })

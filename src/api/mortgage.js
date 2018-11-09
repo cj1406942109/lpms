@@ -341,15 +341,15 @@ export function confirmLoan (taskId) {
 // ***********************放款结束***************************
 
 // 静态索引
-export function getStaticIndexByKey (key) {
-  return request({
-    url: '/tableValue/value/{key}',
-    method: 'get',
-    params: {
-      key
-    }
-  })
-}
+// export function getStaticIndexByKey (key) {
+//   return request({
+//     url: '/tableValue/value/{key}',
+//     method: 'get',
+//     params: {
+//       key
+//     }
+//   })
+// }
 
 // ************************* 以下为v2 *******************************
 
@@ -390,10 +390,11 @@ export function saveCheckList ({
   loanPeriod,
   checklistSource,
   agentName,
-  remark
+  remark,
+  houses
 }, checklistId) {
   return request({
-    url: '/checklist/save',
+    url: `/mortgage/checklist/${checklistId}`,
     method: 'post',
     data: qs.stringify({
       checklistId,
@@ -409,11 +410,30 @@ export function saveCheckList ({
       loanPeriod,
       checklistSource,
       agentName,
-      remark
+      remark,
+      houses: JSON.stringify(houses)
     })
   })
 }
 
 // ************************* 接单结束 *******************************
+
+// ************************* 表单字段及静态索引管理开始 *******************************
+
+/**
+ * 根据key获取索引列表
+ * @param {string} key 索引key
+ */
+export function getStaticIndexByKey (key) {
+  return request({
+    url: '/tableValue/value',
+    method: 'get',
+    params: {
+      key
+    }
+  })
+}
+
+// ************************* 表单字段及静态索引管理结束 *******************************
 
 // ************************* 以上为v2 *******************************
