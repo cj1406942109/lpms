@@ -5,7 +5,7 @@
       <el-row :gutter="20">
         <el-col :span="10">
           <el-form-item label="完成时间" prop="datetime">
-            <el-date-picker type="date" placeholder="选择日期" v-model="checklistForm.datetime" value-format="yyyy-MM-dd"></el-date-picker>
+            <el-date-picker placeholder="选择日期" value-format="timestamp" v-model="checklistForm.datetime"></el-date-picker>
           </el-form-item>
           <el-form-item label="客户姓名" prop="clientName">
             <el-input clearable v-model="checklistForm.clientName"></el-input>
@@ -125,7 +125,7 @@ export default {
         remark: null
       },
       rules: {
-        datetime: [{ required: true, message: '姓名不能为空', trigger: 'blur' }],
+        datetime: [{ required: true, message: '完成时间不能为空', trigger: 'blur' }],
         clientName: [{ required: true, message: '姓名不能为空', trigger: 'blur' }],
         clientPhone: [
           { required: true, message: '手机号不能为空', trigger: 'blur' },
@@ -195,19 +195,19 @@ export default {
     addHouseProperty () {
       this.checklistForm.houses.push({
         area: null,
-        enquiry_result: null,
-        total_price: null
+        enquiryResult: null,
+        totalPrice: null
       })
     },
     calcTotalPrice (area, singlePrice, index) {
       if (area && singlePrice) {
         if (parseFloat(area).toString() !== 'NaN' && parseFloat(singlePrice).toString() !== 'NaN') {
-          this.checklistForm.houses[index].total_price = area * singlePrice
+          this.checklistForm.houses[index].totalPrice = area * singlePrice
         } else {
-          this.checklistForm.houses[index].total_price = null
+          this.checklistForm.houses[index].totalPrice = null
         }
       } else {
-        this.checklistForm.houses[index].total_price = null
+        this.checklistForm.houses[index].totalPrice = null
       }
     },
     submitForm (formName) {

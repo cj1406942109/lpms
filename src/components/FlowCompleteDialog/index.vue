@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="dialogVisible" width="30%" center>
+  <el-dialog :visible.sync="showDialog" width="30%" center>
     <div slot="title"><i class="el-icon-success" style="color:#67C23A;font-size:22px;vertical-align:middle;margin-right:5px;"></i>面签成功</div>
     <div>贷款编号为：<a style="color:blue">{{loanId}}</a></div>
     <div>贷款状态为：<a style="color:blue">{{loanStatus}}</a></div>
@@ -14,17 +14,29 @@
 <script>
 export default {
   name: 'flow-complete-dialog',
+  data () {
+    return {
+      showDialog: this.dialogVisible
+    }
+  },
   props: {
     loanId: '',
     loanStatus: '',
-    dialogVisible: false,
-    showReturnButton: true,
+    dialogVisible: '',
+    showReturnButton: {
+      default: true
+    },
     listPath: '',
     nextPath: ''
   },
+  watch: {
+    dialogVisible () {
+      this.showDialog = this.dialogVisible
+    }
+  },
   methods: {
     changePath (path) {
-      this.dialogVisible = false
+      this.showDialog = false
       if (path) {
         this.$router.push({ path })
       } else {
