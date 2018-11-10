@@ -54,11 +54,11 @@ export default {
       tableList: [],
       tableListLoading: true,
       tableTypeList: [
-        { label: '抵押贷款-面签-面签地点', valueType: 0 },
-        { label: '抵押贷款-评估下单-评估公司', valueType: 1 },
-        { label: '抵押贷款-审批-放款条件', valueType: 2 },
-        { label: '二手房贷款-面签-面签地点', valueType: 3 },
-        { label: '二手房贷款-评估下单-评估公司', valueType: 4 }
+        { label: '抵押贷款-面签-面签地点', valueType: 0, key: '', value: '' },
+        { label: '抵押贷款-评估下单-评估公司', valueType: 1, key: '', value: '' },
+        { label: '抵押贷款-审批-放款条件', valueType: 2, key: '', value: '' },
+        { label: '二手房贷款-面签-面签地点', valueType: 3, key: '', value: '' },
+        { label: '二手房贷款-评估下单-评估公司', valueType: 4, key: '', value: '' }
       ],
       dialogFormVisible: false,
       dialogTitle: '',
@@ -71,15 +71,15 @@ export default {
     }
   },
   created () {
-    this.GetTableList()
+    this.getTableList()
   },
   methods: {
-    GetTableList () {
-      getTableList().then(response => {
-        if (response.data.status) {
-          const data = response.data.data
-          const temp1 = []
-          data.forEach(ele => {
+    getTableList () {
+      getTableList().then(data => {
+        const temp1 = []
+        for (const key in data) {
+          if (data.hasOwnProperty(data)) {
+            const ele = data[key]
             const temp2 = []
             ele.forEach(e => {
               // 不标准json字符串规范化
@@ -87,10 +87,10 @@ export default {
               temp2.push(JSON.parse(e.replace(/'/g, '"').replace(/(\w+)\s*:/g, function (match, $1) { return '"' + $1 + '":' })))
             })
             temp1.push(temp2)
-          })
-          this.tableList = temp1
-          this.tableListLoading = false
+          }
         }
+        this.tableList = temp1
+        this.tableListLoading = false
       })
     },
     editTable (item) {

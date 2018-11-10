@@ -561,16 +561,16 @@ export function saveForm (form) {
 
 /**
  * 确定签约状态
- * @param {*} orderId id
+ * @param {*} visaId id
  * @param {*} time 完成时间
  * @param {*} address 约定地点
  */
-export function confirmVisa (orderId, time, address) {
+export function confirmVisa (visaId, time, address) {
   return request({
     url: `/mortgage/visa/confirm`,
     method: 'post',
     data: qs.stringify({
-      orderId,
+      visaId,
       time,
       address
     })

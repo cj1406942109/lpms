@@ -24,12 +24,12 @@ export function getEmployee (id) {
 }
 
 // 表格
-export function getTableList () {
-  return request({
-    url: '/tableValue/allValue',
-    method: 'get'
-  })
-}
+// export function getTableList () {
+//   return request({
+//     url: '/tableValue/allValue',
+//     method: 'get'
+//   })
+// }
 
 // ************************* 部门管理开始 *******************************
 
@@ -98,3 +98,14 @@ export function gePermissionByEmployeeId (employeeId) {
 }
 
 // ************************* 账号管理结束 *******************************
+
+// ************************* 表格管理开始 *******************************
+
+export function getTableList () {
+  return request({
+    url: '/tableValue/allValue',
+    method: 'get'
+  })
+}
+
+// ************************* 表格管理结束 *******************************

@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <h2>部门列表</h2>
+    <h2>账号列表</h2>
     <el-table :data="userList" v-loading.body="userListLoading" style="width: 100%" border stripe>
       <el-table-column type="index" label="序号" width="100"></el-table-column>
       <el-table-column prop="name" label="姓名"></el-table-column>

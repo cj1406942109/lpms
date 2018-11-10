@@ -1,22 +1,17 @@
 <template>
   <div class="app-container">
     <h2>正在面签列表</h2>
-    <el-table :data="visaInterviewList" v-loading.body="visaInterviewListLoading" style="width: 100%" border stripe>
+    <el-table :data="interviewList" v-loading.body="interviewListLoading" style="width: 100%" border stripe>
       <el-table-column type="index" label="序号" width="100"></el-table-column>
-      <el-table-column prop="loanId" label="贷款编号" width="300"></el-table-column>
-      <el-table-column prop="name" label="客户姓名"></el-table-column>
-      <el-table-column prop="phone" label="联系方式"></el-table-column>
-      <el-table-column prop="status" label="当前状态" width="200">
-        <!-- <template slot-scope="scope">
-          <el-tag
-            :type="scope.row.status === '待确定签约状态' ? 'warning' : 'infro'"
-            close-transition>{{scope.row.status}}</el-tag>
-        </template> -->
-      </el-table-column>
+      <el-table-column prop="rootId" label="贷款编号" width="300"></el-table-column>
+      <el-table-column prop="clientName" label="客户姓名"></el-table-column>
+      <el-table-column prop="clientPhone" label="联系方式"></el-table-column>
+      <el-table-column prop="state" label="当前状态" width="200"></el-table-column>
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="goNext(scope.row)">办理</el-button>
           <el-button type="success" size="mini" @click="assignTask(scope.row)">分配</el-button>
+          <el-button type="danger" size="mini" @click="wasteSheetOperation(scope.row)">废单</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -38,17 +33,18 @@
 <script>
 import { mapGetters } from 'vuex'
 import {
-  getVisaInterviewList,
-  // getVisaInterviewById,
+  getViewList,
+  getViewListByEmployeeId,
+  wasteSheet,
   assignTaskToUser,
   getAssignUserList
 } from '@/api/mortgage'
 export default {
-  name: 'visa-interview',
+  name: 'interview',
   data () {
     return {
-      visaInterviewList: null,
-      visaInterviewListLoading: true,
+      interviewList: null,
+      interviewListLoading: true,
       assignUserListLoading: true,
       assignUserList: [{
         name: '李华',
@@ -56,38 +52,34 @@ export default {
       }],
       dialogTableVisible: false,
       selectedTask: null,
-      departmentId: '3242bdd1b6e14896a464514ed4e52236'
+      departmentId: '0f165b4a1e8747a1a143fc23773f2a61'
     }
   },
   created () {
-    this.GetVisaInterviewList()
+    this.getInterviewList()
   },
   computed: {
     ...mapGetters([
-      'user_id'
+      'userId',
+      'permission'
     ])
   },
   methods: {
-    GetVisaInterviewList () {
-      // if (this.user_id === '40f2c37fecfb42da9429b3622e898686') {
-      //   getVisaInterviewById(this.user_id).then(response => {
-      //     this.visaInterviewListLoading = false
-      //     if (response.data.status) {
-      //       this.visaInterviewList = response.data.data
-      //     }
-      //   })
-      // } else {
-      // }
-      getVisaInterviewList().then(response => {
-        this.visaInterviewListLoading = false
-        if (response.data.status) {
-          this.visaInterviewList = response.data.data
-        }
-      })
+    getInterviewList () {
+      if (this.permission.includes('mortgage_view_getViewList')) {
+        getViewList().then(data => {
+          this.interviewListLoading = false
+          this.interviewList = data
+        })
+      } else {
+        getViewListByEmployeeId(this.userId).then(data => {
+          this.interviewListLoading = false
+          this.interviewList = data
+        })
+      }
     },
     goNext (item) {
-      console.log(item)
-      this.$router.push({ path: `/loan-mortgage/visa-interview/edit-info/${item.taskId}/${item.checklistId}/${item.loanId}` })
+      this.$router.push({ path: `/house/visa-interview/edit-info/${item.id}` })
     },
     assignTask (item) {
       this.selectedTask = item
@@ -119,10 +111,38 @@ export default {
             type: 'success',
             message: '任务分配成功'
           })
-          this.GetVisaInterviewList()
+          this.getInterviewList()
         }
       })
       console.log(item)
+    },
+    wasteSheetOperation (item) {
+      console.log(item)
+      this.$confirm('废单操作将结束当前贷款的所有流程，是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'info',
+          message: '正在处理...'
+        })
+        wasteSheet(item.taskId, this.userId).then(response => {
+          if (response.data.status) {
+            this.$message({
+              type: 'success',
+              message: '废单操作执行成功'
+            })
+            this.getInterviewList()
+          } else {
+            this.$message({
+              showClose: true,
+              message: '操作失败，请稍候重试',
+              type: 'error'
+            })
+          }
+        })
+      }).catch(() => {})
     }
   }
 }

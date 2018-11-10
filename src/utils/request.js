@@ -77,13 +77,19 @@ service.interceptors.response.use(
   //   }
   // },
   error => {
-    console.log(error)// for debug
-    Message({
-      // message: error.message,
-      message: error.message,
-      type: 'error'
-    })
-    return Promise.reject(error)
+    // console.log(error)// for debug
+    if (error.response) {
+      Message({
+        message: error.response.data.data,
+        type: 'error'
+      })
+    } else {
+      Message({
+        message: error.message,
+        type: 'error'
+      })
+    }
+    // return Promise.reject(error) 不抛出错误
   }
 )
 

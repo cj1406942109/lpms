@@ -160,6 +160,12 @@ export const constantRouterMap = [
       component: () => import('@/views/loan-house/visa-interview'),
       name: '二手房贷款-面签',
       meta: { title: '面签', icon: 'visa-interview' }
+    }, {
+      path: 'visa-interview/edit-info/:id',
+      hidden: true,
+      name: '二手房贷款-面签表格',
+      meta: { title: '面签表格' },
+      component: () => import('@/views/loan-house/visa-interview/editInfo')
     }]
   },
   {

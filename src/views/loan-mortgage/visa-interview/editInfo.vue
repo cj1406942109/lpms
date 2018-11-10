@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-steps :active="activeStep" align-center finish-status="success" class="form-wrapper">
       <el-step title="步骤1" description="填写资料目录表和个人贷款申请表"></el-step>
-      <el-step title="步骤2" description="确定面签状态"></el-step>
+      <el-step title="步骤2" description="确定签约状态"></el-step>
     </el-steps>
     <template v-if="activeStep=='0'">
       <el-collapse v-model="activeNames">
@@ -896,7 +896,12 @@ export default {
       this.$refs['catalogForm'].validate((valid) => {
         if (valid) {
           saveCatalog(this.catalogForm).then(data => {
-            console.log(data)
+            if (data) {
+              this.$message({
+                type: 'success',
+                message: '保存成功'
+              })
+            }
           })
         } else {
           return false
@@ -907,7 +912,12 @@ export default {
       this.$refs['applicationForm'].validate((valid) => {
         if (valid) {
           saveForm(this.applicationForm).then(data => {
-            return data
+            if (data) {
+              this.$message({
+                type: 'success',
+                message: '保存成功'
+              })
+            }
           })
         } else {
           return false
@@ -915,7 +925,6 @@ export default {
       })
     },
     resetForm (formName) {
-      console.log(formName)
       this.$refs[formName].resetFields()
     },
     addContent () {
@@ -941,10 +950,6 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message({
-          type: 'info',
-          message: '正在处理...'
-        })
         this.saveCatalog()
         this.saveForm()
         this.activeStep++
@@ -958,10 +963,6 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.$message({
-              type: 'info',
-              message: '正在处理...'
-            })
             this.formLoading = true
             confirmVisa(this.$route.params.id, this.contractStatusForm.time, this.contractStatusForm.address).then(data => {
               this.formLoading = false
