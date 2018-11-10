@@ -52,7 +52,7 @@ export default {
     },
     goNext (item) {
       console.log(item)
-      this.$router.push({ path: `/loan-mortgage/evaluate-order/edit-info/${item.id}` })
+      this.$router.push({ path: `/loan-mortgage/evaluate-order/edit-info/${item.id}/${item.rootId}` })
     }
   }
 }

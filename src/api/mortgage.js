@@ -248,17 +248,17 @@ export function confirmApproveStatus (approve, taskId) {
     })
   })
 }
-export function saveReport (time, reports, taskId) {
-  return request({
-    url: '/approve/report/save',
-    method: 'post',
-    data: qs.stringify({
-      time,
-      reports,
-      taskId
-    })
-  })
-}
+// export function saveReport (time, reports, taskId) {
+//   return request({
+//     url: '/approve/report/save',
+//     method: 'post',
+//     data: qs.stringify({
+//       time,
+//       reports,
+//       taskId
+//     })
+//   })
+// }
 
 // ***********************审批结束***************************
 
@@ -631,6 +631,26 @@ export function confirmOrder (orderId, time, company) {
   })
 }
 
+export function saveReport (reportId, time, type, report) {
+  return request({
+    url: `/mortgage/order/report/${reportId}`,
+    method: 'post',
+    data: qs.stringify({
+      time,
+      type,
+      report: JSON.stringify(report)
+    })
+  })
+}
+// export function getHouseInfoByOrderId (orderId) {
+//   return request({
+//     url: `/mortgage/order/house/${orderId}`,
+//     method: 'get',
+//     params: {
+//       orderId
+//     }
+//   })
+// }
 // ************************* 评估下单结束 *******************************
 
 // ************************* 审批开始 *******************************

@@ -93,7 +93,7 @@ export const constantRouterMap = [
       name: '抵押贷款-评估下单',
       meta: { title: '评估下单', icon: 'evaluate' }
     }, {
-      path: 'evaluate-order/edit-info/:id',
+      path: 'evaluate-order/edit-info/:id/:mortgageId',
       hidden: true,
       name: '抵押贷款-评估下单表格',
       meta: { title: '评估下单表格' },
