@@ -1,14 +1,18 @@
 <template>
   <div class="app-container">
-    <div class="form-wrapper">
-      <h2>确定下单状态</h2>
+    <el-steps :active="activeStep" align-center finish-status="success" class="form-wrapper">
+      <el-step title="步骤1" description="填写资料目录表和个人贷款申请表"></el-step>
+      <el-step title="步骤2" description="确定面签状态"></el-step>
+    </el-steps>
+    <div class="form-wrapper" v-if="activeStep=='0'">
+      <h3>确定下单状态</h3>
       <el-form :model="orderStatusForm" ref="orderStatusForm" label-width="200px">
         <el-row>
           <el-col :span="10">
             <el-form-item label="完成时间" prop="time">
-              <el-date-picker type="date" placeholder="选择日期" v-model="orderStatusForm.time" value-format="yyyy-MM-dd"></el-date-picker>
+              <el-date-picker type="date" placeholder="选择日期" v-model="orderStatusForm.time" value-format="timestamp"></el-date-picker>
             </el-form-item>
-            <el-form-item label="评估公司">
+            <el-form-item label="评估公司" prop="company">
               <el-select v-model="orderStatusForm.company" placeholder="请选择评估公司">
                 <el-option label="公司1" :value="1"></el-option>
                 <el-option label="公司2" :value="2"></el-option>
@@ -18,11 +22,11 @@
         </el-row>
         <el-form-item label=" ">
           <el-button v-if="orderFinish" disabled type="info">下单已完成</el-button>
-          <el-button type="primary" v-else @click="finishOrder()">下单完成</el-button>
+          <el-button type="primary" v-else @click="confirmOrder()">完成下单</el-button>
         </el-form-item>
       </el-form>
     </div>
-    <div class="form-wrapper">
+    <div class="form-wrapper" v-if="activeStep=='1'">
       <h2>出报告</h2>
       <el-form :model="reportForm" ref="reportForm" label-width="200px">
         <el-form-item label="完成时间" prop="time">
@@ -77,21 +81,22 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-dialog :visible.sync="dialogVisible" width="30%" center>
-      <div slot="title"><i class="el-icon-success" style="color:#67C23A;font-size:22px;vertical-align:middle;margin-right:5px;"></i>评估下单成功</div>
-      <div>贷款编号为：<a style="color:blue">{{loanNum}}</a></div>
-      <div>贷款状态为：<a style="color:blue">正在审批（等待填写审批相关表格）</a></div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="checkStatus">查看贷款状态</el-button>
-        <el-button @click="returnList">返回面谈列表</el-button>
-        <el-button type="primary" @click="nextOperation">办理下一业务</el-button>
-      </span>
-    </el-dialog>
+    <flow-complete-dialog
+      :loanId="loanId"
+      :loanStatus="loanStatus"
+      :dialogVisible="dialogVisible"
+      :listPath="listPath"
+      :nextPath="nextPath"
+    ></flow-complete-dialog>
   </div>
 </template>
 
 <script>
-import { setOrderStatus, checkOrderStatus, saveReports } from '@/api/mortgage'
+import {
+  getOrderById,
+  confirmOrder,
+  saveReports
+} from '@/api/mortgage'
 
 export default {
   data () {
@@ -119,23 +124,22 @@ export default {
         type: null,
         reports: [report]
       },
-      loanNum: '',
+      activeStep: 0,
+      formLoading: false,
+      loanId: '',
+      loanStatus: '',
       dialogVisible: false,
+      listPath: '/loan-mortgage/visa-interview',
+      nextPath: '/loan-mortgage/evaluate-order',
       orderFinish: null,
       reportFinish: null
     }
   },
   methods: {
-    finishOrder () {
-      setOrderStatus(this.orderStatusForm.time, this.orderStatusForm.company, this.$route.params.taskId).then(response => {
-        console.log(response)
-        if (response.data.status) {
-          this.$message({
-            type: 'success',
-            message: '下单已完成'
-          })
-          this.orderFinish = true
-        }
+    confirmOrder () {
+      confirmOrder(this.$route.params.id, this.orderStatusForm.company, this.orderStatusForm.time).then(data => {
+        console.log(data)
+        this.orderFinish = true
       })
     },
     addReport () {
@@ -172,27 +176,18 @@ export default {
         })
       }).catch(() => {})
       this.dialogVisible = false
-    },
-    checkStatus () {
-      this.dialogVisible = false
-      this.$router.push({ path: `/loan-management/order/status/${this.loanNum}` })
-    },
-    returnList () {
-      this.dialogVisible = false
-      this.$router.push({ path: '/loan-mortgage/evaluate-order' })
-    },
-    nextOperation () {
-      this.dialogVisible = false
-      this.$router.push({ path: '/loan-mortgage/examine-approve' })
     }
   },
   created () {
-    checkOrderStatus(this.$route.params.loanId).then(response => {
-      if (response.data.status) {
-        this.orderFinish = response.data.data.orderFinish
-        this.reportFinish = response.data.data.reportFinish
-      }
+    getOrderById(this.$route.params.id).then(data => {
+      console.log(data)
     })
+    // checkOrderStatus(this.$route.params.loanId).then(response => {
+    //   if (response.data.status) {
+    //     this.orderFinish = response.data.data.orderFinish
+    //     this.reportFinish = response.data.data.reportFinish
+    //   }
+    // })
   }
 }
 </script>
@@ -203,6 +198,10 @@ export default {
       padding: 20px;
       margin-bottom: 20px;
       background-color: #fff;
+      h3 {
+        padding-left: 200px;
+        color: #303133;
+      }
     }
   }
 </style>

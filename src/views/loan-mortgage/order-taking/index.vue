@@ -98,7 +98,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getStaticIndexByKey, saveCheckList, createTask } from '@/api/mortgage'
+import { getStaticIndexByKey, saveChecklist, createTask } from '@/api/mortgage'
 
 export default {
   name: 'order-taking',
@@ -125,30 +125,30 @@ export default {
         remark: null
       },
       rules: {
-        datetime: [{ required: true, message: '完成时间不能为空', trigger: 'blur' }],
-        clientName: [{ required: true, message: '姓名不能为空', trigger: 'blur' }],
+        datetime: [{ required: true, message: '完成时间不能为空' }],
+        clientName: [{ required: true, message: '姓名不能为空' }],
         clientPhone: [
-          { required: true, message: '手机号不能为空', trigger: 'blur' },
-          { pattern: /^1[0-9]{10}$/, message: '手机号格式错误', trigger: 'blur' }
+          { required: true, message: '手机号不能为空' },
+          { pattern: /^1[0-9]{10}$/, message: '手机号格式错误' }
         ],
-        clientIdType: [{ required: true, message: '请选择证件类型', trigger: 'blur' }],
+        clientIdType: [{ required: true, message: '请选择证件类型' }],
         clientIdNumber: [
-          { required: true, message: '证件号码不能为空', trigger: 'blur' },
-          { pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}[0-9Xx]$)/, message: '证件号码格式错误', trigger: 'blur' }
+          { required: true, message: '证件号码不能为空' },
+          { pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}[0-9Xx]$)/, message: '证件号码格式错误' }
         ],
-        clientWorkType: [{ required: true, message: '请选择工作种类', trigger: 'blur' }],
-        clientWorkUnit: [{ required: true, message: '工作单位不能为空', trigger: 'blur' }],
-        loanVariety: [{ required: true, message: '请选择借款品种', trigger: 'blur' }],
+        clientWorkType: [{ required: true, message: '请选择工作种类' }],
+        clientWorkUnit: [{ required: true, message: '工作单位不能为空' }],
+        loanVariety: [{ required: true, message: '请选择借款品种' }],
         loanAmount: [
-          { required: true, message: '贷款金额不能为空', trigger: 'blur' },
+          { required: true, message: '贷款金额不能为空' },
           { type: 'integer', message: '贷款金额必须为整数值' }
         ],
         loanPeriod: [
-          { required: true, message: '贷款期限不能为空', trigger: 'blur' },
+          { required: true, message: '贷款期限不能为空' },
           { type: 'integer', message: '贷款期限必须为整数值' }
         ],
-        checklistSource: [{ required: true, message: '请选择单子来源渠道', trigger: 'blur' }],
-        agentName: [{ required: true, message: '中介不能为空', trigger: 'blur' }]
+        checklistSource: [{ required: true, message: '请选择单子来源渠道' }],
+        agentName: [{ required: true, message: '中介不能为空' }]
       },
       formLoading: false,
       loanId: '',
@@ -226,7 +226,7 @@ export default {
             createTask(this.userId).then(data => {
               // console.log(data)
               const checklistId = data.id
-              saveCheckList(this.checklistForm, checklistId).then(data => {
+              saveChecklist(this.checklistForm, checklistId).then(data => {
                 this.formLoading = false
                 this.loanId = data.rootId
                 this.loanStatus = data.des

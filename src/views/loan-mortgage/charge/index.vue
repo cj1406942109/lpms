@@ -3,16 +3,10 @@
     <h2>正在收费列表</h2>
     <el-table :data="chargeList" v-loading.body="chargeListLoading" style="width: 100%" border stripe>
       <el-table-column type="index" label="序号" width="100"></el-table-column>
-      <el-table-column prop="loanId" label="贷款编号" width="300"></el-table-column>
-      <el-table-column prop="name" label="客户姓名"></el-table-column>
-      <el-table-column prop="phone" label="联系方式"></el-table-column>
-      <el-table-column prop="status" label="当前状态" width="200">
-        <!-- <template slot-scope="scope">
-          <el-tag
-            :type="scope.row.status === '待确定签约状态' ? 'warning' : 'infro'"
-            close-transition>{{scope.row.status}}</el-tag>
-        </template> -->
-      </el-table-column>
+      <el-table-column prop="rootId" label="贷款编号" width="300"></el-table-column>
+      <el-table-column prop="clientName" label="客户姓名"></el-table-column>
+      <el-table-column prop="clientPhone" label="联系方式"></el-table-column>
+      <el-table-column prop="state" label="当前状态" width="200"></el-table-column>
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="goNext(scope.row)">办理</el-button>
@@ -24,7 +18,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getChargeListById } from '@/api/mortgage'
+import { getChargeList } from '@/api/mortgage'
 export default {
   name: 'charge',
   data () {
@@ -38,17 +32,14 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'user_id'
+      'userId'
     ])
   },
   methods: {
     getchargeList () {
-      getChargeListById(this.user_id).then(response => {
-        console.log(response)
+      getChargeList().then(data => {
         this.chargeListLoading = false
-        if (response.data.status) {
-          this.chargeList = response.data.data
-        }
+        this.chargeList = data
       })
     },
     goNext (item) {

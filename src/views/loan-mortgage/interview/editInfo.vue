@@ -81,22 +81,22 @@ export default {
         surveyOpinion: null
       },
       rules: {
-        finishTime: [{ required: true, message: '完成时间不能为空', trigger: 'blur' }],
-        proposedInstitution: [{ required: true, message: '拟申请机构不能为空', trigger: 'blur' }],
-        proposedClerk: [{ required: true, message: '拟对接人不能为空', trigger: 'blur' }],
+        finishTime: [{ required: true, message: '完成时间不能为空' }],
+        proposedInstitution: [{ required: true, message: '拟申请机构不能为空' }],
+        proposedClerk: [{ required: true, message: '拟对接人不能为空' }],
         proposedAmount: [
-          { required: true, message: '拟上报金额不能为空', trigger: 'blur' },
+          { required: true, message: '拟上报金额不能为空' },
           { type: 'integer', message: '拟上报金额必须为整数值' }
         ],
-        proposedTime: [{ required: true, message: '拟签约时间不能为空', trigger: 'blur' }],
+        proposedTime: [{ required: true, message: '拟签约时间不能为空' }],
         rate: [
-          { required: true, message: '费率不能为空', trigger: 'blur' },
+          { required: true, message: '费率不能为空' },
           { type: 'number', min: 0, max: 100, message: '费率必须为0到100之间的数字' }
         ],
-        repaymentType: [{ required: true, message: '请选择客户还款方式', trigger: 'blur' }],
-        clientPurposeType: [{ required: true, message: '请选择客户用途类型', trigger: 'blur' }],
-        clientPurpose: [{ required: true, message: '客户用途不能为空', trigger: 'blur' }],
-        surveyOpinion: [{ required: true, message: '调查意见不能为空', trigger: 'blur' }]
+        repaymentType: [{ required: true, message: '请选择客户还款方式' }],
+        clientPurposeType: [{ required: true, message: '请选择客户用途类型' }],
+        clientPurpose: [{ required: true, message: '客户用途不能为空' }],
+        surveyOpinion: [{ required: true, message: '调查意见不能为空' }]
       },
       formLoading: false,
       loanId: '',

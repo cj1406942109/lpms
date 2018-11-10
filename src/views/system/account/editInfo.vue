@@ -2,60 +2,60 @@
   <div class="app-container">
     <h2>编辑用户</h2>
     <div class="form-wrapper">
-      <el-form :model="accountForm" ref="accountForm" label-width="200px" inline>
-        <h3>账号信息</h3>
-        <el-form-item label="账号">
-          <el-input v-model="accountForm.account"></el-input>
-        </el-form-item>
-        <br>
-        <el-form-item label="密码">
-          <el-input v-model="accountForm.password"></el-input>
-        </el-form-item>
-        <br>
-        <h3>基本信息</h3>
-        <el-form-item label="姓名">
-          <el-input v-model="accountForm.name"></el-input>
-        </el-form-item>
-        <br>
-        <el-form-item label="部门">
-          <el-select v-model="accountForm.department" placeholder="请选择部门">
-            <el-option label="部门1" value="1"></el-option>
-            <el-option label="部门2" value="2"></el-option>
-          </el-select>
-        </el-form-item>
-        <br>
-        <el-form-item label="角色">
-          <el-select v-model="accountForm.role" placeholder="请选择角色">
-            <el-option label="管理员" value="1"></el-option>
-            <el-option label="普通员工" value="2"></el-option>
-          </el-select>
-        </el-form-item>
-        <br>
-        <el-form-item label="手机号">
-          <el-input v-model="accountForm.phone"></el-input>
-        </el-form-item>
-        <br>
-        <h3>账号权限</h3>
-        <el-form-item label=" ">
-          <el-tree
-            :data="permissions"
-            show-checkbox
-            node-key="id">
-          </el-tree>
-        </el-form-item>
-        <br>
+      <el-form :model="accountForm" ref="accountForm" label-width="200px">
+        <el-row :gutter="20">
+          <el-col :span="10">
+            <h3>账号信息</h3>
+            <el-form-item label="账号">
+              <el-input v-model="accountForm.account"></el-input>
+            </el-form-item>
+            <el-form-item label="密码">
+              <el-input v-model="accountForm.password"></el-input>
+            </el-form-item>
+            <el-form-item label="姓名">
+              <el-input v-model="accountForm.name"></el-input>
+            </el-form-item>
+            <el-form-item label="部门">
+              <el-select v-model="accountForm.department" placeholder="请选择部门">
+                <el-option label="部门1" value="1"></el-option>
+                <el-option label="部门2" value="2"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="角色">
+              <el-select v-model="accountForm.role" placeholder="请选择角色">
+                <el-option label="管理员" value="1"></el-option>
+                <el-option label="普通员工" value="2"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="手机号">
+              <el-input v-model="accountForm.phone"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="10">
+            <h3>账号权限</h3>
+            <el-form-item label=" ">
+              <el-tree
+                :data="permissions"
+                show-checkbox
+                node-key="id">
+              </el-tree>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label=" ">
           <el-button type="primary" @click="submitForm('accountForm')">保存</el-button>
           <el-button @click="resetForm('accountForm')">重置</el-button>
         </el-form-item>
       </el-form>
-      {{accountForm}}
     </div>
   </div>
 </template>
 
 <script>
-import { getEmployee } from '@/api/system'
+import {
+  getUserById,
+  gePermissionByEmployeeId
+} from '@/api/system'
 const permissionOptions = [{
   id: 'handle',
   label: '业务办理',
@@ -189,17 +189,20 @@ export default {
     }
   },
   methods: {
-    GetEmployee (id) {
-      getEmployee(id).then(response => {
-        // console.log(response)
-        this.accountForm = response.data.data
-        console.log(this.accountForm)
+    getUser () {
+      getUserById(this.$route.params.id).then(data => {
+        console.log(data)
+      })
+    },
+    getPermission () {
+      gePermissionByEmployeeId(this.$route.params.id).then(data => {
+        console.log(data)
       })
     }
   },
   created () {
-    console.log(this.$route.params.id)
-    this.GetEmployee(this.$route.params.id)
+    this.getUser()
+    this.getPermission()
   }
 }
 </script>

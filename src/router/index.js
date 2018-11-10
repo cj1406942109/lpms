@@ -82,7 +82,7 @@ export const constantRouterMap = [
       name: '抵押贷款-面签',
       meta: { title: '面签', icon: 'visa-interview' }
     }, {
-      path: 'visa-interview/edit-info/:taskId/:checklistId/:loanId',
+      path: 'visa-interview/edit-info/:id/:mortgageId',
       hidden: true,
       name: '抵押贷款-面签表格',
       meta: { title: '面签表格' },
@@ -93,7 +93,7 @@ export const constantRouterMap = [
       name: '抵押贷款-评估下单',
       meta: { title: '评估下单', icon: 'evaluate' }
     }, {
-      path: 'evaluate-order/edit-info/:taskId/:loanId',
+      path: 'evaluate-order/edit-info/:id',
       hidden: true,
       name: '抵押贷款-评估下单表格',
       meta: { title: '评估下单表格' },
@@ -167,7 +167,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: 'noredirect',
     name: '贷款管理',
-    meta: { title: '贷款管理', icon: 'set' },
+    meta: { title: '贷款管理', icon: 'loan-set' },
     children: [{
       path: 'order',
       component: () => import('@/views/loan-management/order'),
@@ -191,12 +191,18 @@ export const constantRouterMap = [
     component: Layout,
     redirect: 'noredirect',
     name: '系统管理',
-    meta: { title: '系统管理', icon: 'set' },
+    meta: { title: '系统管理', icon: 'system-set' },
     children: [{
       path: 'department',
       component: () => import('@/views/system/department'),
       name: '部门管理',
       meta: { title: '部门管理', icon: 'department' }
+    }, {
+      path: 'department/edit-info/:id',
+      hidden: true,
+      name: '部门管理-部门详情',
+      meta: { title: '部门详情' },
+      component: () => import('@/views/system/department/editInfo')
     }, {
       path: 'account',
       component: () => import('@/views/system/account'),
@@ -206,11 +212,6 @@ export const constantRouterMap = [
       path: 'account/edit-info/:id',
       hidden: true,
       component: () => import('@/views/system/account/editInfo')
-    }, {
-      path: 'permission',
-      component: () => import('@/views/system/permission'),
-      name: '权限管理',
-      meta: { title: '权限管理', icon: 'permission' }
     }, {
       path: 'table',
       component: () => import('@/views/system/table'),

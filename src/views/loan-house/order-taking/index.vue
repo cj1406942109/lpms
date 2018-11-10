@@ -223,7 +223,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getStaticIndexByKey, saveCheckList } from '@/api/mortgage'
+import { getStaticIndexByKey, saveChecklist } from '@/api/mortgage'
 
 export default {
   name: 'order-taking',
@@ -337,7 +337,7 @@ export default {
               message: '正在处理...'
             })
             this.formLoading = true
-            saveCheckList(JSON.stringify(this.clientForm), this.user_id).then(response => {
+            saveChecklist(JSON.stringify(this.clientForm), this.user_id).then(response => {
               this.formLoading = false
               if (response.data.status) {
                 this.loanNum = response.data.data

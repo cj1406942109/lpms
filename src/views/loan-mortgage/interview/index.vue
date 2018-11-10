@@ -6,8 +6,7 @@
       <el-table-column prop="rootId" label="贷款编号" width="300"></el-table-column>
       <el-table-column prop="clientName" label="客户姓名"></el-table-column>
       <el-table-column prop="clientPhone" label="联系方式"></el-table-column>
-      <el-table-column prop="state" label="当前状态" width="200">
-      </el-table-column>
+      <el-table-column prop="state" label="当前状态" width="200"></el-table-column>
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="goNext(scope.row)">办理</el-button>

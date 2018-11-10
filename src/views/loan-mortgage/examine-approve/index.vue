@@ -3,17 +3,11 @@
     <h2>正在审批列表</h2>
     <el-table :data="examineApproveList" v-loading.body="examineApproveListLoading" style="width: 100%" border stripe>
       <el-table-column type="index" label="序号" width="100"></el-table-column>
-      <el-table-column prop="loanId" label="贷款编号" width="300"></el-table-column>
-      <el-table-column prop="name" label="客户姓名"></el-table-column>
-      <el-table-column prop="phone" label="联系方式"></el-table-column>
+      <el-table-column prop="rootId" label="贷款编号" width="300"></el-table-column>
+      <el-table-column prop="clientName" label="客户姓名"></el-table-column>
+      <el-table-column prop="clientPhone" label="联系方式"></el-table-column>
       <el-table-column prop="report_type" label="已出报告类型"></el-table-column>
-      <el-table-column prop="state" label="当前状态" width="200">
-        <template slot-scope="scope">
-          <el-tag
-            :type="scope.row.state === '待出正评' ? 'warning' : 'success'"
-            close-transition>{{scope.row.state}}</el-tag>
-        </template>
-      </el-table-column>
+      <el-table-column prop="state" label="当前状态" width="200"></el-table-column>
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="goNext(scope.row)">办理</el-button>
@@ -25,7 +19,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getApproveListById } from '@/api/mortgage'
+import {
+  getApproveList
+} from '@/api/mortgage'
 export default {
   name: 'examineApprove',
   data () {
@@ -35,21 +31,18 @@ export default {
     }
   },
   created () {
-    this.GetApproveListById()
+    this.getApproveList()
   },
   computed: {
     ...mapGetters([
-      'user_id'
+      'userId'
     ])
   },
   methods: {
-    GetApproveListById () {
-      getApproveListById(this.user_id).then(response => {
-        console.log(response)
+    getApproveList () {
+      getApproveList().then(data => {
         this.examineApproveListLoading = false
-        if (response.data.status) {
-          this.examineApproveList = response.data.data
-        }
+        this.examineApproveList = data
       })
     },
     goNext (item) {

@@ -3,10 +3,10 @@
     <h2>正在放款列表</h2>
     <el-table :data="makeLoansList" v-loading.body="makeLoansListLoading" style="width: 100%" border stripe>
       <el-table-column type="index" label="序号" width="100"></el-table-column>
-      <el-table-column prop="loanId" label="贷款编号" width="300"></el-table-column>
-      <el-table-column prop="name" label="客户姓名"></el-table-column>
-      <el-table-column prop="phone" label="联系方式"></el-table-column>
-      <el-table-column prop="status" label="当前状态" width="200">
+      <el-table-column prop="rootId" label="贷款编号" width="300"></el-table-column>
+      <el-table-column prop="clientName" label="客户姓名"></el-table-column>
+      <el-table-column prop="clientPhone" label="联系方式"></el-table-column>
+      <el-table-column prop="state" label="当前状态" width="200">
         <template slot-scope="scope">
           <el-tag type="primary" close-transition>等待放款</el-tag>
         </template>
@@ -22,7 +22,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getLoanListById, confirmLoan } from '@/api/mortgage'
+import {
+  getLoanList,
+  getLoanById,
+  confirmLoan
+} from '@/api/mortgage'
 export default {
   name: 'evaluate-order',
   data () {
@@ -32,20 +36,18 @@ export default {
     }
   },
   created () {
-    this.getMakeLoansList()
+    this.getLoanList()
   },
   computed: {
     ...mapGetters([
-      'user_id'
+      'userId'
     ])
   },
   methods: {
-    getMakeLoansList () {
-      getLoanListById(this.user_id).then(response => {
+    getLoanList () {
+      getLoanList().then(data => {
         this.makeLoansListLoading = false
-        if (response.data.status) {
-          this.makeLoansList = response.data.data
-        }
+        this.makeLoansList = data
       })
     },
     confirmLoan (item) {
@@ -59,21 +61,11 @@ export default {
           type: 'info',
           message: '正在处理...'
         })
-        confirmLoan(item.taskId).then(response => {
-          if (response.data.status === 1) {
-            this.$message({
-              showClose: true,
-              message: '放款成功',
-              type: 'success'
-            })
-            this.getMakeLoansList()
-          } else {
-            this.$message({
-              showClose: true,
-              message: '放款失败，请稍候重试！',
-              type: 'error'
-            })
-          }
+        getLoanById(item.id).then(data => {
+          console.log(data)
+        })
+        confirmLoan(item.id).then(data => {
+          console.log(data)
         })
       }).catch(() => {})
     }
