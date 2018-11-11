@@ -6,7 +6,13 @@
       <el-table-column prop="rootId" label="贷款编号" width="300"></el-table-column>
       <el-table-column prop="clientName" label="客户姓名"></el-table-column>
       <el-table-column prop="clientPhone" label="联系方式"></el-table-column>
-      <el-table-column prop="state" label="当前状态" width="200"></el-table-column>
+      <el-table-column prop="state" label="当前状态" width="200">
+        <template slot-scope="scope">
+            <el-tag :type="tagState(scope.row.state)">
+              {{formateState(scope.row.state)}}
+            </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="goNext(scope.row)">办理</el-button>
@@ -80,6 +86,30 @@ export default {
     },
     goNext (item) {
       this.$router.push({ path: `/loan-mortgage/interview/edit-info/${item.id}` })
+    },
+    tagState (state) {
+      switch (state) {
+        case 'open':
+          return 'primary'
+        case 'finish':
+          return 'success'
+        case 'close':
+          return 'danger'
+        default:
+          return 'info'
+      }
+    },
+    formateState (state) {
+      switch (state) {
+        case 'open':
+          return '待填写面谈建议'
+        case 'finish':
+          return '已完成'
+        case 'close':
+          return '已关闭'
+        default:
+          return '其他'
+      }
     },
     assignTask (item) {
       this.selectedTask = item
