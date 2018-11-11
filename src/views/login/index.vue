@@ -84,7 +84,8 @@ export default {
 
 <style lang="scss" scoped>
 .app-wrapper {
-  // background-color: #E7E5E4;
+  background-color: #E7E5E4;
+  height: 100vh;
   .el-header {
     padding: 0 100px;
     border-bottom: 1px solid #eee;
