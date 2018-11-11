@@ -42,12 +42,13 @@
           </el-radio-group>
         </el-form-item>
         <el-row v-for="(house, indexH) in reportForm.reports" :key="house.id">
+          <h3>房产 {{indexH + 1}} </h3>
           <el-form-item>
             <el-button type="success" @click="addReport(indexH)" v-if="reportForm.type == '1' && reportForm.reports[indexH].length < 2">新增报告</el-button>
             <el-button type="danger" @click="removeReport(indexH)" v-if="reportForm.type == '1' && reportForm.reports[indexH].length === 2">删除第二份报告</el-button>
           </el-form-item>
           <el-col :span="10" v-for="(report, indexR) in house" :key="report.id">
-            <h3>房产 {{indexH + 1}} 报告 {{indexR + 1}} 内容</h3>
+            <h3>报告 {{indexR + 1}} 内容</h3>
             <el-form-item label="权利人" :prop="'reports.' + indexH + '.' + indexR + '.reportObligee'" :rules="[{ required: true, message: '权利人不能为空' }]">
               <el-input clearable v-model="report.reportObligee"></el-input>
             </el-form-item>
@@ -150,10 +151,37 @@ export default {
       loanId: '',
       loanStatus: '',
       dialogVisible: false,
-      listPath: '/loan-mortgage/visa-interview',
-      nextPath: '/loan-mortgage/evaluate-order',
+      listPath: '/loan-mortgage/evaluate-order',
+      nextPath: '/loan-mortgage/examine-approve',
       orderFinish: null,
       reportFinish: null
+    }
+  },
+  watch: {
+    'reportForm.type': function (newType, oldType) {
+      let dialog = false
+      this.reportForm.reports.forEach(house => {
+        // 勾选正评，且当前有房产报告大于一份
+        if (house.length > 1 && newType === 2) {
+          dialog = true
+        }
+      })
+
+      if (dialog) {
+        this.$confirm('一个房产只能对应一份正评，是否删除多余报告', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          // 报告截取，只取第一个
+          this.reportForm.reports.forEach((house, index) => {
+            this.removeReport(index)
+          })
+          this.reportForm.type = newType
+        }).catch(() => {
+          this.reportForm.type = oldType
+        })
+      }
     }
   },
   methods: {
@@ -165,10 +193,6 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.$message({
-              type: 'info',
-              message: '正在处理...'
-            })
             confirmOrder(this.$route.params.id, this.orderStatusForm.time, this.orderStatusForm.company).then(data => {
               this.orderFinish = true
             })
@@ -195,9 +219,7 @@ export default {
     },
     nextStep () {
       if (!this.orderFinish) {
-        confirmOrder(this.$route.params.id, this.orderStatusForm.company, this.orderStatusForm.time).then(data => {
-          this.orderFinish = true
-        })
+        this.confirmOrder('orderStatusForm')
       }
       this.activeStep++
     },
@@ -212,6 +234,12 @@ export default {
             this.$message({
               type: 'info',
               message: '正在处理...'
+            })
+            // 给所有的报告类型赋值
+            this.reportForm.reports.forEach(house => {
+              house.forEach(report => {
+                report.reportType = this.reportForm.type
+              })
             })
             saveReport(this.$route.params.id, this.reportForm.time, this.reportForm.type, this.reportForm.reports).then(data => {
               this.formLoading = false
