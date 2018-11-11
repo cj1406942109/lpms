@@ -3,9 +3,9 @@
     <h2>面谈列表</h2>
     <el-table :data="interviewList" v-loading.body="interviewListLoading" style="width: 100%" border stripe>
       <el-table-column type="index" label="序号" width="100"></el-table-column>
-      <el-table-column :sortable="true" prop="rootId" label="贷款编号" width="300"></el-table-column>
+      <el-table-column :sortable="true" prop="rootId" label="贷款编号" width="200"></el-table-column>
       <el-table-column :sortable="true" prop="clientName" label="客户姓名"></el-table-column>
-      <el-table-column :sortable="true" prop="clientPhone" label="联系方式"></el-table-column>
+      <el-table-column :sortable="true" prop="clientPhone" label="联系方式" width="200"></el-table-column>
       <el-table-column :sortable="true" prop="state" label="当前状态" width="200"
         :filter-method="filterState"
         :filters="[{ text: '待填写面谈建议', value: 'open' }, { text: '已完成', value: 'finish' }, { text: '已关闭', value: 'close' }]"

@@ -3,7 +3,7 @@
     <h2>待办事项</h2>
     <el-table :data="todoList" v-loading.body="toodoListLoading" border stripe style="width: 100%">
       <el-table-column type="index" label="序号" width="100"></el-table-column>
-      <el-table-column prop="rootId" label="贷款编号" width="300"></el-table-column>
+      <el-table-column prop="rootId" label="贷款编号" width="200"></el-table-column>
       <!-- <el-table-column prop="type" label="贷款类型"></el-table-column> -->
       <el-table-column prop="clientName" label="姓名"></el-table-column>
       <el-table-column prop="clientPhone" label="电话"></el-table-column>
