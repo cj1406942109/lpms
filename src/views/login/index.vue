@@ -3,7 +3,10 @@
     <el-container>
       <el-main>
         <div class="form-wrapper">
-          <h3 class="title">日晟行贷款管理系统</h3>
+          <h3 class="title">
+            <img :src="logo" alt="日晟行贷款">
+            <!-- <br>日晟行贷款管理系统 -->
+          </h3>
           <el-card class="box-card">
             <div slot="header" class="form-title">
               <span>登录到我的账户</span>
@@ -33,10 +36,12 @@
 </template>
 
 <script>
+import logo from '@/assets/logo.png'
 export default {
   name: 'login',
   data () {
     return {
+      logo,
       loginForm: {
         name: '15827258233',
         password: 'cj123456'
@@ -79,6 +84,7 @@ export default {
 
 <style lang="scss" scoped>
 .app-wrapper {
+  // background-color: #E7E5E4;
   .el-header {
     padding: 0 100px;
     border-bottom: 1px solid #eee;
