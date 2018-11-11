@@ -225,13 +225,31 @@ export default {
             this.formLoading = true
             createTask(this.userId).then(data => {
               // console.log(data)
-              const checklistId = data.id
-              saveChecklist(this.checklistForm, checklistId).then(data => {
+              if (data) {
+                const checklistId = data.id
+                saveChecklist(this.checklistForm, checklistId).then(data => {
+                  // 关闭所有消息
+                  this.$message.closeAll()
+                  this.formLoading = false
+                  if (data) {
+                    this.loanId = data.rootId
+                    this.loanStatus = data.des
+                    this.dialogVisible = true
+                  } else {
+                    this.$message({
+                      type: 'error',
+                      message: '客户交接表保存失败'
+                    })
+                  }
+                })
+              } else {
+                this.$message.closeAll()
                 this.formLoading = false
-                this.loanId = data.rootId
-                this.loanStatus = data.des
-                this.dialogVisible = true
-              })
+                this.$message({
+                  type: 'error',
+                  message: '任务创建失败'
+                })
+              }
             })
           }).catch(() => {})
         } else {
