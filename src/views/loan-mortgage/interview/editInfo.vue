@@ -54,6 +54,7 @@
     <flow-complete-dialog
       :loanId="loanId"
       :loanStatus="loanStatus"
+      :loanLastStatus="loanLastStatus"
       :dialogVisible="dialogVisible"
       :listPath="listPath"
       :nextPath="nextPath"
@@ -101,6 +102,7 @@ export default {
       formLoading: false,
       loanId: '',
       loanStatus: '',
+      loanLastStatus: '',
       dialogVisible: false,
       listPath: '/loan-mortgage/interview',
       nextPath: '/loan-mortgage/visa-interview',
@@ -170,6 +172,7 @@ export default {
     }
   },
   created () {
+    this.loanLastStatus = this.$route.params.des
     this.getStaticIndex(this.repaymentMethod)
     this.getStaticIndex(this.purpose)
   }

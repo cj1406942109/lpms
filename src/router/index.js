@@ -71,7 +71,7 @@ export const constantRouterMap = [
       name: '抵押贷款-面谈',
       meta: { title: '面谈', icon: 'talk' }
     }, {
-      path: 'interview/edit-info/:id',
+      path: 'interview/edit-info/:id/:des',
       hidden: true,
       name: '抵押贷款-面谈建议',
       meta: { title: '面谈建议' },
@@ -82,7 +82,7 @@ export const constantRouterMap = [
       name: '抵押贷款-面签',
       meta: { title: '面签', icon: 'visa-interview' }
     }, {
-      path: 'visa-interview/edit-info/:id/:mortgageId',
+      path: 'visa-interview/edit-info/:id/:mortgageId/:des',
       hidden: true,
       name: '抵押贷款-面签表格',
       meta: { title: '面签表格' },
@@ -93,7 +93,7 @@ export const constantRouterMap = [
       name: '抵押贷款-评估下单',
       meta: { title: '评估下单', icon: 'evaluate' }
     }, {
-      path: 'evaluate-order/edit-info/:id/:mortgageId',
+      path: 'evaluate-order/edit-info/:id/:mortgageId/:des',
       hidden: true,
       name: '抵押贷款-评估下单表格',
       meta: { title: '评估下单表格' },
@@ -104,7 +104,7 @@ export const constantRouterMap = [
       name: '抵押贷款-审批',
       meta: { title: '审批', icon: 'approve' }
     }, {
-      path: 'examine-approve/edit-info/:id/:mortgageId',
+      path: 'examine-approve/edit-info/:id/:mortgageId/:reportType/:des',
       hidden: true,
       name: '抵押贷款-审批表格',
       meta: { title: '审批表格' },

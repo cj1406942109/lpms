@@ -88,6 +88,7 @@
     <flow-complete-dialog
       :loanId="loanId"
       :loanStatus="loanStatus"
+      :loanLastStatus="loanLastStatus"
       :dialogVisible="dialogVisible"
       :showReturnButton="false"
       :listPath="listPath"
@@ -153,6 +154,7 @@ export default {
       formLoading: false,
       loanId: '',
       loanStatus: '',
+      loanLastStatus: '',
       dialogVisible: false,
       listPath: '',
       nextPath: '/loan-mortgage/interview',
@@ -227,6 +229,7 @@ export default {
               // console.log(data)
               if (data) {
                 const checklistId = data.id
+                this.loanLastStatus = data.des
                 saveChecklist(this.checklistForm, checklistId).then(data => {
                   // 关闭所有消息
                   this.$message.closeAll()

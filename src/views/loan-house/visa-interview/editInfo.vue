@@ -577,14 +577,8 @@ export default {
     getFormData () {
       getVisaById(this.$route.params.id).then(data => {
         this.catalogForm = data.catalog
-        // 修复element-ui model.number初始化出错
-        this.catalogForm.finishTime = this.catalogForm.finishTime ? parseInt(this.catalogForm.loanAmount) : this.catalogForm.loanAmount
-        this.catalogForm.loanAmount = this.catalogForm.loanAmount ? parseInt(this.catalogForm.loanAmount) : this.catalogForm.loanAmount
         this.applicationForm = data.form
-        this.applicationForm.applicationTime = this.applicationForm.applicationTime ? parseInt(this.applicationForm.applicationTime) : this.applicationForm.applicationTime
-        this.applicationForm.proposerFamilyNum = this.applicationForm.proposerFamilyNum ? parseInt(this.applicationForm.proposerFamilyNum) : this.applicationForm.proposerFamilyNum
-        this.applicationForm.loanAmount = this.applicationForm.loanAmount ? parseInt(this.applicationForm.loanAmount) : this.applicationForm.loanAmount
-        this.applicationForm.loanPeriod = this.applicationForm.loanPeriod ? parseInt(this.applicationForm.loanPeriod) : this.applicationForm.loanPeriod
+        // 如果后台返回的数据类型不是int，需要手动转为int 修复element-ui model.number初始化出错
       })
     },
     saveCatalog () {

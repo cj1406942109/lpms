@@ -94,6 +94,7 @@
     <flow-complete-dialog
       :loanId="loanId"
       :loanStatus="loanStatus"
+      :loanLastStatus="loanLastStatus"
       :dialogVisible="dialogVisible"
       :listPath="listPath"
       :nextPath="nextPath"
@@ -102,7 +103,7 @@
 </template>
 
 <script>
-import moment from 'moment'
+// import moment from 'moment'
 import {
   getTaskById,
   getChecklistById,
@@ -150,6 +151,7 @@ export default {
       formLoading: false,
       loanId: '',
       loanStatus: '',
+      loanLastStatus: '',
       dialogVisible: false,
       listPath: '/loan-mortgage/evaluate-order',
       nextPath: '/loan-mortgage/examine-approve',
@@ -197,7 +199,7 @@ export default {
               confirmOrder(this.$route.params.id, this.orderStatusForm.time, this.orderStatusForm.company).then(data => {
                 data ? resolve() : reject(true)
               })
-            }).catch(() => {})
+            }).catch(() => { reject() })
           } else {
             reject()
           }
@@ -307,10 +309,11 @@ export default {
     }
   },
   created () {
+    this.loanLastStatus = this.$route.params.des
     getOrderById(this.$route.params.id).then(data => {
       if (data) {
         if (data.id) {
-          this.orderStatusForm.time = moment(data.orderTime).format('x')
+          this.orderStatusForm.time = data.orderTime
           this.orderStatusForm.company = parseInt(data.company)
           this.orderFinish = true
         }

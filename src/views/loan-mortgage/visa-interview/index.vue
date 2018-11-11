@@ -111,7 +111,7 @@ export default {
       }
     },
     goNext (item) {
-      this.$router.push({ path: `/loan-mortgage/visa-interview/edit-info/${item.id}/${item.rootId}` })
+      this.$router.push({ path: `/loan-mortgage/visa-interview/edit-info/${item.id}/${item.rootId}/${item.des}` })
     },
     tagState (item) {
       switch (item) {

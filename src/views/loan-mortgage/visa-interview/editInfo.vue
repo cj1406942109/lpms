@@ -578,6 +578,7 @@
     <flow-complete-dialog
       :loanId="loanId"
       :loanStatus="loanStatus"
+      :loanLastStatus="loanLastStatus"
       :dialogVisible="dialogVisible"
       :listPath="listPath"
       :nextPath="nextPath"
@@ -813,6 +814,7 @@ export default {
       formLoading: false,
       loanId: '',
       loanStatus: '',
+      loanLastStatus: '',
       dialogVisible: false,
       listPath: '/loan-mortgage/visa-interview',
       nextPath: '/loan-mortgage/evaluate-order',
@@ -863,6 +865,7 @@ export default {
     ])
   },
   created () {
+    this.loanLastStatus = this.$route.params.des
     getTaskById(this.$route.params.mortgageId).then(data => {
       if (data) {
         getChecklistById(data[0].id).then(data => {
@@ -904,14 +907,8 @@ export default {
         getVisaById(this.$route.params.id).then(data => {
           if (data) {
             this.catalogForm = data.catalog
-            // 修复element-ui model.number初始化出错
-            this.catalogForm.finishTime = this.catalogForm.finishTime ? parseInt(this.catalogForm.loanAmount) : this.catalogForm.loanAmount
-            this.catalogForm.loanAmount = this.catalogForm.loanAmount ? parseInt(this.catalogForm.loanAmount) : this.catalogForm.loanAmount
             this.applicationForm = data.form
-            this.applicationForm.applicationTime = this.applicationForm.applicationTime ? parseInt(this.applicationForm.applicationTime) : this.applicationForm.applicationTime
-            this.applicationForm.proposerFamilyNum = this.applicationForm.proposerFamilyNum ? parseInt(this.applicationForm.proposerFamilyNum) : this.applicationForm.proposerFamilyNum
-            this.applicationForm.loanAmount = this.applicationForm.loanAmount ? parseInt(this.applicationForm.loanAmount) : this.applicationForm.loanAmount
-            this.applicationForm.loanPeriod = this.applicationForm.loanPeriod ? parseInt(this.applicationForm.loanPeriod) : this.applicationForm.loanPeriod
+            // 修复element-ui model.number初始化出错
             resolve()
           } else {
             reject()
@@ -979,6 +976,10 @@ export default {
       this.$refs[formName].resetFields()
     },
     addContent () {
+      // 第一次拿到时为null
+      if (!this.catalogForm.catalogOther) {
+        this.catalogForm.catalogOther = []
+      }
       this.catalogForm.catalogOther.push({
         content: '',
         description: '',

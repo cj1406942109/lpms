@@ -102,7 +102,7 @@ export default {
       }
     },
     goNext (item) {
-      this.$router.push({ path: `/loan-mortgage/interview/edit-info/${item.id}` })
+      this.$router.push({ path: `/loan-mortgage/interview/edit-info/${item.id}/${item.des}` })
     },
     tagState (state) {
       switch (state) {

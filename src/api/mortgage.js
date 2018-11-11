@@ -682,7 +682,7 @@ export function getApproveListByEmployeeId (employeeId) {
  */
 export function getApproveById (approveId) {
   return request({
-    url: `/mortgage/approve/employee/${approveId}`,
+    url: `/mortgage/approve/${approveId}`,
     method: 'get'
   })
 }
@@ -731,6 +731,23 @@ export function confirmApproveStatus (approveId, approve) {
   })
 }
 
+/**
+ * 保存正评
+ * @param {*} approveId 审批id
+ * @param {*} time 时间
+ * @param {*} report 正评报告
+ */
+export function saveFormalReport (approveId, time, report) {
+  return request({
+    url: '/mortgage/approve/formalReport',
+    method: 'post',
+    data: qs.stringify({
+      approveId,
+      time,
+      report: JSON.stringify(report)
+    })
+  })
+}
 // ************************* 审批结束 *******************************
 
 // ************************* 抵押开始 *******************************

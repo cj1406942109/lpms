@@ -4,7 +4,7 @@
       <el-step title="步骤1" description="确定资料目录表"></el-step>
       <el-step title="步骤2" description="报审"></el-step>
       <el-step title="步骤3" description="确定审批状态"></el-step>
-      <el-step title="步骤4" description="出正评"></el-step>
+      <el-step title="步骤4" description="出正评" v-if="reportType == '1'"></el-step>
     </el-steps>
     <div class="form-wrapper" v-if="activeStep=='0'">
       <h3>资料目录表</h3>
@@ -364,7 +364,7 @@
           <el-date-picker type="date" placeholder="选择日期" v-model="approveForm.time" value-format="timestamp"></el-date-picker>
         </el-form-item>
         <el-form-item label=" ">
-          <el-button type="primary" @click="completeApprove">完成报审</el-button>
+          <el-button type="primary" @click="completeApproveHandler()">完成报审</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -372,7 +372,7 @@
       <h3>确定审批状态</h3>
       <el-form :model="approveStatusForm" ref="approveStatusForm" label-width="200px" :rules="approveStatusFormRules">
         <el-form-item label="审批状态" prop="approveState">
-          <el-radio-group v-model="approveStatusForm.approveState">
+          <el-radio-group v-model="approveStatusForm.approveState" :disabled="finishApproveStatus">
             <el-radio :label="1">已通过</el-radio>
             <el-radio :label="0">未通过</el-radio>
           </el-radio-group>
@@ -381,42 +381,42 @@
           <el-col :span="10">
             <template v-if="approveStatusForm.approveState == '1'">
               <el-form-item label="审批通过时间" prop="approveTime">
-                <el-date-picker type="date" placeholder="选择日期" v-model="approveStatusForm.approveTime" value-format="timestamp"></el-date-picker>
+                <el-date-picker type="date" placeholder="选择日期" v-model="approveStatusForm.approveTime" value-format="timestamp" :disabled="finishApproveStatus"></el-date-picker>
               </el-form-item>
               <el-form-item label="金额" prop="amount">
-                <el-input clearable v-model.number="approveStatusForm.amount" type="number"><template slot="append">元</template></el-input>
+                <el-input clearable v-model.number="approveStatusForm.amount" type="number" :disabled="finishApproveStatus"><template slot="append">元</template></el-input>
               </el-form-item>
               <el-form-item label="年限" prop="period">
-                <el-input clearable v-model.number="approveStatusForm.period" type="number"><template slot="append">年</template></el-input>
+                <el-input clearable v-model.number="approveStatusForm.period" type="number" :disabled="finishApproveStatus"><template slot="append">年</template></el-input>
               </el-form-item>
               <el-form-item label="利率" prop="rate">
-                <el-input clearable v-model.number="approveStatusForm.rate" type="number"><template slot="append">%</template></el-input>
+                <el-input clearable v-model.number="approveStatusForm.rate" type="number" :disabled="finishApproveStatus"><template slot="append">%</template></el-input>
               </el-form-item>
               <el-form-item label="放款条件" prop="loanCondition">
-                <el-select v-model="approveStatusForm.loanCondition" placeholder="请选择">
+                <el-select v-model="approveStatusForm.loanCondition" placeholder="请选择" :disabled="finishApproveStatus">
                   <el-option label="见抵押收件单放款" value="1"></el-option>
                   <el-option label="见他项权证放款" value="2"></el-option>
                   <el-option label="见担保函放款" value="3"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="备注" prop="remark">
-                <el-input clearable type="textarea" v-model="approveStatusForm.remark"></el-input>
+                <el-input clearable type="textarea" v-model="approveStatusForm.remark" :disabled="finishApproveStatus"></el-input>
               </el-form-item>
             </template>
             <template v-if="approveStatusForm.approveState == '0'">
               <el-form-item label="审批未通过时间" prop="approveTime">
-                <el-date-picker type="date" placeholder="选择日期" v-model="approveStatusForm.approveTime" value-format="timestamp"></el-date-picker>
+                <el-date-picker type="date" placeholder="选择日期" v-model="approveStatusForm.approveTime" value-format="timestamp" :disabled="finishApproveStatus"></el-date-picker>
               </el-form-item>
               <el-form-item label="未通过原因" prop="failReason">
-                <el-select v-model="approveStatusForm.failReason" placeholder="请选择">
+                <el-select v-model="approveStatusForm.failReason" placeholder="请选择" :disabled="finishApproveStatus">
                   <el-option label="银行拒贷" value="1"></el-option>
                   <el-option label="补充资料" value="2"></el-option>
                   <el-option label="其他" value="-1"></el-option>
                 </el-select>
-                <el-input clearable v-model="approveStatusForm.failReasonOther" placeholder="其他原因" v-if="approveStatusForm.failReason == '-1'"></el-input>
+                <el-input clearable v-model="approveStatusForm.failReasonOther" placeholder="其他原因" v-if="approveStatusForm.failReason == '-1'" :disabled="finishApproveStatus"></el-input>
               </el-form-item>
               <el-form-item label="后续操作" prop="laterAction">
-                <el-select v-model="approveStatusForm.laterAction" placeholder="请选择">
+                <el-select v-model="approveStatusForm.laterAction" placeholder="请选择" :disabled="finishApproveStatus">
                   <el-option label="继续操作" :value="1"></el-option>
                   <el-option label="换行" :value="2"></el-option>
                   <el-option label="废单" :value="3"></el-option>
@@ -426,64 +426,70 @@
           </el-col>
         </el-row>
         <el-form-item label=" ">
-          <el-button type="primary" @click="confirmApproveStatus">提交</el-button>
+          <el-button type="primary" @click="confirmApproveStatusHandler()" v-if="!finishApproveStatus">提交</el-button>
+          <el-button type="info" v-else :disabled="finishApproveStatus">审批状态已确认</el-button>
         </el-form-item>
-
       </el-form>
     </div>
-    <div class="form-wrapper" v-if="activeStep=='3'">
-      <h3>出正评</h3>
-      <el-form :model="reportForm" ref="reportForm" label-width="200px">
-        <el-form-item label="出正评时间" prop="time">
+    <div class="form-wrapper" v-if="activeStep=='3' && reportType == '1'">
+      <h3>出报告</h3>
+      <el-form :model="reportForm" ref="reportForm" label-width="200px" :rules="reportFormRules">
+        <el-form-item label="完成时间" prop="time">
           <el-date-picker type="date" placeholder="选择日期" v-model="reportForm.time" value-format="timestamp"></el-date-picker>
         </el-form-item>
         <el-row>
-          <el-col :span="10" v-for="report in reportForm.reports" :key="report.id">
-            <h3 style="margin-left: 50px;">报告内容</h3>
-            <el-form-item label="权利人">
-              <el-input v-model="report.report_obligee"></el-input>
+          <el-col :span="10" v-for="(report, index) in  reportForm.reports" :key="report.id">
+            <h3>房产 {{index + 1}} 报告内容</h3>
+            <el-form-item>
+              <el-button type="primary" @click="copyReport(index, 0)">复制第一份预评报告</el-button>
+              <el-button type="primary" @click="copyReport(index, 1)" v-if="preReports[index].length>1">复制第二份预评报告</el-button>
             </el-form-item>
-            <el-form-item label="借款人">
-              <el-input v-model="report.report_borrower"></el-input>
+            <el-form-item label="权利人" :prop="'reports.' + index + '.reportObligee'" :rules="[{ required: true, message: '权利人不能为空' }]">
+              <el-input clearable v-model="report.reportObligee"></el-input>
             </el-form-item>
-            <el-form-item label="坐落">
-              <el-input v-model="report.report_repose"></el-input>
+            <el-form-item label="借款人" :prop="'reports.' + index + '.reportBorrower'" :rules="[{ required: true, message: '借款人不能为空' }]">
+              <el-input clearable v-model="report.reportBorrower"></el-input>
             </el-form-item>
-            <el-form-item label="房龄">
-              <el-input v-model="report.report_house_age"></el-input>
+            <el-form-item label="座落" :prop="'reports.' + index + '.reportRepose'" :rules="[{ required: true, message: '座落不能为空' }]">
+              <el-input clearable v-model="report.reportRepose"></el-input>
             </el-form-item>
-            <el-form-item label="面积">
-              <el-input v-model="report.report_house_area"></el-input>
+            <el-form-item label="房龄" :prop="'reports.' + index + '.reportHouseAge'" :rules="[{ required: true, message: '房龄不能为空' }, { type: 'number', message: '房龄必须为数字值' }]">
+              <el-input clearable v-model.number="report.reportHouseAge" type="number" min="0"><template slot="append">年</template></el-input>
             </el-form-item>
-            <el-form-item label="单价">
-              <el-input v-model="report.report_house_single"></el-input>
+            <el-form-item label="面积" :prop="'reports.' + index + '.reportHouseArea'" :rules="[{ required: true, message: '面积不能为空' }, { type: 'number', message: '面积必须为数字值' }]">
+              <el-input clearable v-model.number="report.reportHouseArea" type="number" min="0" @input="calcTotalPrice(report.reportHouseArea, report.reportHouseSingle, index)"><template slot="append">平米</template></el-input>
             </el-form-item>
-            <el-form-item label="总价">
-              <el-input v-model="report.report_house_total"></el-input>
+            <el-form-item label="单价" :prop="'reports.' + index + '.reportHouseSingle'" :rules="[{ required: true, message: '单价不能为空' }, { type: 'number', message: '单价必须为数字值' }]">
+              <el-input clearable v-model.number="report.reportHouseSingle" type="number" min="0" @input="calcTotalPrice(report.reportHouseArea, report.reportHouseSingle, index)"><template slot="append">元/平米</template></el-input>
             </el-form-item>
-            <el-form-item label="贷款金额">
-              <el-input v-model="report.report_loan_amount"></el-input>
+            <el-form-item label="总价" :prop="'reports.' + index + '.reportHouseTotal'">
+              <el-input clearable v-model.number="report.reportHouseTotal" type="number" min="0" readonly><template slot="append">元</template></el-input>
             </el-form-item>
-            <el-form-item label="年限">
-              <el-input v-model="report.report_loan_year"></el-input>
+            <el-form-item label="拟贷款金额" :prop="'reports.' + index + '.reportLoanAmount'" :rules="[{ required: true, message: '拟贷款金额不能为空' }, { type: 'number', message: '拟贷款金额必须为数字值' }]">
+              <el-input clearable v-model.number="report.reportLoanAmount" type="number" min="0"><template slot="append">元</template></el-input>
             </el-form-item>
-            <el-form-item label="首套/两套">
-              <el-radio-group v-model="report.report_first"><el-radio :label="1">首套</el-radio><el-radio :label="2">两套</el-radio></el-radio-group>
+            <el-form-item label="年限" :prop="'reports.' + index + '.reportLoanYear'" :rules="[{ required: true, message: '年限不能为空' }, { type: 'number', message: '年限必须为数字值' }]">
+              <el-input clearable v-model.number="report.reportLoanYear" type="number" min="0"><template slot="append">年</template></el-input>
+            </el-form-item>
+            <el-form-item label="首套/两套" :prop="'reports.' + index + '.reportFirst'" :rules="[{ required: true, message: '请选择首套/两套' }]">
+              <el-radio-group v-model="report.reportFirst"><el-radio :label="1">首套</el-radio><el-radio :label="2">两套</el-radio></el-radio-group>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label=" ">
-          <el-button type="primary" @click="saveReport()">提交</el-button>
+        <el-form-item>
+          <el-button type="primary" :loading="formLoading" @click="saveReport()">提交</el-button>
+          <el-button @click="resetForm('reportForm')">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="option">
       <el-button @click="activeStep--" v-if="activeStep > 0">上一步</el-button>
-      <el-button type="primary" @click="nextStep()" v-if="activeStep < 4">下一步</el-button>
+      <el-button type="primary" @click="nextStep()" v-if="activeStep < (reportType == '1' ? 3 : 2)">下一步</el-button>
     </div>
     <flow-complete-dialog
       :loanId="loanId"
       :loanStatus="loanStatus"
+      :loanLastStatus="loanLastStatus"
       :dialogVisible="dialogVisible"
       :listPath="listPath"
       :nextPath="nextPath"
@@ -502,14 +508,30 @@ import {
   saveCatalog,
   confirmCatalog,
   completeApprove,
-  // getLoanCondition,
   confirmApproveStatus,
-  saveReport
+  saveFormalReport
 } from '@/api/mortgage'
 
 export default {
   data () {
+    const report = {
+      reportObligee: null,
+      reportBorrower: null,
+      reportRepose: null,
+      reportHouseAge: null,
+      reportHouseArea: null,
+      reportHouseSingle: null,
+      reportHouseTotal: null,
+      reportLoanAmount: null,
+      reportLoanYear: null,
+      reportFirst: null,
+      reportType: 2,
+      houseId: null
+    }
     return {
+      report: report, // 不可直接修改
+      reportType: 0, // 报告类型，1表示预评，2表示正评
+      preReports: [], // 预评
       catalogForm: null,
       approveForm: {
         time: null
@@ -528,19 +550,7 @@ export default {
       },
       reportForm: {
         time: null,
-        reports: [{
-          report_obligee: null,
-          report_borrower: null,
-          report_repose: null,
-          report_house_age: null,
-          report_house_area: null,
-          report_house_single: null,
-          report_house_total: null,
-          report_loan_amount: null,
-          report_loan_year: null,
-          report_first: null,
-          report_type: null
-        }]
+        reports: []
       },
       catalogFormRules: {
         finishTime: [{ required: true, message: '完成时间不能为空' }],
@@ -577,36 +587,77 @@ export default {
         failReason: [{ required: true, message: '请选择未通过原因' }],
         laterAction: [{ required: true, message: '请选择后续操作' }]
       },
+      reportFormRules: {
+        time: [{ required: true, message: '完成时间不能为空' }]
+      },
+      finishApproveStatus: false,
       formLoading: false,
       loanId: '',
       loanStatus: '',
+      loanLastStatus: '',
       dialogVisible: false,
       listPath: '/loan-mortgage/examine-approve',
       nextPath: '/loan-mortgage/mortgage',
-      activeStep: 2,
+      activeStep: 0,
       loanVariety: ''
     }
   },
   created () {
+    this.loanLastStatus = this.$route.params.des
+    this.reportType = parseInt(this.$route.params.reportType)
     getTaskById(this.$route.params.mortgageId).then(data => {
-      getChecklistById(data[0].id).then(data => {
-        this.loanVariety = data.loanVariety
-      })
-      getVisaById(data[2].id).then(data => {
-        this.catalogForm = data.catalog
-        // 修复element-ui model.number初始化出错
-        this.catalogForm.finishTime = this.catalogForm.finishTime ? parseInt(this.catalogForm.loanAmount) : this.catalogForm.loanAmount
-        this.catalogForm.loanAmount = this.catalogForm.loanAmount ? parseInt(this.catalogForm.loanAmount) : this.catalogForm.loanAmount
-      })
+      if (data) {
+        getChecklistById(data[0].id).then(data => {
+          if (data) {
+            this.loanVariety = data.loanVariety
+          } else {
+            this.$message({
+              type: 'error',
+              message: '获取借款品种信息失败'
+            })
+          }
+        })
+        getVisaById(data[2].id).then(data => {
+          if (data) {
+            this.catalogForm = data.catalog
+          } else {
+            this.$message({
+              type: 'error',
+              message: '获取资料目录表信息失败'
+            })
+          }
+        })
+      } else {
+        this.$message({
+          type: 'error',
+          message: '获取流程信息失败'
+        })
+      }
     })
     getApproveById(this.$route.params.id).then(data => {
-      console.log(data)
+      if (data) {
+        if (data.approve) {
+          this.approveForm = JSON.parse(JSON.stringify(data.approve))
+        }
+        if (!JSON.stringify(data.approveState) === '{}') {
+          this.finishApproveStatus = true
+          this.approveStatusForm = JSON.parse(JSON.stringify(data.approveState))
+          this.approveStatusForm.period = parseInt(this.approveStatusForm.period)
+          this.approveStatusForm.rate = parseInt(this.approveStatusForm.rate)
+        }
+        this.preReports = data.reports
+        this.preReports.forEach(house => {
+          const report = JSON.parse(JSON.stringify(this.report))
+          report.houseId = house[0].houseId
+          this.reportForm.reports.push(report)
+        })
+      } else {
+        this.$message({
+          type: 'error',
+          message: '获取审批流程数据失败'
+        })
+      }
     })
-    // getLoanCondition().then(response => {
-    //   if (response.data.status) {
-    //     this.loanConditions = response.data.data
-    //   }
-    // })
   },
   computed: {
     ...mapGetters([
@@ -652,96 +703,222 @@ export default {
     },
     nextStep () {
       if (this.activeStep === 0) {
-        this.$confirm('是否确定当前资料目录表已收齐？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.confirmCatalog()
+        this.confirmCatalog().then(() => {
+          this.$message({
+            type: 'success',
+            message: '确认资料目录表成功'
+          })
           this.activeStep++
-          // 确认收齐
-        }).catch(() => {})
+        }).catch((done) => {
+          if (done) {
+            this.$message({
+              type: 'error',
+              message: '确认资料目录表失败'
+            })
+          }
+        })
       } else if (this.activeStep === 1) {
-        this.completeApprove()
-        this.activeStep++
+        this.completeApprove().then(() => {
+          this.$message({
+            type: 'success',
+            message: '确认报审成功'
+          })
+          this.activeStep++
+        }).catch((done) => {
+          if (done) {
+            this.$message({
+              type: 'error',
+              message: '确认报审失败'
+            })
+          }
+        })
       } else if (this.activeStep === 2) {
-        this.confirmApproveStatus()
-        this.activeStep++
+        if (!this.finishApproveStatus) {
+          this.confirmApproveStatus().then(() => {
+            this.$message({
+              type: 'success',
+              message: '确定审批状态成功'
+            })
+            this.activeStep++
+          }).catch((done) => {
+            if (done) {
+              this.$message({
+                type: 'error',
+                message: '确定审批状态失败'
+              })
+            }
+          })
+        } else {
+          this.activeStep++
+        }
       }
     },
     confirmCatalog () {
-      this.$refs['catalogForm'].validate((valid) => {
-        if (valid) {
-          confirmCatalog(this.catalogForm).then(data => {
-            if (data) {
-              this.$message({
-                type: 'success',
-                message: '资料目录表确认成功'
+      return new Promise((resolve, reject) => {
+        this.$refs['catalogForm'].validate((valid) => {
+          if (valid) {
+            this.$confirm('是否确定当前资料目录表已收齐？', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              confirmCatalog(this.catalogForm).then(data => {
+                data ? resolve() : reject(true)
               })
-            }
-          })
-        } else {
-          return false
-        }
+            }).catch(() => { reject() })
+          } else {
+            reject()
+          }
+        })
       })
     },
     completeApprove () {
-      this.$refs['approveForm'].validate((valid) => {
-        if (valid) {
-          completeApprove(this.$route.params.id, this.approveForm.time).then(data => {
-            if (data) {
-              this.$message({
-                type: 'success',
-                message: '保存成功'
-              })
-            }
+      return new Promise((resolve, reject) => {
+        this.$refs['approveForm'].validate((valid) => {
+          if (valid) {
+            completeApprove(this.$route.params.id, this.approveForm.time).then(data => {
+              data ? resolve() : reject(true)
+            })
+          } else {
+            reject()
+          }
+        })
+      })
+    },
+    completeApproveHandler () {
+      this.completeApprove().then(() => {
+        this.$message({
+          type: 'success',
+          message: '确认报审成功'
+        })
+      }).catch((done) => {
+        if (done) {
+          this.$message({
+            type: 'error',
+            message: '确认报审失败'
           })
-        } else {
-          return false
         }
       })
     },
     confirmApproveStatus () {
-      this.$refs['approveStatusForm'].validate((valid) => {
-        if (valid) {
-          confirmApproveStatus(this.$route.params.id, this.approveStatusForm).then(data => {
+      return new Promise((resolve, reject) => {
+        this.$refs['approveStatusForm'].validate((valid) => {
+          if (valid) {
+            confirmApproveStatus(this.$route.params.id, this.approveStatusForm).then(data => {
+              data ? resolve(data) : reject(true)
+            })
+          } else {
+            reject()
+          }
+        })
+      })
+    },
+    confirmApproveStatusHandler () {
+      if (this.reportType === 1) {
+        // 需要第四步出正评
+        this.confirmApproveStatus().then(() => {
+          this.finishApproveStatus = true
+          this.$message({
+            type: 'success',
+            message: '确定审批状态成功'
+          })
+        }).catch((done) => {
+          if (done) {
+            this.$message({
+              type: 'error',
+              message: '确定审批状态失败'
+            })
+          }
+        })
+      } else {
+        this.$confirm('请确认信息填写无误，是否提交？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'info',
+            message: '正在处理...'
+          })
+          this.confirmApproveStatus().then((data) => {
+            this.$message.closeAll()
+            this.formLoading = false
             if (data) {
+              this.loanId = data.rootId
+              this.loanStatus = data.des
+              this.dialogVisible = true
+            } else {
               this.$message({
-                type: 'success',
-                message: '确定审批状态成功'
+                type: 'error',
+                message: '确定审批状态失败'
+              })
+            }
+          }).catch((done) => {
+            if (done) {
+              this.$message({
+                type: 'error',
+                message: '确定审批状态失败'
               })
             }
           })
+        }).catch(() => {})
+      }
+    },
+    saveReport () {
+      this.$refs['reportForm'].validate((valid) => {
+        if (valid) {
+          this.$confirm('请确认信息填写无误，是否提交？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$message({
+              type: 'info',
+              message: '正在处理...'
+            })
+            saveFormalReport(this.$route.params.id, this.reportForm.time, this.reportForm.reports).then(data => {
+              this.$message.closeAll()
+              this.formLoading = false
+              if (data) {
+                this.loanId = data.rootId
+                this.loanStatus = data.des
+                this.dialogVisible = true
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: '正评报告保存失败'
+                })
+              }
+            })
+          }).catch(() => {})
         } else {
           return false
         }
       })
     },
-    saveReport () {
-      this.$confirm('请确认信息填写无误，是否提交？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$message({
-          type: 'info',
-          message: '正在处理...'
-        })
-        saveReport(this.reportForm.time, JSON.stringify(this.reportForm.reports), this.$route.params.taskId).then(response => {
-          this.formLoading = false
-          if (response.data.status === 1) {
-            this.loanNum = response.data.data
-            this.dialogVisible = true
-          } else {
-            this.$message({
-              showClose: true,
-              message: '保存失败，请稍候重试！',
-              type: 'error'
-            })
-          }
-        })
-      }).catch(() => {})
-      this.dialogVisible = false
+    calcTotalPrice (area, singlePrice, index) {
+      if (area && singlePrice) {
+        if (parseFloat(area).toString() !== 'NaN' && parseFloat(singlePrice).toString() !== 'NaN') {
+          this.reportForm.reports[index].reportHouseTotal = area * singlePrice
+        } else {
+          this.reportForm.reports[index].reportHouseTotal = null
+        }
+      } else {
+        this.reportForm.reports[index].reportHouseTotal = null
+      }
+    },
+    copyReport (index1, index2) {
+      // index1 正评索引，index2 预评索引
+      this.reportForm.reports[index1].reportObligee = this.preReports[index1][index2].reportObligee
+      this.reportForm.reports[index1].reportBorrower = this.preReports[index1][index2].reportBorrower
+      this.reportForm.reports[index1].reportHouseAge = parseFloat(this.preReports[index1][index2].reportHouseAge)
+      this.reportForm.reports[index1].reportHouseArea = this.preReports[index1][index2].reportHouseArea
+      this.reportForm.reports[index1].reportHouseSingle = this.preReports[index1][index2].reportHouseSingle
+      this.reportForm.reports[index1].reportHouseTotal = this.preReports[index1][index2].reportHouseTotal
+      this.reportForm.reports[index1].reportLoanAmount = this.preReports[index1][index2].reportLoanAmount
+      this.reportForm.reports[index1].reportLoanYear = parseFloat(this.preReports[index1][index2].reportLoanYear)
+      this.reportForm.reports[index1].reportRepose = this.preReports[index1][index2].reportRepose
+      this.reportForm.reports[index1].reportFirst = parseInt(this.preReports[index1][index2].reportFirst)
     }
   }
 }
