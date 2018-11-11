@@ -77,8 +77,8 @@ export default {
     getInterviewList () {
       if (this.permission.includes('mortgage_view_getViewList')) {
         getViewList().then(data => {
+          this.interviewListLoading = false
           if (data) {
-            this.interviewListLoading = false
             this.interviewList = data
           } else {
             this.$message({
@@ -89,8 +89,8 @@ export default {
         })
       } else {
         getViewListByEmployeeId(this.userId).then(data => {
+          this.interviewListLoading = false
           if (data) {
-            this.interviewListLoading = false
             this.interviewList = data
           } else {
             this.$message({

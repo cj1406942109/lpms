@@ -86,8 +86,8 @@ export default {
     getVisaInterviewList () {
       if (this.permission.includes('mortgage_visa_getVisaList')) {
         getVisaList().then(data => {
+          this.visaInterviewListLoading = false
           if (data) {
-            this.visaInterviewListLoading = false
             this.visaInterviewList = data
           } else {
             this.$message({
@@ -98,8 +98,8 @@ export default {
         })
       } else {
         getVisaListByEmployeeId(this.userId).then(data => {
+          this.visaInterviewListLoading = false
           if (data) {
-            this.visaInterviewListLoading = false
             this.visaInterviewList = data
           } else {
             this.$message({
