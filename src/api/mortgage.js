@@ -238,16 +238,16 @@ export function getLoanCondition () {
   })
 }
 
-export function confirmApproveStatus (approve, taskId) {
-  return request({
-    url: '/approve/save',
-    method: 'post',
-    data: qs.stringify({
-      approve,
-      taskId
-    })
-  })
-}
+// export function confirmApproveStatus (approve, taskId) {
+//   return request({
+//     url: '/approve/save',
+//     method: 'post',
+//     data: qs.stringify({
+//       approve,
+//       taskId
+//     })
+//   })
+// }
 // export function saveReport (time, reports, taskId) {
 //   return request({
 //     url: '/approve/report/save',
@@ -673,6 +673,61 @@ export function getApproveListByEmployeeId (employeeId) {
   return request({
     url: `/mortgage/approve/employee/${employeeId}`,
     method: 'get'
+  })
+}
+
+/**
+ * 根据id获取报审流程数据
+ * @param {*} approveId 报审id
+ */
+export function getApproveById (approveId) {
+  return request({
+    url: `/mortgage/approve/employee/${approveId}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 确定资料目录表已收齐
+ * @param {*} catalog 资料目录表
+ */
+export function confirmCatalog (catalog) {
+  return request({
+    url: `/mortgage/approve/confirmCatalog`,
+    method: 'post',
+    data: qs.stringify({
+      catalog: JSON.stringify(catalog)
+    })
+  })
+}
+
+/**
+ * 完成报审
+ * @param {*} approveId 报审id
+ * @param {*} time 时间
+ */
+export function completeApprove (approveId, time) {
+  return request({
+    url: `/mortgage/approve/complete/${approveId}`,
+    method: 'post',
+    data: qs.stringify({
+      time
+    })
+  })
+}
+
+/**
+ * 确定报审状态
+ * @param {*} approveId 报审id
+ * @param {*} approve 报审表
+ */
+export function confirmApproveStatus (approveId, approve) {
+  return request({
+    url: `/mortgage/approve/${approveId}`,
+    method: 'post',
+    data: qs.stringify({
+      approve: JSON.stringify(approve)
+    })
   })
 }
 

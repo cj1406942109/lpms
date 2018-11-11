@@ -20,7 +20,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import {
-  getApproveList
+  // getApproveList
+  getApproveListByEmployeeId
 } from '@/api/mortgage'
 export default {
   name: 'examineApprove',
@@ -40,13 +41,17 @@ export default {
   },
   methods: {
     getApproveList () {
-      getApproveList().then(data => {
+      // getApproveList().then(data => {
+      //   this.examineApproveListLoading = false
+      //   this.examineApproveList = data
+      // })
+      getApproveListByEmployeeId(this.userId).then(data => {
         this.examineApproveListLoading = false
         this.examineApproveList = data
       })
     },
     goNext (item) {
-      this.$router.push({ path: `/loan-mortgage/examine-approve/edit-info/${item.taskId}/${item.loanType}/${item.catalogId}` })
+      this.$router.push({ path: `/loan-mortgage/examine-approve/edit-info/${item.id}/${item.rootId}` })
     }
   }
 }

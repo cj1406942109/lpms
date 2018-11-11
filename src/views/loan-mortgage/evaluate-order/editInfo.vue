@@ -273,7 +273,7 @@ export default {
         this.orderFinish = true
       }
     })
-    getTaskById(parseInt(this.$route.params.mortgageId)).then(data => {
+    getTaskById(this.$route.params.mortgageId).then(data => {
       getChecklistById(data[0].id).then(data => {
         data.houses.forEach(ele => {
           // 深层赋值，防止对象被篡改
