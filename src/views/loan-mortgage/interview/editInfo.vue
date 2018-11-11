@@ -135,9 +135,17 @@ export default {
             })
             saveView(this.interviewSuggestionForm, this.$route.params.id).then(data => {
               this.formLoading = false
-              this.loanId = data.rootId
-              this.loanStatus = data.des
-              this.dialogVisible = true
+              this.$message.closeAll()
+              if (data) {
+                this.loanId = data.rootId
+                this.loanStatus = data.des
+                this.dialogVisible = true
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: '面谈建议保存失败'
+                })
+              }
             })
           }).catch(() => {})
         } else {
