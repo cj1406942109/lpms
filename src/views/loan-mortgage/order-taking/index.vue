@@ -37,10 +37,10 @@
           <div v-for="(item, index) in checklistForm.houses" :key="item.id" class="house-info">
             <el-form-item :label="'房产' + (index + 1) + '：'" style="font-weight:bold"><el-button @click.prevent="removeHouseProperty(item)" type="danger">删除</el-button></el-form-item>
             <el-form-item label="面积（性质）" :prop="'houses.' + index + '.area'" :rules="[{ required: true, message: '面积不能为空' }, { type: 'number', message: '面积必须为数字值' }]">
-              <el-input clearable v-model.number="item.area" type="number" @input="calcTotalPrice(item.area, item.enquiryResult, index)"><template slot="append">平米</template></el-input>
+              <el-input clearable v-model.number="item.area" type="number" min="0" @input="calcTotalPrice(item.area, item.enquiryResult, index)"><template slot="append">平米</template></el-input>
             </el-form-item>
             <el-form-item label="询价结果" :prop="'houses.' + index + '.enquiryResult'" :rules="[{ required: true, message: '询价结果不能为空' }, { type: 'number', message: '询价结果必须为数字值' }]">
-              <el-input clearable v-model.number="item.enquiryResult" type="number" @input="calcTotalPrice(item.area, item.enquiryResult, index)"><template slot="append">元/平米</template></el-input>
+              <el-input clearable v-model.number="item.enquiryResult" type="number" min="0" @input="calcTotalPrice(item.area, item.enquiryResult, index)"><template slot="append">元/平米</template></el-input>
             </el-form-item>
             <el-form-item label="总价" :prop="'houses.' + index + '.totalPrice'">
               <el-input v-model.number="item.totalPrice" type="number" readonly><template slot="append">元</template></el-input>

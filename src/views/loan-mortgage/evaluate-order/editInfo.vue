@@ -23,7 +23,7 @@
         <el-form-item label=" ">
           <el-button v-if="orderFinish" disabled type="info">下单已完成</el-button>
           <template v-else>
-            <el-button type="primary" @click="confirmOrder('orderStatusForm')">完成下单</el-button>
+            <el-button type="primary" @click="confirmOrderHandler()">完成下单</el-button>
             <el-button @click="resetForm('orderStatusForm')">重置</el-button>
           </template>
         </el-form-item>
@@ -82,7 +82,7 @@
           </el-col>
         </el-row>
         <el-form-item>
-          <el-button type="primary" :loading="formLoading" @click="submit('reportForm')">提交</el-button>
+          <el-button type="primary" :loading="formLoading" @click="submit()">提交</el-button>
           <el-button @click="resetForm('reportForm')">重置</el-button>
         </el-form-item>
       </el-form>
@@ -185,25 +185,64 @@ export default {
     }
   },
   methods: {
-    confirmOrder (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.$confirm('请确认下单状态无误，是否提交？', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            confirmOrder(this.$route.params.id, this.orderStatusForm.time, this.orderStatusForm.company).then(data => {
-              this.orderFinish = true
-            })
-          }).catch(() => {})
-        } else {
-          return false
+    confirmOrder () {
+      return new Promise((resolve, reject) => {
+        this.$refs['orderStatusForm'].validate((valid) => {
+          if (valid) {
+            this.$confirm('请确认下单状态无误，是否提交？', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              confirmOrder(this.$route.params.id, this.orderStatusForm.time, this.orderStatusForm.company).then(data => {
+                data ? resolve() : reject(true)
+              })
+            }).catch(() => {})
+          } else {
+            reject()
+          }
+        })
+      })
+    },
+    confirmOrderHandler () {
+      this.confirmOrder().then(() => {
+        this.orderFinish = true
+        this.$message({
+          type: 'success',
+          message: '确定下单状态成功'
+        })
+      }).catch((done) => {
+        if (done) {
+          this.$message({
+            type: 'error',
+            message: '确定下单状态失败'
+          })
         }
       })
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()
+    },
+    nextStep () {
+      if (!this.orderFinish) {
+        this.confirmOrder().then(() => {
+          this.$message({
+            type: 'success',
+            message: '确定下单状态成功'
+          })
+          this.orderFinish = true
+          this.activeStep++
+        }).catch((done) => {
+          if (done) {
+            this.$message({
+              type: 'error',
+              message: '确定下单状态失败'
+            })
+          }
+        })
+      } else {
+        this.activeStep++
+      }
     },
     addReport (index) {
       const report = JSON.parse(JSON.stringify(this.report))
@@ -217,14 +256,8 @@ export default {
         this.reportForm.reports[index].splice(1, 1)
       }
     },
-    nextStep () {
-      if (!this.orderFinish) {
-        this.confirmOrder('orderStatusForm')
-      }
-      this.activeStep++
-    },
-    submit (formName) {
-      this.$refs[formName].validate((valid) => {
+    submit () {
+      this.$refs['reportForm'].validate((valid) => {
         if (valid) {
           this.$confirm('请确认信息填写无误，是否提交？', '提示', {
             confirmButtonText: '确定',
@@ -242,10 +275,18 @@ export default {
               })
             })
             saveReport(this.$route.params.id, this.reportForm.time, this.reportForm.type, this.reportForm.reports).then(data => {
+              this.$message.closeAll()
               this.formLoading = false
-              this.loanId = data.rootId
-              this.loanStatus = data.des
-              this.dialogVisible = true
+              if (data) {
+                this.loanId = data.rootId
+                this.loanStatus = data.des
+                this.dialogVisible = true
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: '报告提交失败'
+                })
+              }
             })
           }).catch(() => {})
         } else {
@@ -267,21 +308,42 @@ export default {
   },
   created () {
     getOrderById(this.$route.params.id).then(data => {
-      if (data.id) {
-        this.orderStatusForm.time = moment(data.orderTime).format('x')
-        this.orderStatusForm.company = parseInt(data.company)
-        this.orderFinish = true
+      if (data) {
+        if (data.id) {
+          this.orderStatusForm.time = moment(data.orderTime).format('x')
+          this.orderStatusForm.company = parseInt(data.company)
+          this.orderFinish = true
+        }
+      } else {
+        this.$message({
+          type: 'error',
+          message: '获取评估下单信息失败'
+        })
       }
     })
     getTaskById(this.$route.params.mortgageId).then(data => {
-      getChecklistById(data[0].id).then(data => {
-        data.houses.forEach(ele => {
-          // 深层赋值，防止对象被篡改
-          const report = JSON.parse(JSON.stringify(this.report))
-          report.houseId = ele.id
-          this.reportForm.reports.push([report])
+      if (data) {
+        getChecklistById(data[0].id).then(data => {
+          if (data) {
+            data.houses.forEach(ele => {
+              // 深层赋值，防止对象被篡改
+              const report = JSON.parse(JSON.stringify(this.report))
+              report.houseId = ele.id
+              this.reportForm.reports.push([report])
+            })
+          } else {
+            this.$message({
+              type: 'error',
+              message: '获取接单表房产信息失败'
+            })
+          }
         })
-      })
+      } else {
+        this.$message({
+          type: 'error',
+          message: '获取流程信息失败'
+        })
+      }
     })
   }
 }
