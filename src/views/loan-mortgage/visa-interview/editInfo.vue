@@ -8,7 +8,7 @@
       <el-collapse v-model="activeNames">
         <el-collapse-item class="form-wrapper" name="1">
           <template slot="title"><h2>资料目录表</h2></template>
-          <el-form :model="catalogForm" ref="catalogForm" label-width="200px" :rules="catalogFormRules">
+          <el-form :model="catalogForm" ref="catalogForm" label-width="200px" :rules="catalogFormRules" v-if="catalogForm">
             <el-row>
               <el-col :span="10">
                 <el-form-item label="完成时间" prop="finishTime">
@@ -352,14 +352,14 @@
             </table>
             <el-button type="info" @click="addContent()" style="margin: 20px 0 50px 200px;display:block;">添加资料内容</el-button>
             <el-form-item label=" ">
-              <el-button type="primary" @click="saveCatalog()">保存</el-button>
+              <el-button type="primary" @click="saveCatalogHandler()">保存</el-button>
               <el-button @click="resetForm('catalogForm')">重置</el-button>
             </el-form-item>
           </el-form>
         </el-collapse-item>
         <el-collapse-item class="form-wrapper" name="2">
           <template slot="title"><h2>个人贷款申请表</h2></template>
-          <el-form :model="applicationForm" ref="applicationForm" label-width="200px" :rules="applicationFormRules">
+          <el-form :model="applicationForm" ref="applicationForm" label-width="200px" :rules="applicationFormRules" v-if="applicationForm">
             <el-form-item label="申请时间" prop="applicationTime">
               <el-date-picker type="date" placeholder="选择日期" v-model="applicationForm.applicationTime" value-format="timestamp"></el-date-picker>
             </el-form-item>
@@ -478,7 +478,7 @@
                   </el-form-item>
                 </template>
                 <el-form-item label=" ">
-                  <el-button type="primary" @click="saveForm()">提交</el-button>
+                  <el-button type="primary" @click="saveFormHandler()">提交</el-button>
                   <el-button @click="resetForm('applicationForm')">重置</el-button>
                 </el-form-item>
               </el-col>
@@ -566,7 +566,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="">
-          <el-button type="primary" :loading="formLoading" @click="finishVisaInterview">提交</el-button>
+          <el-button type="primary" :loading="formLoading" @click="confirmVisaStatus()">提交</el-button>
           <el-button @click="resetForm('contractStatusForm')">重置</el-button>
         </el-form-item>
       </el-form>
@@ -598,138 +598,139 @@ import {
 } from '@/api/mortgage'
 
 export default {
-  name: 'sign-contract',
   data () {
     return {
       contractStatusForm: {
         time: '',
         address: ''
       },
-      catalogForm: {
-        finishTime: null,
-        clientName: null,
-        loanAmount: null,
-        clerkName: null,
-        clerkPhone: null,
-        hasClientIdCard: null,
-        clientIdCardDes: null,
-        clientIdCardPage: null,
-        clientIdCardRemark: null,
-        hasClientAccount: null,
-        clientAccountHome: null,
-        clientAccountHousehold: null,
-        clientAccountMyself: null,
-        clientAccountDes: null,
-        clientAccountPage: null,
-        clientAccountRemark: null,
-        hasClientSpouseIdCard: null,
-        clientSpouseIdCardDes: null,
-        clientSpouseIdCardPage: null,
-        clientSpouseIdCardRemark: null,
-        hasClientSpouseAccount: null,
-        clientSpouseAccountHome: null,
-        clientSpouseAccountHousehold: null,
-        clientSpouseAccountMyself: null,
-        clientSpouseAccountDes: null,
-        clientSpouseAccountPage: null,
-        clientSpouseAccountRemark: null,
-        hasMarriageProof: null,
-        marriageCertificate: null,
-        divorceCertificate: null,
-        divorceAgreement: null,
-        marriageProofDes: null,
-        marriageProofPage: null,
-        marriageProofRemark: null,
-        hasHouseMortgage: null,
-        houseMortgage: null,
-        houseMortgageDes: null,
-        houseMortgagePage: null,
-        houseMortgageRemark: null,
-        hasAssetsCertificate: null,
-        assetsHouseCertificate: null,
-        assetsHouseNumber: null,
-        assetsOther: null,
-        assetsOtherRemark: null,
-        assetsCarCertificate: null,
-        assetsCarNumber: null,
-        assetsCertificateDes: null,
-        assetsCertificatePage: null,
-        assetsCertificateRemark: null,
-        hasIncomeProof: null,
-        incomeProofDes: null,
-        incomeProofPage: null,
-        incomeProofRemark: null,
-        hasBusinessLicense: null,
-        businessLicenseDes: null,
-        businessLicensePage: null,
-        businessLicenseRemark: null,
-        hasLegalRepresentative: null,
-        legalRepresentativeDes: null,
-        legalRepresentativePage: null,
-        legalRepresentativeRemark: null,
-        hasCompanyStatute: null,
-        companyStatuteDes: null,
-        companyStatutePage: null,
-        companyStatuteRemark: null,
-        hasGrantDeed: null,
-        grantDeedDes: null,
-        grantDeedPage: null,
-        grantDeedRemark: null,
-        hasTradingContact: null,
-        tradingContactDes: null,
-        tradingContactPage: null,
-        tradingContactRemark: null,
-        hasPurposeContact: null,
-        purposeContactDes: null,
-        purposeContactPage: null,
-        purposeContactRemark: null,
-        catalogOther: []
-      },
-      applicationForm: {
-        applicationTime: null,
-        proposerName: null,
-        proposerGender: null,
-        proposerMarriageState: null,
-        proposerFamily: null,
-        proposerFamilyNum: null,
-        proposerPhone: null,
-        proposerWorkTele: null,
-        proposerHouseTele: null,
-        proposerHouseholdType: null,
-        proposerIdCard: null,
-        proposerInhabitingInfo: null,
-        proposerAddress: null,
-        proposerLocalResident: null,
-        proposerLodgingInfo: null,
-        proposerLoanState: null,
-        proposerJobType: null,
-        proposerWorkYear: null,
-        proposerIncomeMonth: null,
-        proposerSpouseName: null,
-        proposerSpousePhone: null,
-        proposerSpousePaperType: null,
-        proposerSpousePaperId: null,
-        hasProposerSpouseTogether: null,
-        proposerCompany: null,
-        proposerCompanyAddress: null,
-        proposerCompanyType: null,
-        proposerCompanyDuty: null,
-        proposerBusinessLicense: null,
-        proposerBusinessPlace: null,
-        proposerBusinessAddress: null,
-        proposerBusiness: null,
-        proposerBusinessCard: null,
-        loanAmount: null,
-        loanPeriod: null,
-        loanCreditType: null,
-        loanPurpose: null,
-        loanRepaymentType: null,
-        loanOther: null,
-        loanContactName: null,
-        loanContactRela: null,
-        loanContactTele: null,
-        loanContactPhone: null
-      },
+      // catalogForm: {
+      //   finishTime: null,
+      //   clientName: null,
+      //   loanAmount: null,
+      //   clerkName: null,
+      //   clerkPhone: null,
+      //   hasClientIdCard: null,
+      //   clientIdCardDes: null,
+      //   clientIdCardPage: null,
+      //   clientIdCardRemark: null,
+      //   hasClientAccount: null,
+      //   clientAccountHome: null,
+      //   clientAccountHousehold: null,
+      //   clientAccountMyself: null,
+      //   clientAccountDes: null,
+      //   clientAccountPage: null,
+      //   clientAccountRemark: null,
+      //   hasClientSpouseIdCard: null,
+      //   clientSpouseIdCardDes: null,
+      //   clientSpouseIdCardPage: null,
+      //   clientSpouseIdCardRemark: null,
+      //   hasClientSpouseAccount: null,
+      //   clientSpouseAccountHome: null,
+      //   clientSpouseAccountHousehold: null,
+      //   clientSpouseAccountMyself: null,
+      //   clientSpouseAccountDes: null,
+      //   clientSpouseAccountPage: null,
+      //   clientSpouseAccountRemark: null,
+      //   hasMarriageProof: null,
+      //   marriageCertificate: null,
+      //   divorceCertificate: null,
+      //   divorceAgreement: null,
+      //   marriageProofDes: null,
+      //   marriageProofPage: null,
+      //   marriageProofRemark: null,
+      //   hasHouseMortgage: null,
+      //   houseMortgage: null,
+      //   houseMortgageDes: null,
+      //   houseMortgagePage: null,
+      //   houseMortgageRemark: null,
+      //   hasAssetsCertificate: null,
+      //   assetsHouseCertificate: null,
+      //   assetsHouseNumber: null,
+      //   assetsOther: null,
+      //   assetsOtherRemark: null,
+      //   assetsCarCertificate: null,
+      //   assetsCarNumber: null,
+      //   assetsCertificateDes: null,
+      //   assetsCertificatePage: null,
+      //   assetsCertificateRemark: null,
+      //   hasIncomeProof: null,
+      //   incomeProofDes: null,
+      //   incomeProofPage: null,
+      //   incomeProofRemark: null,
+      //   hasBusinessLicense: null,
+      //   businessLicenseDes: null,
+      //   businessLicensePage: null,
+      //   businessLicenseRemark: null,
+      //   hasLegalRepresentative: null,
+      //   legalRepresentativeDes: null,
+      //   legalRepresentativePage: null,
+      //   legalRepresentativeRemark: null,
+      //   hasCompanyStatute: null,
+      //   companyStatuteDes: null,
+      //   companyStatutePage: null,
+      //   companyStatuteRemark: null,
+      //   hasGrantDeed: null,
+      //   grantDeedDes: null,
+      //   grantDeedPage: null,
+      //   grantDeedRemark: null,
+      //   hasTradingContact: null,
+      //   tradingContactDes: null,
+      //   tradingContactPage: null,
+      //   tradingContactRemark: null,
+      //   hasPurposeContact: null,
+      //   purposeContactDes: null,
+      //   purposeContactPage: null,
+      //   purposeContactRemark: null,
+      //   catalogOther: []
+      // },
+      catalogForm: null,
+      // applicationForm: {
+      //   applicationTime: null,
+      //   proposerName: null,
+      //   proposerGender: null,
+      //   proposerMarriageState: null,
+      //   proposerFamily: null,
+      //   proposerFamilyNum: null,
+      //   proposerPhone: null,
+      //   proposerWorkTele: null,
+      //   proposerHouseTele: null,
+      //   proposerHouseholdType: null,
+      //   proposerIdCard: null,
+      //   proposerInhabitingInfo: null,
+      //   proposerAddress: null,
+      //   proposerLocalResident: null,
+      //   proposerLodgingInfo: null,
+      //   proposerLoanState: null,
+      //   proposerJobType: null,
+      //   proposerWorkYear: null,
+      //   proposerIncomeMonth: null,
+      //   proposerSpouseName: null,
+      //   proposerSpousePhone: null,
+      //   proposerSpousePaperType: null,
+      //   proposerSpousePaperId: null,
+      //   hasProposerSpouseTogether: null,
+      //   proposerCompany: null,
+      //   proposerCompanyAddress: null,
+      //   proposerCompanyType: null,
+      //   proposerCompanyDuty: null,
+      //   proposerBusinessLicense: null,
+      //   proposerBusinessPlace: null,
+      //   proposerBusinessAddress: null,
+      //   proposerBusiness: null,
+      //   proposerBusinessCard: null,
+      //   loanAmount: null,
+      //   loanPeriod: null,
+      //   loanCreditType: null,
+      //   loanPurpose: null,
+      //   loanRepaymentType: null,
+      //   loanOther: null,
+      //   loanContactName: null,
+      //   loanContactRela: null,
+      //   loanContactTele: null,
+      //   loanContactPhone: null
+      // },
+      applicationForm: null,
       catalogFormRules: {
         finishTime: [{ required: true, message: '完成时间不能为空' }],
         clientName: [{ required: true, message: '贷款人姓名不能为空' }],
@@ -858,16 +859,35 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'user_id'
+      'userId'
     ])
   },
   created () {
     getTaskById(this.$route.params.mortgageId).then(data => {
-      getChecklistById(data[0].id).then(data => {
-        this.loanVariety = data.loanVariety
+      if (data) {
+        getChecklistById(data[0].id).then(data => {
+          if (data) {
+            this.loanVariety = data.loanVariety
+          } else {
+            this.$message({
+              type: 'error',
+              message: '获取借款品种信息失败'
+            })
+          }
+        })
+      } else {
+        this.$message({
+          type: 'error',
+          message: '获取流程信息失败'
+        })
+      }
+    })
+    this.getFormData().catch(() => {
+      this.$message({
+        type: 'error',
+        message: '表单数据获取失败'
       })
     })
-    this.getFormData()
     this.getStaticIndex(this.maritalStatus)
     this.getStaticIndex(this.familyStructure)
     this.getStaticIndex(this.localLiving1)
@@ -880,47 +900,78 @@ export default {
   },
   methods: {
     getFormData () {
-      getVisaById(this.$route.params.id).then(data => {
-        this.catalogForm = data.catalog
-        // 修复element-ui model.number初始化出错
-        this.catalogForm.finishTime = this.catalogForm.finishTime ? parseInt(this.catalogForm.loanAmount) : this.catalogForm.loanAmount
-        this.catalogForm.loanAmount = this.catalogForm.loanAmount ? parseInt(this.catalogForm.loanAmount) : this.catalogForm.loanAmount
-        this.applicationForm = data.form
-        this.applicationForm.applicationTime = this.applicationForm.applicationTime ? parseInt(this.applicationForm.applicationTime) : this.applicationForm.applicationTime
-        this.applicationForm.proposerFamilyNum = this.applicationForm.proposerFamilyNum ? parseInt(this.applicationForm.proposerFamilyNum) : this.applicationForm.proposerFamilyNum
-        this.applicationForm.loanAmount = this.applicationForm.loanAmount ? parseInt(this.applicationForm.loanAmount) : this.applicationForm.loanAmount
-        this.applicationForm.loanPeriod = this.applicationForm.loanPeriod ? parseInt(this.applicationForm.loanPeriod) : this.applicationForm.loanPeriod
+      return new Promise((resolve, reject) => {
+        getVisaById(this.$route.params.id).then(data => {
+          if (data) {
+            this.catalogForm = data.catalog
+            // 修复element-ui model.number初始化出错
+            this.catalogForm.finishTime = this.catalogForm.finishTime ? parseInt(this.catalogForm.loanAmount) : this.catalogForm.loanAmount
+            this.catalogForm.loanAmount = this.catalogForm.loanAmount ? parseInt(this.catalogForm.loanAmount) : this.catalogForm.loanAmount
+            this.applicationForm = data.form
+            this.applicationForm.applicationTime = this.applicationForm.applicationTime ? parseInt(this.applicationForm.applicationTime) : this.applicationForm.applicationTime
+            this.applicationForm.proposerFamilyNum = this.applicationForm.proposerFamilyNum ? parseInt(this.applicationForm.proposerFamilyNum) : this.applicationForm.proposerFamilyNum
+            this.applicationForm.loanAmount = this.applicationForm.loanAmount ? parseInt(this.applicationForm.loanAmount) : this.applicationForm.loanAmount
+            this.applicationForm.loanPeriod = this.applicationForm.loanPeriod ? parseInt(this.applicationForm.loanPeriod) : this.applicationForm.loanPeriod
+            resolve()
+          } else {
+            reject()
+          }
+        })
       })
     },
     saveCatalog () {
-      this.$refs['catalogForm'].validate((valid) => {
-        if (valid) {
-          saveCatalog(this.catalogForm).then(data => {
-            if (data) {
-              this.$message({
-                type: 'success',
-                message: '保存成功'
-              })
-            }
+      return new Promise((resolve, reject) => {
+        this.$refs['catalogForm'].validate((valid) => {
+          if (valid) {
+            saveCatalog(this.catalogForm).then(data => {
+              data ? resolve() : reject(true)
+            })
+          } else {
+            reject()
+          }
+        })
+      })
+    },
+    saveCatalogHandler () {
+      this.saveCatalog().then(() => {
+        this.$message({
+          type: 'success',
+          message: '资料目录表保存成功'
+        })
+      }).catch((done) => {
+        if (done) {
+          this.$message({
+            type: 'error',
+            message: '资料目录表保存失败'
           })
-        } else {
-          return false
         }
       })
     },
     saveForm () {
-      this.$refs['applicationForm'].validate((valid) => {
-        if (valid) {
-          saveForm(this.applicationForm).then(data => {
-            if (data) {
-              this.$message({
-                type: 'success',
-                message: '保存成功'
-              })
-            }
+      return new Promise((resolve, reject) => {
+        this.$refs['applicationForm'].validate((valid) => {
+          if (valid) {
+            saveForm(this.applicationForm).then(data => {
+              data ? resolve() : reject()
+            })
+          } else {
+            reject()
+          }
+        })
+      })
+    },
+    saveFormHandler () {
+      this.saveForm().then(() => {
+        this.$message({
+          type: 'success',
+          message: '个人贷款申请表保存成功'
+        })
+      }).catch((done) => {
+        if (done) {
+          this.$message({
+            type: 'error',
+            message: '个人贷款申请表保存失败'
           })
-        } else {
-          return false
         }
       })
     },
@@ -950,12 +1001,22 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.saveCatalog()
-        this.saveForm()
-        this.activeStep++
+        // 合并Promise
+        Promise.all([this.saveCatalog(), this.saveForm()]).then(() => {
+          this.$message({
+            type: 'success',
+            message: '资料目录表和个人贷款申请表保存成功'
+          })
+          this.activeStep++
+        }).catch(() => {
+          this.$message({
+            type: 'error',
+            message: '资料目录表和个人贷款申请表未能均保存成功'
+          })
+        })
       }).catch(() => {})
     },
-    finishVisaInterview () {
+    confirmVisaStatus () {
       this.$refs['contractStatusForm'].validate((valid) => {
         if (valid) {
           this.$confirm('请确认信息填写无误，是否提交？', '提示', {
@@ -964,11 +1025,23 @@ export default {
             type: 'warning'
           }).then(() => {
             this.formLoading = true
+            this.$message({
+              type: 'info',
+              message: '正在处理...'
+            })
             confirmVisa(this.$route.params.id, this.contractStatusForm.time, this.contractStatusForm.address).then(data => {
+              this.$message.closeAll()
               this.formLoading = false
-              this.loanId = data.rootId
-              this.loanStatus = data.des
-              this.dialogVisible = true
+              if (data) {
+                this.loanId = data.rootId
+                this.loanStatus = data.des
+                this.dialogVisible = true
+              } else {
+                this.$message({
+                  type: 'success',
+                  message: '确定面签状态失败'
+                })
+              }
             })
           }).catch(() => {})
         } else {
@@ -978,7 +1051,14 @@ export default {
     },
     getStaticIndex (staticIndex) {
       getStaticIndexByKey(staticIndex.key).then(data => {
-        staticIndex.value = data[staticIndex.key]
+        if (data) {
+          staticIndex.value = data[staticIndex.key]
+        } else {
+          this.$message({
+            type: 'success',
+            message: '静态索引获取失败'
+          })
+        }
       })
     }
   }

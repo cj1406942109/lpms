@@ -262,7 +262,14 @@ export default {
     },
     getStaticIndex (staticIndex) {
       getStaticIndexByKey(staticIndex.key).then(data => {
-        staticIndex.value = data[staticIndex.key]
+        if (data) {
+          staticIndex.value = data[staticIndex.key]
+        } else {
+          this.$message({
+            type: 'success',
+            message: '静态索引获取失败'
+          })
+        }
       })
     }
   },
