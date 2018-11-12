@@ -6,7 +6,7 @@
       <el-table-column :sortable="true" prop="rootId" label="贷款编号" width="200"></el-table-column>
       <el-table-column :sortable="true" prop="clientName" label="客户姓名"></el-table-column>
       <el-table-column :sortable="true" prop="clientPhone" label="联系方式" width="200"></el-table-column>
-      <el-table-column :sortable="true" prop="state" label="当前状态" width="200"
+      <el-table-column :sortable="true" prop="state" label="当前状态"
         :filter-method="filterState"
         :filters="[{ text: '待填写面谈建议', value: 'open' }, { text: '已完成', value: 'finish' }, { text: '已关闭', value: 'close' }]"
         filter-placement="bottom-end">
