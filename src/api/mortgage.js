@@ -188,7 +188,7 @@ export function getVisaById (visaId) {
  */
 export function saveCatalog (catalog) {
   return request({
-    url: `/mortgage/visa/catalog`,
+    url: '/mortgage/visa/catalog',
     method: 'post',
     data: qs.stringify({
       catalog: JSON.stringify(catalog)
@@ -202,7 +202,7 @@ export function saveCatalog (catalog) {
  */
 export function saveForm (form) {
   return request({
-    url: `/mortgage/visa/form`,
+    url: '/mortgage/visa/form',
     method: 'post',
     data: qs.stringify({
       form: JSON.stringify(form)
@@ -218,7 +218,7 @@ export function saveForm (form) {
  */
 export function confirmVisa (visaId, time, address) {
   return request({
-    url: `/mortgage/visa/confirm`,
+    url: '/mortgage/visa/confirm',
     method: 'post',
     data: qs.stringify({
       visaId,
@@ -272,7 +272,7 @@ export function getOrderById (orderId) {
  */
 export function confirmOrder (orderId, time, company) {
   return request({
-    url: `/mortgage/order/confirm`,
+    url: '/mortgage/order/confirm',
     method: 'post',
     data: qs.stringify({
       orderId,
@@ -282,6 +282,13 @@ export function confirmOrder (orderId, time, company) {
   })
 }
 
+/**
+ * 保存报告
+ * @param {*} reportId 报告id
+ * @param {*} time 时间
+ * @param {*} type 报告类型
+ * @param {*} report 报告
+ */
 export function saveReport (reportId, time, type, report) {
   return request({
     url: `/mortgage/order/report/${reportId}`,
@@ -293,15 +300,7 @@ export function saveReport (reportId, time, type, report) {
     })
   })
 }
-// export function getHouseInfoByOrderId (orderId) {
-//   return request({
-//     url: `/mortgage/order/house/${orderId}`,
-//     method: 'get',
-//     params: {
-//       orderId
-//     }
-//   })
-// }
+
 // ************************* 评估下单结束 *******************************
 
 // ************************* 审批开始 *******************************
@@ -345,7 +344,7 @@ export function getApproveById (approveId) {
  */
 export function confirmCatalog (approveId, catalog) {
   return request({
-    url: `/mortgage/approve/confirmCatalog`,
+    url: '/mortgage/approve/confirmCatalog',
     method: 'post',
     data: qs.stringify({
       approveId,

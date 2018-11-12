@@ -161,11 +161,33 @@ export const constantRouterMap = [
       name: '二手房贷款-面签',
       meta: { title: '面签', icon: 'visa-interview' }
     }, {
-      path: 'visa-interview/edit-info/:id',
+      path: 'visa-interview/edit-info/:id/:des',
       hidden: true,
       name: '二手房贷款-面签表格',
       meta: { title: '面签表格' },
       component: () => import('@/views/loan-house/visa-interview/editInfo')
+    }, {
+      path: 'evaluate-order',
+      component: () => import('@/views/loan-house/evaluate-order'),
+      name: '二手房贷款-评估下单',
+      meta: { title: '评估下单', icon: 'evaluate' }
+    }, {
+      path: 'evaluate-order/edit-info/:id/:des',
+      hidden: true,
+      name: '二手房贷款-评估下单表格',
+      meta: { title: '评估下单表格' },
+      component: () => import('@/views/loan-house/evaluate-order/editInfo')
+    }, {
+      path: 'integrate-input',
+      component: () => import('@/views/loan-house/integrate-input'),
+      name: '二手房贷款-整件输机',
+      meta: { title: '整件输机', icon: 'evaluate' }
+    }, {
+      path: 'integrate-input/edit-info/:id/:des',
+      hidden: true,
+      name: '二手房贷款-整件输机表格',
+      meta: { title: '整件输机表格' },
+      component: () => import('@/views/loan-house/integrate-input/editInfo')
     }]
   },
   {

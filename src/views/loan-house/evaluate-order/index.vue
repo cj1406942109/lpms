@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
-    <h2>面签列表</h2>
-    <el-table :data="visaInterviewList" v-loading.body="visaInterviewListLoading" style="width: 100%" border stripe>
+    <h2>评估下单列表</h2>
+    <el-table :data="evaluateOrderList" v-loading.body="evaluateOrderListLoading" style="width: 100%" border stripe>
       <el-table-column type="index" label="序号" width="100"></el-table-column>
       <el-table-column :sortable="true" prop="rootId" label="贷款编号" width="200"></el-table-column>
       <el-table-column :sortable="true" prop="clientName" label="客户姓名"></el-table-column>
@@ -12,14 +12,11 @@
         filter-placement="bottom-end">
         <template slot-scope="scope">
           <template v-if="scope.row.state == 'open'">
-            <el-tag :type="scope.row.extra.catalogState.done ? 'success' : 'primary'">
-              {{scope.row.extra.catalogState.message}}
+            <el-tag :type="scope.row.extra.orderState.done ? 'success' : 'primary'">
+              {{scope.row.extra.orderState.message}}
             </el-tag>
-            <el-tag :type="scope.row.extra.formState.done ? 'success' : 'primary'">
-              {{scope.row.extra.formState.message}}
-            </el-tag>
-            <el-tag :type="scope.row.extra.visaState.done ? 'success' : 'primary'">
-              {{scope.row.extra.visaState.message}}
+            <el-tag :type="scope.row.extra.reportState.done ? 'success' : 'primary'">
+              {{scope.row.extra.reportState.message}}
             </el-tag>
           </template>
           <el-tag :type="tagState(scope.row.state)" v-else>
@@ -39,18 +36,18 @@
 <script>
 import { mapGetters } from 'vuex'
 import {
-  getVisaListByEmployeeId
-} from '@/api/mortgage'
+  getOrderListByEmployeeId
+} from '@/api/house'
 export default {
-  name: 'visa-interview',
+  name: 'evaluate-order',
   data () {
     return {
-      visaInterviewList: null,
-      visaInterviewListLoading: true
+      evaluateOrderList: null,
+      evaluateOrderListLoading: true
     }
   },
   created () {
-    this.getVisaInterviewList()
+    this.getOrderList()
   },
   computed: {
     ...mapGetters([
@@ -58,21 +55,21 @@ export default {
     ])
   },
   methods: {
-    getVisaInterviewList () {
-      getVisaListByEmployeeId(this.userId).then(data => {
-        this.visaInterviewListLoading = false
+    getOrderList () {
+      getOrderListByEmployeeId(this.userId).then(data => {
+        this.evaluateOrderListLoading = false
         if (data) {
-          this.visaInterviewList = data
+          this.evaluateOrderList = data
         } else {
           this.$message({
             type: 'error',
-            message: '面签列表获取失败'
+            message: '评估下单列表获取失败'
           })
         }
       })
     },
     goNext (item) {
-      this.$router.push({ path: `/loan-mortgage/visa-interview/edit-info/${item.id}/${item.rootId}/${item.des}` })
+      this.$router.push({ path: `/house/evaluate-order/edit-info/${item.id}/${item.des}` })
     },
     tagState (item) {
       switch (item) {
@@ -101,41 +98,6 @@ export default {
     filterState (value, row) {
       return row.state === value
     }
-    // assignTask (item) {
-    //   this.selectedTask = item
-    //   getAssignUserList(this.departmentId).then(response => {
-    //     this.assignUserListLoading = false
-    //     if (response.data.status) {
-    //       this.assignUserList = response.data.data
-    //       this.assignUserList.forEach(function (item) {
-    //         let prefix = '1'
-    //         for (let i = 0; i < 10; i++) {
-    //           prefix += Math.floor(Math.random() * 10)
-    //         }
-    //         item.phone = prefix
-    //       })
-    //     } else {
-    //       this.$message({
-    //         type: 'error',
-    //         message: '可分配用户列表获取失败，请稍候重试'
-    //       })
-    //     }
-    //   })
-    //   this.dialogTableVisible = true
-    // },
-    // assignTaskToUser (item) {
-    //   assignTaskToUser(this.selectedTask.taskId, item.id).then(response => {
-    //     if (response.data.status) {
-    //       this.dialogTableVisible = false
-    //       this.$message({
-    //         type: 'success',
-    //         message: '任务分配成功'
-    //       })
-    //       this.GetVisaInterviewList()
-    //     }
-    //   })
-    //   console.log(item)
-    // }
   }
 }
 </script>
