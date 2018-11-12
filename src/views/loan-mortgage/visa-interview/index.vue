@@ -53,9 +53,9 @@
 import { mapGetters } from 'vuex'
 import {
   getVisaList,
-  getVisaListByEmployeeId,
-  assignTaskToUser,
-  getAssignUserList
+  getVisaListByEmployeeId
+  // assignTaskToUser,
+  // getAssignUserList
 } from '@/api/mortgage'
 export default {
   name: 'visa-interview',
@@ -139,42 +139,42 @@ export default {
     },
     filterState (value, row) {
       return row.state === value
-    },
-    assignTask (item) {
-      this.selectedTask = item
-      getAssignUserList(this.departmentId).then(response => {
-        this.assignUserListLoading = false
-        if (response.data.status) {
-          this.assignUserList = response.data.data
-          this.assignUserList.forEach(function (item) {
-            let prefix = '1'
-            for (let i = 0; i < 10; i++) {
-              prefix += Math.floor(Math.random() * 10)
-            }
-            item.phone = prefix
-          })
-        } else {
-          this.$message({
-            type: 'error',
-            message: '可分配用户列表获取失败，请稍候重试'
-          })
-        }
-      })
-      this.dialogTableVisible = true
-    },
-    assignTaskToUser (item) {
-      assignTaskToUser(this.selectedTask.taskId, item.id).then(response => {
-        if (response.data.status) {
-          this.dialogTableVisible = false
-          this.$message({
-            type: 'success',
-            message: '任务分配成功'
-          })
-          this.GetVisaInterviewList()
-        }
-      })
-      console.log(item)
     }
+    // assignTask (item) {
+    //   this.selectedTask = item
+    //   getAssignUserList(this.departmentId).then(response => {
+    //     this.assignUserListLoading = false
+    //     if (response.data.status) {
+    //       this.assignUserList = response.data.data
+    //       this.assignUserList.forEach(function (item) {
+    //         let prefix = '1'
+    //         for (let i = 0; i < 10; i++) {
+    //           prefix += Math.floor(Math.random() * 10)
+    //         }
+    //         item.phone = prefix
+    //       })
+    //     } else {
+    //       this.$message({
+    //         type: 'error',
+    //         message: '可分配用户列表获取失败，请稍候重试'
+    //       })
+    //     }
+    //   })
+    //   this.dialogTableVisible = true
+    // },
+    // assignTaskToUser (item) {
+    //   assignTaskToUser(this.selectedTask.taskId, item.id).then(response => {
+    //     if (response.data.status) {
+    //       this.dialogTableVisible = false
+    //       this.$message({
+    //         type: 'success',
+    //         message: '任务分配成功'
+    //       })
+    //       this.GetVisaInterviewList()
+    //     }
+    //   })
+    //   console.log(item)
+    // }
   }
 }
 </script>

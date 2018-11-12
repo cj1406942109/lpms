@@ -4,7 +4,7 @@
       <el-main>
         <div class="form-wrapper">
           <h3 class="title">
-            <img :src="logo" alt="日晟行贷款">
+            <img :src="logo" alt="日晟行贷款" style="max-width:100%">
             <!-- <br>日晟行贷款管理系统 -->
           </h3>
           <el-card class="box-card">
