@@ -128,7 +128,7 @@ export default {
     formateState (state) {
       switch (state) {
         case 'open':
-          return '待填写面谈建议'
+          return '待填写相关表格'
         case 'finish':
           return '已完成'
         case 'close':

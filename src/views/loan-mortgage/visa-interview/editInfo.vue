@@ -1039,7 +1039,7 @@ export default {
                 this.dialogVisible = true
               } else {
                 this.$message({
-                  type: 'success',
+                  type: 'error',
                   message: '确定面签状态失败'
                 })
               }
@@ -1056,7 +1056,7 @@ export default {
           staticIndex.value = data[staticIndex.key]
         } else {
           this.$message({
-            type: 'success',
+            type: 'error',
             message: '静态索引获取失败'
           })
         }

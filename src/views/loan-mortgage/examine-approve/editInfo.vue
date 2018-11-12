@@ -50,7 +50,7 @@
               <td>借款人身份证</td>
               <td>
                 <el-radio-group v-model="catalogForm.clientIdCardDes">
-                  <el-radio :label="1" >原件</el-radio>
+                  <el-radio :label="1">原件</el-radio>
                   <el-radio :label="2">复印件</el-radio>
                 </el-radio-group>
               </td>
@@ -764,7 +764,7 @@ export default {
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-              confirmCatalog(this.catalogForm).then(data => {
+              confirmCatalog(this.$route.params.id, this.catalogForm).then(data => {
                 data ? resolve() : reject(true)
               })
             }).catch(() => { reject() })

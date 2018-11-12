@@ -5,7 +5,7 @@
     <div class="dialog-info">贷款状态为：<a>{{loanStatus}}</a></div>
     <span slot="footer" class="dialog-footer">
       <el-button @click="changePath()">查看贷款状态</el-button>
-      <el-button @click="changePath(listPath)" v-if="showReturnButton">返回面谈列表</el-button>
+      <el-button @click="changePath(listPath)" v-if="showReturnButton">返回{{loanLastStatus}}列表</el-button>
       <el-button type="primary" @click="changePath(nextPath)">办理下一业务</el-button>
     </span>
   </el-dialog>

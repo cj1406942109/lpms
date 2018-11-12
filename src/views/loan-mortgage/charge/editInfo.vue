@@ -2,76 +2,82 @@
   <div class="app-container">
     <div class="form-wrapper">
       <h2>确定收费状态</h2>
-      <el-form :model="chargeForm" ref="chargeForm" label-width="200px" inline>
-        <el-form-item label="收费时间" prop="datetime">
-          <el-date-picker type="date" placeholder="选择日期" v-model="chargeForm.time" value-format="yyyy-MM-dd"></el-date-picker>
+      <el-form :model="chargeForm" ref="chargeForm" label-width="200px" :rules="chargeFormRules">
+        <el-form-item label="收费时间" prop="time">
+          <el-date-picker type="date" placeholder="选择日期" v-model="chargeForm.time" value-format="timestamp"></el-date-picker>
         </el-form-item>
-        <el-form-item label=" ">
-          <el-button type="primary" @click="confirmCharge">提交</el-button>
+        <el-form-item>
+          <el-button type="primary" :loading="formLoading" @click="confirmCharge">提交</el-button>
         </el-form-item>
       </el-form>
-      <el-dialog :visible.sync="dialogVisible" width="30%" center>
-        <div slot="title"><i class="el-icon-success" style="color:#67C23A;font-size:22px;vertical-align:middle;margin-right:5px;"></i>收费成功</div>
-        <div>贷款编号为：<a style="color:blue">{{loanNum}}</a></div>
-        <div>贷款状态为：<a style="color:blue">正在放款（等待放款确认）</a></div>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="checkStatus">查看贷款状态</el-button>
-          <el-button @click="returnList">返回面谈列表</el-button>
-          <el-button type="primary" @click="nextOperation">办理下一业务</el-button>
-        </span>
-      </el-dialog>
     </div>
+    <flow-complete-dialog
+      :loanId="loanId"
+      :loanStatus="loanStatus"
+      :loanLastStatus="loanLastStatus"
+      :dialogVisible="dialogVisible"
+      :listPath="listPath"
+      :nextPath="nextPath"
+    ></flow-complete-dialog>
   </div>
 </template>
 
 <script>
 import { confirmCharge } from '@/api/mortgage'
 export default {
-  name: 'sign-contract',
   data () {
     return {
       chargeForm: {
         time: null
       },
-      pickerOptions: {
-        disabledDate (time) {
-          return time.getTime() < Date.now()
-        }
+      chargeFormRules: {
+        time: [{ required: true, message: '收费时间不能为空' }]
       },
+      formLoading: false,
+      loanId: '',
+      loanStatus: '',
+      loanLastStatus: '',
       dialogVisible: false,
-      loanNum: ''
+      listPath: '/loan-mortgage/charge',
+      nextPath: '/loan-mortgage/make-loans'
     }
+  },
+  created () {
+    this.loanLastStatus = this.$route.params.des
   },
   methods: {
     confirmCharge () {
-      confirmCharge(this.chargeForm.time, this.$route.params.taskId).then(response => {
-        console.log(response)
-        if (response.data.status) {
-          this.loanNum = response.data.data
-          this.dialogVisible = true
-          this.$message({
-            type: 'success',
-            message: '确定收费状态成功'
-          })
+      this.$refs['chargeForm'].validate((valid) => {
+        if (valid) {
+          this.$confirm('请确认信息填写无误，是否提交？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.formLoading = true
+            this.$message({
+              type: 'info',
+              message: '正在处理...'
+            })
+            confirmCharge(this.$route.params.id, this.chargeForm.time).then(data => {
+              this.$message.closeAll()
+              this.formLoading = false
+              if (data) {
+                this.loanId = data.rootId
+                this.loanStatus = data.des
+                this.dialogVisible = true
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: '确定收费状态失败'
+                })
+              }
+            })
+          }).catch(() => {})
         } else {
-          this.$message({
-            type: 'error',
-            message: '确定收费状态失败，请稍候重试'
-          })
+          return false
         }
       })
-    },
-    checkStatus () {
-      this.dialogVisible = false
-      this.$router.push({ path: `/loan-management/order/status/${this.loanNum}` })
-    },
-    returnList () {
-      this.dialogVisible = false
-      this.$router.push({ path: '/loan-mortgage/charge' })
-    },
-    nextOperation () {
-      this.dialogVisible = false
-      this.$router.push({ path: '/loan-mortgage/make-loans' })
     }
   }
 }
