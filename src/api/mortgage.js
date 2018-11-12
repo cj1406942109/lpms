@@ -401,6 +401,17 @@ export function saveFormalReport (approveId, time, report) {
     })
   })
 }
+
+/**
+ * 结束当前审批流程
+ * @param {*} approveId 审批id
+ */
+export function skipApprove (approveId) {
+  return request({
+    url: `/mortgage/approve/skip/${approveId}`,
+    method: 'post'
+  })
+}
 // ************************* 审批结束 *******************************
 
 // ************************* 抵押开始 *******************************
@@ -488,6 +499,18 @@ export function guaranteePublish (mortgageId, approveResult, approvePassTime, gu
     })
   })
 }
+
+/**
+ * 跳过抵押，结束当前抵押流程
+ * @param {*} mortgageId 抵押id
+ */
+export function skipMortgage (mortgageId) {
+  return request({
+    url: `/mortgage/mortgage/${mortgageId}/pass`,
+    method: 'post'
+  })
+}
+
 // ************************* 抵押结束 *******************************
 
 // ************************* 收费开始 *******************************

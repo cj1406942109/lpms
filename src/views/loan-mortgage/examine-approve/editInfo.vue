@@ -509,7 +509,8 @@ import {
   confirmCatalog,
   completeApprove,
   confirmApproveStatus,
-  saveFormalReport
+  saveFormalReport,
+  skipApprove
 } from '@/api/mortgage'
 
 export default {
@@ -846,9 +847,11 @@ export default {
             this.$message.closeAll()
             this.formLoading = false
             if (data) {
-              this.loanId = data.rootId
-              this.loanStatus = data.des
-              this.dialogVisible = true
+              skipApprove(this.$route.params.id).then(data => {
+                this.loanId = data.rootId
+                this.loanStatus = data.des
+                this.dialogVisible = true
+              })
             } else {
               this.$message({
                 type: 'error',
