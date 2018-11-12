@@ -351,7 +351,7 @@
           </tbody>
         </table>
         <el-button type="info" @click="addContent()" style="margin: 20px 0 50px 200px;display:block;">添加资料内容</el-button>
-        <!-- <el-form-item label=" ">
+        <!-- <el-form-item>
           <el-button type="primary" @click="saveCatalog()">保存</el-button>
           <el-button @click="resetForm('catalogForm')">重置</el-button>
         </el-form-item> -->
@@ -363,7 +363,7 @@
         <el-form-item label="上报审批时间" prop="time">
           <el-date-picker type="date" placeholder="选择日期" v-model="approveForm.time" value-format="timestamp"></el-date-picker>
         </el-form-item>
-        <el-form-item label=" ">
+        <el-form-item>
           <el-button type="primary" @click="completeApproveHandler()">完成报审</el-button>
         </el-form-item>
       </el-form>
@@ -425,7 +425,7 @@
             </template>
           </el-col>
         </el-row>
-        <el-form-item label=" ">
+        <el-form-item>
           <el-button type="primary" @click="confirmApproveStatusHandler()" v-if="!finishApproveStatus">提交</el-button>
           <el-button type="info" v-else :disabled="finishApproveStatus">审批状态已确认</el-button>
         </el-form-item>
@@ -848,9 +848,16 @@ export default {
             this.formLoading = false
             if (data) {
               skipApprove(this.$route.params.id).then(data => {
-                this.loanId = data.rootId
-                this.loanStatus = data.des
-                this.dialogVisible = true
+                if (data) {
+                  this.loanId = data.rootId
+                  this.loanStatus = data.des
+                  this.dialogVisible = true
+                } else {
+                  this.$message({
+                    type: 'error',
+                    message: '流程跳转失败'
+                  })
+                }
               })
             } else {
               this.$message({

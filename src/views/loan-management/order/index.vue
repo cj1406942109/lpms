@@ -45,7 +45,7 @@
                 <el-input clearable v-model="optionForm.employeeName"></el-input>
               </el-form-item>
               <br>
-              <el-form-item label=" ">
+              <el-form-item>
                 <el-button type="primary" @click="queryOrder()">查询</el-button>
                 <el-button @click="resetForm('optionForm')">重置</el-button>
               </el-form-item>

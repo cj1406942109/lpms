@@ -41,7 +41,7 @@
           </el-upload>
         </el-form-item>
         <br>
-        <el-form-item label=" ">
+        <el-form-item>
           <el-upload
             class="file-uploader"
             action=""
@@ -58,7 +58,7 @@
         </el-form-item>
         <br>
         <br>
-        <el-form-item label=" ">
+        <el-form-item>
           <el-button type="primary" @click="finishMortgage">提交</el-button>
           <el-button @click="resetForm('mortgageStatusForm')">重置</el-button>
         </el-form-item>

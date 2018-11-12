@@ -31,7 +31,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item label=" ">
+          <el-form-item>
             <el-button @click.prevent="addHouseProperty" type="primary">添加房产信息</el-button>
           </el-form-item>
           <div v-for="(item, index) in checklistForm.houses" :key="item.id" class="house-info">
@@ -46,7 +46,7 @@
               <el-input v-model.number="item.totalPrice" type="number" readonly><template slot="append">元</template></el-input>
             </el-form-item>
           </div>
-          <el-form-item label=" ">
+          <el-form-item>
             <el-alert title="如没有房产，请点击删除按钮" type="warning"></el-alert>
           </el-form-item>
         </el-col>

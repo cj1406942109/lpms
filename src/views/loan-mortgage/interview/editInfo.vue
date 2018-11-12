@@ -43,7 +43,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label=" ">
+        <el-form-item>
           <el-button type="primary" @click="submitForm('interviewSuggestionForm')" :loading="formLoading">提交</el-button>
           <el-button @click="resetForm('interviewSuggestionForm')">重置</el-button>
         </el-form-item>

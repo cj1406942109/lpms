@@ -33,7 +33,7 @@
           </el-col>
           <el-col :span="10">
             <h3>账号权限</h3>
-            <el-form-item label=" ">
+            <el-form-item>
               <el-tree
                 :data="permissions"
                 show-checkbox
@@ -42,7 +42,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label=" ">
+        <el-form-item>
           <el-button type="primary" @click="submitForm('accountForm')">保存</el-button>
           <el-button @click="resetForm('accountForm')">重置</el-button>
         </el-form-item>

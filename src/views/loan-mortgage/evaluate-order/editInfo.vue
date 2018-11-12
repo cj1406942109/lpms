@@ -10,18 +10,18 @@
         <el-row>
           <el-col :span="10">
             <el-form-item label="完成时间" prop="time">
-              <el-date-picker type="date" placeholder="选择日期" v-model="orderStatusForm.time" value-format="timestamp" :disabled="orderFinish"></el-date-picker>
+              <el-date-picker type="date" placeholder="选择日期" v-model="orderStatusForm.time" value-format="timestamp" :disabled="finishOrder"></el-date-picker>
             </el-form-item>
             <el-form-item label="评估公司" prop="company">
-              <el-select v-model="orderStatusForm.company" placeholder="请选择评估公司" :disabled="orderFinish">
+              <el-select v-model="orderStatusForm.company" placeholder="请选择评估公司" :disabled="finishOrder">
                 <el-option label="公司1" :value="1"></el-option>
                 <el-option label="公司2" :value="2"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label=" ">
-          <el-button v-if="orderFinish" disabled type="info">下单已完成</el-button>
+        <el-form-item>
+          <el-button v-if="finishOrder" disabled type="info">下单已完成</el-button>
           <template v-else>
             <el-button type="primary" @click="confirmOrderHandler()">完成下单</el-button>
             <el-button @click="resetForm('orderStatusForm')">重置</el-button>
@@ -82,14 +82,14 @@
           </el-col>
         </el-row>
         <el-form-item>
-          <el-button type="primary" :loading="formLoading" @click="submit()">提交</el-button>
-          <el-button @click="resetForm('reportForm')">重置</el-button>
+          <el-button type="primary" :loading="formLoading" @click="saveReportHandler()">提交</el-button>
+          <!-- <el-button @click="resetForm('reportForm')">重置</el-button> -->
         </el-form-item>
       </el-form>
     </div>
     <div class="option">
       <el-button @click="activeStep--" v-if="activeStep > 0">上一步</el-button>
-      <el-button type="primary" @click="nextStep()" v-if="activeStep < 1">下一步</el-button>
+      <el-button type="primary" @click="activeStep++" v-if="activeStep < 1" :disabled="!finishOrder">下一步</el-button>
     </div>
     <flow-complete-dialog
       :loanId="loanId"
@@ -155,8 +155,7 @@ export default {
       dialogVisible: false,
       listPath: '/loan-mortgage/evaluate-order',
       nextPath: '/loan-mortgage/examine-approve',
-      orderFinish: null,
-      reportFinish: null
+      finishOrder: null
     }
   },
   watch: {
@@ -187,64 +186,36 @@ export default {
     }
   },
   methods: {
-    confirmOrder () {
-      return new Promise((resolve, reject) => {
-        this.$refs['orderStatusForm'].validate((valid) => {
-          if (valid) {
-            this.$confirm('请确认下单状态无误，是否提交？', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-              confirmOrder(this.$route.params.id, this.orderStatusForm.time, this.orderStatusForm.company).then(data => {
-                data ? resolve() : reject(true)
-              })
-            }).catch(() => { reject() })
-          } else {
-            reject()
-          }
-        })
-      })
-    },
     confirmOrderHandler () {
-      this.confirmOrder().then(() => {
-        this.orderFinish = true
-        this.$message({
-          type: 'success',
-          message: '确定下单状态成功'
-        })
-      }).catch((done) => {
-        if (done) {
-          this.$message({
-            type: 'error',
-            message: '确定下单状态失败'
-          })
+      this.$refs['orderStatusForm'].validate((valid) => {
+        if (valid) {
+          this.$confirm('请确认下单状态无误，是否提交？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            confirmOrder(this.$route.params.id, this.orderStatusForm.time, this.orderStatusForm.company).then(data => {
+              if (data) {
+                this.finishOrder = true
+                this.$message({
+                  type: 'success',
+                  message: '确定下单状态成功'
+                })
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: '确定下单状态失败'
+                })
+              }
+            })
+          }).catch(() => {})
+        } else {
+          return false
         }
       })
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()
-    },
-    nextStep () {
-      if (!this.orderFinish) {
-        this.confirmOrder().then(() => {
-          this.$message({
-            type: 'success',
-            message: '确定下单状态成功'
-          })
-          this.orderFinish = true
-          this.activeStep++
-        }).catch((done) => {
-          if (done) {
-            this.$message({
-              type: 'error',
-              message: '确定下单状态失败'
-            })
-          }
-        })
-      } else {
-        this.activeStep++
-      }
     },
     addReport (index) {
       const report = JSON.parse(JSON.stringify(this.report))
@@ -258,7 +229,18 @@ export default {
         this.reportForm.reports[index].splice(1, 1)
       }
     },
-    submit () {
+    calcTotalPrice (area, singlePrice, indexH, indexR) {
+      if (area && singlePrice) {
+        if (parseFloat(area).toString() !== 'NaN' && parseFloat(singlePrice).toString() !== 'NaN') {
+          this.reportForm.reports[indexH][indexR].reportHouseTotal = area * singlePrice
+        } else {
+          this.reportForm.reports[indexH][indexR].reportHouseTotal = null
+        }
+      } else {
+        this.reportForm.reports[indexH][indexR].reportHouseTotal = null
+      }
+    },
+    saveReportHandler () {
       this.$refs['reportForm'].validate((valid) => {
         if (valid) {
           this.$confirm('请确认信息填写无误，是否提交？', '提示', {
@@ -295,27 +277,16 @@ export default {
           return false
         }
       })
-    },
-    calcTotalPrice (area, singlePrice, indexH, indexR) {
-      if (area && singlePrice) {
-        if (parseFloat(area).toString() !== 'NaN' && parseFloat(singlePrice).toString() !== 'NaN') {
-          this.reportForm.reports[indexH][indexR].reportHouseTotal = area * singlePrice
-        } else {
-          this.reportForm.reports[indexH][indexR].reportHouseTotal = null
-        }
-      } else {
-        this.reportForm.reports[indexH][indexR].reportHouseTotal = null
-      }
     }
   },
   created () {
     this.loanLastStatus = this.$route.params.des
+    this.finishOrder = this.$route.params.orderState === 'true'
     getOrderById(this.$route.params.id).then(data => {
       if (data) {
-        if (data.id) {
+        if (data.orderTime) {
           this.orderStatusForm.time = data.orderTime
           this.orderStatusForm.company = parseInt(data.company)
-          this.orderFinish = true
         }
       } else {
         this.$message({

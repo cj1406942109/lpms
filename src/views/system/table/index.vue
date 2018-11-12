@@ -33,7 +33,7 @@
           </el-select>
           <el-input placeholder="请输入其他值" style="width:auto" v-if="selectValue=='其他'" clearable></el-input>
         </el-form-item>
-        <el-form-item label=" ">
+        <el-form-item>
           <el-checkbox v-model="allowOther">允许填写其他</el-checkbox>
         </el-form-item>
       </el-form>

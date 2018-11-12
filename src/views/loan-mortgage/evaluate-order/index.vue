@@ -36,7 +36,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import {
-  // getOrderList
   getOrderListByEmployeeId
 } from '@/api/mortgage'
 export default {
@@ -58,10 +57,6 @@ export default {
   },
   methods: {
     getOrderList () {
-      // getOrderList().then(data => {
-      //   this.evaluateOrderListLoading = false
-      //   this.evaluateOrderList = data
-      // })
       getOrderListByEmployeeId(this.userId).then(data => {
         this.evaluateOrderListLoading = false
         if (data) {
@@ -75,7 +70,7 @@ export default {
       })
     },
     goNext (item) {
-      this.$router.push({ path: `/loan-mortgage/evaluate-order/edit-info/${item.id}/${item.rootId}/${item.des}` })
+      this.$router.push({ path: `/loan-mortgage/evaluate-order/edit-info/${item.id}/${item.rootId}/${item.extra.orderState.done}/${item.des}` })
     },
     tagState (item) {
       switch (item) {

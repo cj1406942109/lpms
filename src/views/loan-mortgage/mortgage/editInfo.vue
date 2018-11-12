@@ -16,7 +16,7 @@
             <el-radio :label="0">否</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label=" ">
+        <el-form-item>
           <el-button type="primary" @click="confirmMortgageStatus()" :disabled="finishCurrent">提交</el-button>
         </el-form-item>
       </el-form>

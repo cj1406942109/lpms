@@ -351,7 +351,7 @@
               </tbody>
             </table>
             <el-button type="info" @click="addContent()" style="margin: 20px 0 50px 200px;display:block;">添加资料内容</el-button>
-            <el-form-item label=" ">
+            <el-form-item>
               <el-button type="primary" @click="saveCatalogHandler()">保存</el-button>
               <el-button @click="resetForm('catalogForm')">重置</el-button>
             </el-form-item>
@@ -477,7 +477,7 @@
                     <el-input clearable v-model="applicationForm.proposerBusinessCard"></el-input>
                   </el-form-item>
                 </template>
-                <el-form-item label=" ">
+                <el-form-item>
                   <el-button type="primary" @click="saveFormHandler()">提交</el-button>
                   <el-button @click="resetForm('applicationForm')">重置</el-button>
                 </el-form-item>

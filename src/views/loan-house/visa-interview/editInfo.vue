@@ -233,7 +233,7 @@
           </tbody>
         </table>
         <el-button type="info" @click="addContent()" style="margin: 20px 0 50px 200px;display:block;">添加资料内容</el-button>
-        <el-form-item label=" ">
+        <el-form-item>
           <el-button type="primary" @click="saveCatalogHandler()">保存</el-button>
           <el-button @click="resetForm('catalogForm')">重置</el-button>
         </el-form-item>

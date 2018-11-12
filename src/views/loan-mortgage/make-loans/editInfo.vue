@@ -32,7 +32,7 @@
         </el-form-item>
         <br>
         <br>
-        <el-form-item label=" ">
+        <el-form-item>
           <el-button type="primary" @click="submitForm('chargeDetailsForm')">提交</el-button>
           <el-button @click="resetForm('chargeDetailsForm')">重置</el-button>
         </el-form-item>
@@ -49,7 +49,7 @@
           <el-date-picker type="datetime" placeholder="选择日期" v-model="makeLoansStatusForm.date"></el-date-picker>
         </el-form-item>
         <br>
-        <el-form-item label=" ">
+        <el-form-item>
           <el-button type="primary" @click="finishMakeLoans">放款完成</el-button>
           <el-button @click="resetForm('makeLoansStatusForm')">重置</el-button>
         </el-form-item>

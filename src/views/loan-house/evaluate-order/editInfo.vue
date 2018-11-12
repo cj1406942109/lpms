@@ -20,7 +20,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label=" ">
+        <el-form-item>
           <el-button v-if="orderFinish" disabled type="info">下单已完成</el-button>
           <template v-else>
             <el-button type="primary" @click="confirmOrderHandler()">完成下单</el-button>
