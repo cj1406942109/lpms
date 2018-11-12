@@ -47,7 +47,7 @@
             </el-form-item>
           </div>
           <el-form-item label=" ">
-            <el-alert title="如没有房产，请点击删除按钮" type="warning" style="height:35px;"></el-alert>
+            <el-alert title="如没有房产，请点击删除按钮" type="warning"></el-alert>
           </el-form-item>
         </el-col>
       </el-row>
@@ -84,7 +84,6 @@
         <el-button @click="resetForm('checklistForm')">重置</el-button>
       </el-form-item>
     </el-form>
-
     <flow-complete-dialog
       :loanId="loanId"
       :loanStatus="loanStatus"
@@ -289,16 +288,5 @@ export default {
   .app-container {
     padding: 20px;
     background-color: #fff;
-  }
-  .el-dialog {
-    .el-icon-success {
-      color: #67C23A;
-      font-size: 22px;
-      margin-right: 5px;
-      vertical-align: middle;
-    }
-    a {
-      color: blue;
-    }
   }
 </style>
