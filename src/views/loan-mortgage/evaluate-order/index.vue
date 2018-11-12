@@ -51,8 +51,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'userId',
-      'permission'
+      'userId'
     ])
   },
   methods: {

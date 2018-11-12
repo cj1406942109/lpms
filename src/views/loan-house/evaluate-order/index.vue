@@ -69,7 +69,7 @@ export default {
       })
     },
     goNext (item) {
-      this.$router.push({ path: `/house/evaluate-order/edit-info/${item.id}/${item.des}` })
+      this.$router.push({ path: `/house/evaluate-order/edit-info/${item.id}/${item.extra.orderState.done}/${item.des}` })
     },
     tagState (item) {
       switch (item) {

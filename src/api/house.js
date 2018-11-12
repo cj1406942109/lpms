@@ -5,7 +5,7 @@
  * @GitHub: https://github.com/cj1406942109
  * @Date: 2018-11-06 17:31:54
  * @LastEditors: Abraham
- * @LastEditTime: 2018-11-13 04:31:32
+ * @LastEditTime: 2018-11-13 07:37:48
  * @Description: 二手房贷款api
  */
 
@@ -243,14 +243,14 @@ export function getReportStructure () {
 
 /**
  * 保存报告
- * @param {*} reportId 报告id
+ * @param {*} orderId 订单id
  * @param {*} time 时间
  * @param {*} type 报告类型
  * @param {*} report 报告
  */
-export function saveReport (reportId, time, type, report) {
+export function saveReport (orderId, time, type, report) {
   return request({
-    url: `/house/order/report/${reportId}`,
+    url: `/house/order/report/${orderId}`,
     method: 'post',
     data: qs.stringify({
       time,

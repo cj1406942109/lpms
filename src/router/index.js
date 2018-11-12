@@ -172,7 +172,7 @@ export const constantRouterMap = [
       name: '二手房贷款-评估下单',
       meta: { title: '评估下单', icon: 'evaluate' }
     }, {
-      path: 'evaluate-order/edit-info/:id/:des',
+      path: 'evaluate-order/edit-info/:id/:orderState/:des',
       hidden: true,
       name: '二手房贷款-评估下单表格',
       meta: { title: '评估下单表格' },
@@ -181,7 +181,7 @@ export const constantRouterMap = [
       path: 'integrate-input',
       component: () => import('@/views/loan-house/integrate-input'),
       name: '二手房贷款-整件输机',
-      meta: { title: '整件输机', icon: 'evaluate' }
+      meta: { title: '整件输机', icon: 'integrate' }
     }, {
       path: 'integrate-input/edit-info/:id/:des',
       hidden: true,
