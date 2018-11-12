@@ -115,7 +115,7 @@ export const constantRouterMap = [
       name: '抵押贷款-抵押',
       meta: { title: '抵押', icon: 'mortgage' }
     }, {
-      path: 'mortgage/edit-info/:id/:des',
+      path: 'mortgage/edit-info/:id/:mortgageState/:guaranteeApprove/:guaranteePublish/:des',
       hidden: true,
       name: '抵押贷款-抵押表格',
       meta: { title: '抵押表格' },

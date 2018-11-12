@@ -8,16 +8,16 @@
       <h3>确定抵押状态</h3>
       <el-form :model="mortgageStatusForm" ref="mortgageStatusForm" label-width="200px" :rules="mortgageStatusFormRules">
         <el-form-item label="完成时间" prop="time">
-          <el-date-picker type="date" placeholder="选择日期" v-model="mortgageStatusForm.time" value-format="timestamp" :disabled="finishCurrent"></el-date-picker>
+          <el-date-picker type="date" placeholder="选择日期" v-model="mortgageStatusForm.time" value-format="timestamp"></el-date-picker>
         </el-form-item>
         <el-form-item label="是否出担保函" prop="isNeedGuarantee">
-          <el-radio-group v-model="mortgageStatusForm.isNeedGuarantee" :disabled="finishCurrent">
+          <el-radio-group v-model="mortgageStatusForm.isNeedGuarantee">
             <el-radio :label="1">是</el-radio>
             <el-radio :label="0">否</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="confirmMortgageStatus()" :disabled="finishCurrent">提交</el-button>
+          <el-button type="primary" @click="confirmMortgageStatusHandler()">提交</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -65,8 +65,8 @@
     </div>
     <div class="option" v-if="mortgageStatusForm.isNeedGuarantee">
       <el-button @click="activeStep--" v-if="activeStep > 0">上一步</el-button>
-      <el-button type="primary" @click="activeStep++" v-if="activeStep < 1" :disabled="!finishCurrent">下一步</el-button>
-      <el-button type="success" @click="finishMortgageHandler()" v-if="activeStep == 1">完成抵押</el-button>
+      <el-button type="primary" @click="activeStep++" v-if="activeStep < 1" :disabled="!finishMotgage">下一步</el-button>
+      <el-button type="success" @click="finishMortgageHandler()" :disabled="!(finishApprove&&finishPublish)" v-if="activeStep == 1">完成抵押</el-button>
     </div>
     <flow-complete-dialog
       :loanId="loanId"
@@ -87,7 +87,6 @@ export default {
   data () {
     return {
       activeStep: 0,
-      finishCurrent: false,
       mortgageStatusForm: {
         time: null,
         isNeedGuarantee: null
@@ -119,7 +118,10 @@ export default {
       loanLastStatus: '',
       dialogVisible: false,
       listPath: '/loan-mortgage/mortgage',
-      nextPath: '/loan-mortgage/charge'
+      nextPath: '/loan-mortgage/charge',
+      finishMotgage: false, // 确定抵押状态完成
+      finishApprove: false, // 审批担保函完成
+      finishPublish: false // 出担保函完成
     }
   },
   computed: {
@@ -129,11 +131,13 @@ export default {
   },
   created () {
     this.loanLastStatus = this.$route.params.des
+    this.finishMotgage = this.$route.params.mortgageState === 'true'
+    this.finishApprove = this.$route.params.guaranteeApprove === 'true'
+    this.finishPublish = this.$route.params.guaranteePublish === 'true'
     getMortgageById(this.$route.params.id).then(data => {
       if (data) {
         this.mortgageStatusForm.time = data.mortgageState.time ? data.mortgageState.time : null
         this.mortgageStatusForm.isNeedGuarantee = data.mortgageState.isNeedGuarantee ? data.mortgageState.isNeedGuarantee : null
-        this.finishCurrent = Boolean(data.mortgageState.time)
         this.guaranteeApproveForm.approvePass = data.guaranteeApprove.approvePass ? parseInt(data.guaranteeApprove.approvePass) : null
         this.guaranteeApproveForm.approvePassTime = data.guaranteeApprove.approvePassTime ? data.guaranteeApprove.approvePassTime : new Date().getTime()
         this.guaranteePublishForm.approveResult = data.guaranteePublish.approveResult ? data.guaranteePublish.approveResult : null
@@ -143,27 +147,33 @@ export default {
     })
   },
   methods: {
-    confirmMortgageStatus () {
+    confirmMortgageStatusHandler () {
       this.$refs['mortgageStatusForm'].validate((valid) => {
         if (valid) {
-          confirmMortgageStatus(this.$route.params.id, this.mortgageStatusForm.time, this.mortgageStatusForm.isNeedGuarantee).then(data => {
-            if (data) {
-              this.finishCurrent = true
-              this.$message({
-                type: 'success',
-                message: '确定抵押状态成功'
-              })
-              // 如果不出担保函，直接结束当前流程
-              if (!this.mortgageStatusForm.isNeedGuarantee) {
-                this.skipMortgage()
+          this.$confirm('请确认信息填写无误，是否提交？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            confirmMortgageStatus(this.$route.params.id, this.mortgageStatusForm.time, this.mortgageStatusForm.isNeedGuarantee).then(data => {
+              if (data) {
+                this.finishMotgage = true
+                this.$message({
+                  type: 'success',
+                  message: '确定抵押状态成功'
+                })
+                // 如果不出担保函，直接结束当前流程
+                if (!this.mortgageStatusForm.isNeedGuarantee) {
+                  this.skipMortgage()
+                }
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: '确定抵押状态失败'
+                })
               }
-            } else {
-              this.$message({
-                type: 'error',
-                message: '确定抵押状态失败'
-              })
-            }
-          })
+            })
+          }).catch(() => {})
         } else {
           return false
         }
@@ -174,6 +184,7 @@ export default {
         if (valid) {
           guaranteeApprove(this.$route.params.id, this.guaranteeApproveForm.approvePass, this.guaranteeApproveForm.approvePassTime).then(data => {
             if (data) {
+              this.finishApprove = true
               this.$message({
                 type: 'success',
                 message: '担保函审批成功'
@@ -195,6 +206,7 @@ export default {
         if (valid) {
           guaranteePublish(this.$route.params.id, this.guaranteePublishForm.approveResult, this.guaranteePublishForm.approvePassTime, this.guaranteePublishForm.guaranteePublishTime).then(data => {
             if (data) {
+              this.finishPublish = true
               this.$message({
                 type: 'success',
                 message: '出担保函成功'
@@ -212,7 +224,12 @@ export default {
       })
     },
     skipMortgage () {
+      this.$message({
+        type: 'info',
+        message: '正在处理...'
+      })
       skipMortgage(this.$route.params.id).then(data => {
+        this.$message.closeAll()
         if (data) {
           this.loanId = data.rootId
           this.loanStatus = data.des
@@ -226,7 +243,13 @@ export default {
       })
     },
     finishMortgageHandler () {
-      this.skipMortgage()
+      this.$confirm('请确认信息填写无误，是否提交？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.skipMortgage()
+      }).catch(() => {})
     }
   }
 }

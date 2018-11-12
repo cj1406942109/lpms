@@ -32,7 +32,7 @@
       </el-table-column>
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="goNext(scope.row)">办理</el-button>
+          <el-button type="primary" :disabled="scope.row.state == 'open' ? false : true" size="mini" @click="goNext(scope.row)">办理</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -69,7 +69,7 @@ export default {
       })
     },
     goNext (item) {
-      this.$router.push({ path: `/loan-mortgage/mortgage/edit-info/${item.id}/${item.des}` })
+      this.$router.push({ path: `/loan-mortgage/mortgage/edit-info/${item.id}/${item.extra.mortgageState.done}/${item.extra.guaranteeApprove.done}/${item.extra.guaranteePublish.done}/${item.des}` })
     },
     tagState (item) {
       switch (item) {
