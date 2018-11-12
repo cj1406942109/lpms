@@ -478,7 +478,7 @@
         </el-row>
         <el-form-item>
           <el-button type="primary" :loading="formLoading" @click="saveReport()">提交</el-button>
-          <el-button @click="resetForm('reportForm')">重置</el-button>
+          <!-- <el-button @click="resetForm('reportForm')">重置</el-button> -->
         </el-form-item>
       </el-form>
     </div>
@@ -740,6 +740,7 @@ export default {
               message: '确定审批状态成功'
             })
             this.activeStep++
+            console.log(this.reportForm)
           }).catch((done) => {
             if (done) {
               this.$message({
@@ -750,6 +751,7 @@ export default {
           })
         } else {
           this.activeStep++
+          console.log(this.reportForm)
         }
       }
     },
