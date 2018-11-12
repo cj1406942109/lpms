@@ -11,7 +11,7 @@
         :filters="[{ text: '正评', value: '正评' }, { text: '预评', value: '预评' }]"
         filter-placement="bottom-end">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.extra.commentType == '正评' ? 'success' : 'primary'">
+          <el-tag :type="scope.row.extra.commentType == '正评' ? 'success' : 'warning'">
             {{scope.row.extra.commentType}}
           </el-tag>
         </template>

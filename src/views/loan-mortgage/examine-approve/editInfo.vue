@@ -351,10 +351,10 @@
           </tbody>
         </table>
         <el-button type="info" @click="addContent()" style="margin: 20px 0 50px 200px;display:block;">添加资料内容</el-button>
-        <el-form-item label=" ">
+        <!-- <el-form-item label=" ">
           <el-button type="primary" @click="saveCatalog()">保存</el-button>
           <el-button @click="resetForm('catalogForm')">重置</el-button>
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
     </div>
     <div class="form-wrapper" v-if="activeStep=='1'">
@@ -639,7 +639,7 @@ export default {
         if (data.approve) {
           this.approveForm = JSON.parse(JSON.stringify(data.approve))
         }
-        if (!JSON.stringify(data.approveState) === '{}') {
+        if (JSON.stringify(data.approveState) !== '{}') {
           this.finishApproveStatus = true
           this.approveStatusForm = JSON.parse(JSON.stringify(data.approveState))
           this.approveStatusForm.period = parseInt(this.approveStatusForm.period)
