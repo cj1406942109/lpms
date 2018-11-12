@@ -351,10 +351,9 @@
           </tbody>
         </table>
         <el-button type="info" @click="addContent()" style="margin: 20px 0 50px 200px;display:block;">添加资料内容</el-button>
-        <!-- <el-form-item>
-          <el-button type="primary" @click="saveCatalog()">保存</el-button>
-          <el-button @click="resetForm('catalogForm')">重置</el-button>
-        </el-form-item> -->
+        <el-form-item>
+          <el-button type="primary" @click="confirmCatalogHandler()">确认已收齐</el-button>
+        </el-form-item>
       </el-form>
     </div>
     <div class="form-wrapper" v-if="activeStep=='1'">
@@ -372,7 +371,7 @@
       <h3>确定审批状态</h3>
       <el-form :model="approveStatusForm" ref="approveStatusForm" label-width="200px" :rules="approveStatusFormRules">
         <el-form-item label="审批状态" prop="approveState">
-          <el-radio-group v-model="approveStatusForm.approveState" :disabled="finishApproveStatus">
+          <el-radio-group v-model="approveStatusForm.approveState" :disabled="finishApprove">
             <el-radio :label="1">已通过</el-radio>
             <el-radio :label="0">未通过</el-radio>
           </el-radio-group>
@@ -381,42 +380,42 @@
           <el-col :span="10">
             <template v-if="approveStatusForm.approveState == '1'">
               <el-form-item label="审批通过时间" prop="approveTime">
-                <el-date-picker type="date" placeholder="选择日期" v-model="approveStatusForm.approveTime" value-format="timestamp" :disabled="finishApproveStatus"></el-date-picker>
+                <el-date-picker type="date" placeholder="选择日期" v-model="approveStatusForm.approveTime" value-format="timestamp" :disabled="finishApprove"></el-date-picker>
               </el-form-item>
               <el-form-item label="金额" prop="amount">
-                <el-input clearable v-model.number="approveStatusForm.amount" type="number" :disabled="finishApproveStatus"><template slot="append">元</template></el-input>
+                <el-input clearable v-model.number="approveStatusForm.amount" type="number" :disabled="finishApprove"><template slot="append">元</template></el-input>
               </el-form-item>
               <el-form-item label="年限" prop="period">
-                <el-input clearable v-model.number="approveStatusForm.period" type="number" :disabled="finishApproveStatus"><template slot="append">年</template></el-input>
+                <el-input clearable v-model.number="approveStatusForm.period" type="number" :disabled="finishApprove"><template slot="append">年</template></el-input>
               </el-form-item>
               <el-form-item label="利率" prop="rate">
-                <el-input clearable v-model.number="approveStatusForm.rate" type="number" :disabled="finishApproveStatus"><template slot="append">%</template></el-input>
+                <el-input clearable v-model.number="approveStatusForm.rate" type="number" :disabled="finishApprove"><template slot="append">%</template></el-input>
               </el-form-item>
               <el-form-item label="放款条件" prop="loanCondition">
-                <el-select v-model="approveStatusForm.loanCondition" placeholder="请选择" :disabled="finishApproveStatus">
+                <el-select v-model="approveStatusForm.loanCondition" placeholder="请选择" :disabled="finishApprove">
                   <el-option label="见抵押收件单放款" value="1"></el-option>
                   <el-option label="见他项权证放款" value="2"></el-option>
                   <el-option label="见担保函放款" value="3"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="备注" prop="remark">
-                <el-input clearable type="textarea" v-model="approveStatusForm.remark" :disabled="finishApproveStatus"></el-input>
+                <el-input clearable type="textarea" v-model="approveStatusForm.remark" :disabled="finishApprove"></el-input>
               </el-form-item>
             </template>
             <template v-if="approveStatusForm.approveState == '0'">
               <el-form-item label="审批未通过时间" prop="approveTime">
-                <el-date-picker type="date" placeholder="选择日期" v-model="approveStatusForm.approveTime" value-format="timestamp" :disabled="finishApproveStatus"></el-date-picker>
+                <el-date-picker type="date" placeholder="选择日期" v-model="approveStatusForm.approveTime" value-format="timestamp" :disabled="finishApprove"></el-date-picker>
               </el-form-item>
               <el-form-item label="未通过原因" prop="failReason">
-                <el-select v-model="approveStatusForm.failReason" placeholder="请选择" :disabled="finishApproveStatus">
+                <el-select v-model="approveStatusForm.failReason" placeholder="请选择" :disabled="finishApprove">
                   <el-option label="银行拒贷" value="1"></el-option>
                   <el-option label="补充资料" value="2"></el-option>
                   <el-option label="其他" value="-1"></el-option>
                 </el-select>
-                <el-input clearable v-model="approveStatusForm.failReasonOther" placeholder="其他原因" v-if="approveStatusForm.failReason == '-1'" :disabled="finishApproveStatus"></el-input>
+                <el-input clearable v-model="approveStatusForm.failReasonOther" placeholder="其他原因" v-if="approveStatusForm.failReason == '-1'" :disabled="finishApprove"></el-input>
               </el-form-item>
               <el-form-item label="后续操作" prop="laterAction">
-                <el-select v-model="approveStatusForm.laterAction" placeholder="请选择" :disabled="finishApproveStatus">
+                <el-select v-model="approveStatusForm.laterAction" placeholder="请选择" :disabled="finishApprove">
                   <el-option label="继续操作" :value="1"></el-option>
                   <el-option label="换行" :value="2"></el-option>
                   <el-option label="废单" :value="3"></el-option>
@@ -426,8 +425,8 @@
           </el-col>
         </el-row>
         <el-form-item>
-          <el-button type="primary" @click="confirmApproveStatusHandler()" v-if="!finishApproveStatus">提交</el-button>
-          <el-button type="info" v-else :disabled="finishApproveStatus">审批状态已确认</el-button>
+          <el-button type="primary" @click="confirmApproveStatusHandler()" v-if="!finishApprove">提交</el-button>
+          <el-button type="info" v-else :disabled="finishApprove">审批状态已确认</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -477,14 +476,15 @@
           </el-col>
         </el-row>
         <el-form-item>
-          <el-button type="primary" :loading="formLoading" @click="saveReport()">提交</el-button>
+          <el-button type="primary" :loading="formLoading" @click="saveReportHandler()">提交</el-button>
           <!-- <el-button @click="resetForm('reportForm')">重置</el-button> -->
         </el-form-item>
       </el-form>
     </div>
     <div class="option">
       <el-button @click="activeStep--" v-if="activeStep > 0">上一步</el-button>
-      <el-button type="primary" @click="nextStep()" v-if="activeStep < (reportType == '1' ? 3 : 2)">下一步</el-button>
+      <el-button type="primary" @click="activeStep++" :disabled="nextStepStatus" v-if="activeStep < (reportType == '1' ? 3 : 2)">下一步</el-button>
+      <el-button type="success" @click="skipApproveHandler()" :loading="formLoading" :disabled="!finishApprove" v-if="activeStep == 2 && reportType == 2">完成审批</el-button>
     </div>
     <flow-complete-dialog
       :loanId="loanId"
@@ -505,7 +505,6 @@ import {
   getChecklistById,
   getVisaById,
   getApproveById,
-  saveCatalog,
   confirmCatalog,
   completeApprove,
   confirmApproveStatus,
@@ -591,7 +590,6 @@ export default {
       reportFormRules: {
         time: [{ required: true, message: '完成时间不能为空' }]
       },
-      finishApproveStatus: false,
       formLoading: false,
       loanId: '',
       loanStatus: '',
@@ -600,12 +598,18 @@ export default {
       listPath: '/loan-mortgage/examine-approve',
       nextPath: '/loan-mortgage/mortgage',
       activeStep: 0,
-      loanVariety: ''
+      loanVariety: '',
+      finishCatalog: false, // 确认资料目录表完成
+      finishSend: false, // 报审完成
+      finishApprove: false // 确定审批状态完成
     }
   },
   created () {
     this.loanLastStatus = this.$route.params.des
     this.reportType = parseInt(this.$route.params.reportType)
+    this.finishCatalog = this.$route.params.catalogState === 'true'
+    this.finishSend = this.$route.params.sendState === 'true'
+    this.finishApprove = this.$route.params.approveState === 'true'
     getTaskById(this.$route.params.mortgageId).then(data => {
       if (data) {
         getChecklistById(data[0].id).then(data => {
@@ -641,7 +645,7 @@ export default {
           this.approveForm = JSON.parse(JSON.stringify(data.approve))
         }
         if (JSON.stringify(data.approveState) !== '{}') {
-          this.finishApproveStatus = true
+          this.finishApprove = true
           this.approveStatusForm = JSON.parse(JSON.stringify(data.approveState))
           this.approveStatusForm.period = parseInt(this.approveStatusForm.period)
           this.approveStatusForm.rate = parseInt(this.approveStatusForm.rate)
@@ -663,25 +667,18 @@ export default {
   computed: {
     ...mapGetters([
       'userId'
-    ])
+    ]),
+    nextStepStatus: function () {
+      if (this.activeStep === 0) {
+        return !this.finishCatalog
+      } else if (this.activeStep === 1) {
+        return !this.finishSend
+      } else if (this.activeStep === 2) {
+        return !this.finishApprove
+      }
+    }
   },
   methods: {
-    saveCatalog () {
-      this.$refs['catalogForm'].validate((valid) => {
-        if (valid) {
-          saveCatalog(this.catalogForm).then(data => {
-            if (data) {
-              this.$message({
-                type: 'success',
-                message: '保存成功'
-              })
-            }
-          })
-        } else {
-          return false
-        }
-      })
-    },
     resetForm (formName) {
       this.$refs[formName].resetFields()
     },
@@ -702,181 +699,112 @@ export default {
         this.catalogForm.catalogOther.splice(index, 1)
       }).catch(() => {})
     },
-    nextStep () {
-      if (this.activeStep === 0) {
-        this.confirmCatalog().then(() => {
-          this.$message({
-            type: 'success',
-            message: '确认资料目录表成功'
-          })
-          this.activeStep++
-        }).catch((done) => {
-          if (done) {
-            this.$message({
-              type: 'error',
-              message: '确认资料目录表失败'
+    confirmCatalogHandler () {
+      this.$refs['catalogForm'].validate((valid) => {
+        if (valid) {
+          this.$confirm('是否确定当前资料目录表已收齐？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            confirmCatalog(this.$route.params.id, this.catalogForm).then(data => {
+              if (data) {
+                this.finishCatalog = true
+                this.$message({
+                  type: 'success',
+                  message: '确认资料目录表成功'
+                })
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: '确认资料目录表失败'
+                })
+              }
             })
-          }
-        })
-      } else if (this.activeStep === 1) {
-        this.completeApprove().then(() => {
-          this.$message({
-            type: 'success',
-            message: '确认报审成功'
-          })
-          this.activeStep++
-        }).catch((done) => {
-          if (done) {
-            this.$message({
-              type: 'error',
-              message: '确认报审失败'
-            })
-          }
-        })
-      } else if (this.activeStep === 2) {
-        if (!this.finishApproveStatus) {
-          this.confirmApproveStatus().then(() => {
-            this.$message({
-              type: 'success',
-              message: '确定审批状态成功'
-            })
-            this.activeStep++
-            console.log(this.reportForm)
-          }).catch((done) => {
-            if (done) {
-              this.$message({
-                type: 'error',
-                message: '确定审批状态失败'
-              })
-            }
-          })
+          }).catch(() => {})
         } else {
-          this.activeStep++
-          console.log(this.reportForm)
+          return false
         }
-      }
-    },
-    confirmCatalog () {
-      return new Promise((resolve, reject) => {
-        this.$refs['catalogForm'].validate((valid) => {
-          if (valid) {
-            this.$confirm('是否确定当前资料目录表已收齐？', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-              confirmCatalog(this.$route.params.id, this.catalogForm).then(data => {
-                data ? resolve() : reject(true)
-              })
-            }).catch(() => { reject() })
-          } else {
-            reject()
-          }
-        })
-      })
-    },
-    completeApprove () {
-      return new Promise((resolve, reject) => {
-        this.$refs['approveForm'].validate((valid) => {
-          if (valid) {
-            completeApprove(this.$route.params.id, this.approveForm.time).then(data => {
-              data ? resolve() : reject(true)
-            })
-          } else {
-            reject()
-          }
-        })
       })
     },
     completeApproveHandler () {
-      this.completeApprove().then(() => {
-        this.$message({
-          type: 'success',
-          message: '确认报审成功'
-        })
-      }).catch((done) => {
-        if (done) {
-          this.$message({
-            type: 'error',
-            message: '确认报审失败'
-          })
-        }
-      })
-    },
-    confirmApproveStatus () {
-      return new Promise((resolve, reject) => {
-        this.$refs['approveStatusForm'].validate((valid) => {
-          if (valid) {
-            confirmApproveStatus(this.$route.params.id, this.approveStatusForm).then(data => {
-              data ? resolve(data) : reject(true)
-            })
-          } else {
-            reject()
-          }
-        })
-      })
-    },
-    confirmApproveStatusHandler () {
-      if (this.reportType === 1) {
-        // 需要第四步出正评
-        this.confirmApproveStatus().then(() => {
-          this.finishApproveStatus = true
-          this.$message({
-            type: 'success',
-            message: '确定审批状态成功'
-          })
-        }).catch((done) => {
-          if (done) {
-            this.$message({
-              type: 'error',
-              message: '确定审批状态失败'
-            })
-          }
-        })
-      } else {
-        this.$confirm('请确认信息填写无误，是否提交？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'info',
-            message: '正在处理...'
-          })
-          this.confirmApproveStatus().then((data) => {
-            this.$message.closeAll()
-            this.formLoading = false
+      this.$refs['approveForm'].validate((valid) => {
+        if (valid) {
+          completeApprove(this.$route.params.id, this.approveForm.time).then(data => {
             if (data) {
-              skipApprove(this.$route.params.id).then(data => {
-                if (data) {
-                  this.loanId = data.rootId
-                  this.loanStatus = data.des
-                  this.dialogVisible = true
-                } else {
-                  this.$message({
-                    type: 'error',
-                    message: '流程跳转失败'
-                  })
-                }
+              this.finishSend = true
+              this.$message({
+                type: 'success',
+                message: '确认报审成功'
               })
             } else {
               this.$message({
                 type: 'error',
-                message: '确定审批状态失败'
-              })
-            }
-          }).catch((done) => {
-            if (done) {
-              this.$message({
-                type: 'error',
-                message: '确定审批状态失败'
+                message: '确认报审失败'
               })
             }
           })
-        }).catch(() => {})
-      }
+        } else {
+          return false
+        }
+      })
     },
-    saveReport () {
+    confirmApproveStatusHandler () {
+      this.$refs['approveStatusForm'].validate((valid) => {
+        if (valid) {
+          this.$confirm('请确认信息填写无误，是否提交？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            confirmApproveStatus(this.$route.params.id, this.approveStatusForm).then(data => {
+              if (data) {
+                this.finishApprove = true
+                this.$message({
+                  type: 'success',
+                  message: '确定审批状态成功'
+                })
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: '确定审批状态失败'
+                })
+              }
+            })
+          }).catch(() => {})
+        } else {
+          return false
+        }
+      })
+    },
+    skipApproveHandler () {
+      this.$confirm('请确认信息填写无误，是否提交？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'info',
+          message: '正在处理...'
+        })
+        skipApprove(this.$route.params.id).then(data => {
+          this.formLoading = false
+          this.$message.closeAll()
+          if (data) {
+            this.loanId = data.rootId
+            // this.loanStatus = data.des
+            this.loanStatus = '抵押'
+            this.dialogVisible = true
+          } else {
+            this.$message({
+              type: 'error',
+              message: '流程跳转失败'
+            })
+          }
+        })
+      }).catch(() => {})
+    },
+    saveReportHandler () {
       this.$refs['reportForm'].validate((valid) => {
         if (valid) {
           this.$confirm('请确认信息填写无误，是否提交？', '提示', {

@@ -104,7 +104,7 @@ export const constantRouterMap = [
       name: '抵押贷款-审批',
       meta: { title: '审批', icon: 'approve' }
     }, {
-      path: 'examine-approve/edit-info/:id/:mortgageId/:reportType/:des',
+      path: 'examine-approve/edit-info/:id/:mortgageId/:reportType/:catalogState/:sendState/:approveState/:des',
       hidden: true,
       name: '抵押贷款-审批表格',
       meta: { title: '审批表格' },

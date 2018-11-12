@@ -52,7 +52,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import {
-  // getApproveList
   getApproveListByEmployeeId
 } from '@/api/mortgage'
 export default {
@@ -73,10 +72,6 @@ export default {
   },
   methods: {
     getApproveList () {
-      // getApproveList().then(data => {
-      //   this.examineApproveListLoading = false
-      //   this.examineApproveList = data
-      // })
       getApproveListByEmployeeId(this.userId).then(data => {
         this.examineApproveListLoading = false
         if (data) {
@@ -91,7 +86,7 @@ export default {
     },
     goNext (item) {
       const reportType = item.extra.commentType === '正评' ? 2 : 1
-      this.$router.push({ path: `/loan-mortgage/examine-approve/edit-info/${item.id}/${item.rootId}/${reportType}/${item.des}` })
+      this.$router.push({ path: `/loan-mortgage/examine-approve/edit-info/${item.id}/${item.rootId}/${reportType}/${item.extra.catalogState.done}/${item.extra.sendState.done}/${item.extra.approveState.done}/${item.des}` })
     },
     tagState (item) {
       switch (item) {
