@@ -82,7 +82,7 @@ export const constantRouterMap = [
       name: '抵押贷款-面签',
       meta: { title: '面签', icon: 'visa-interview' }
     }, {
-      path: 'visa-interview/edit-info/:id/:mortgageId/:des',
+      path: 'visa-interview/edit-info/:id/:mortgageId/:catalogState/:formState/:des',
       hidden: true,
       name: '抵押贷款-面签表格',
       meta: { title: '面签表格' },

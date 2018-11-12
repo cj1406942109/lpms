@@ -566,14 +566,14 @@
           </el-select>
         </el-form-item>
         <el-form-item label="">
-          <el-button type="primary" :loading="formLoading" @click="confirmVisaStatus()">提交</el-button>
+          <el-button type="primary" :loading="formLoading" @click="confirmVisaHandler()">提交</el-button>
           <el-button @click="resetForm('contractStatusForm')">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="option">
       <el-button @click="activeStep--" v-if="activeStep > 0">上一步</el-button>
-      <el-button type="primary" @click="nextStep()" v-if="activeStep < 1">提交并下一步</el-button>
+      <el-button type="primary" @click="activeStep++" v-if="activeStep < 1" :disabled="!(finishCatalog&&finishForm)">下一步</el-button>
     </div>
     <flow-complete-dialog
       :loanId="loanId"
@@ -686,6 +686,7 @@ export default {
       //   catalogOther: []
       // },
       catalogForm: null,
+      finishCatalog: false,
       // applicationForm: {
       //   applicationTime: null,
       //   proposerName: null,
@@ -732,6 +733,7 @@ export default {
       //   loanContactPhone: null
       // },
       applicationForm: null,
+      finishForm: false,
       catalogFormRules: {
         finishTime: [{ required: true, message: '完成时间不能为空' }],
         clientName: [{ required: true, message: '贷款人姓名不能为空' }],
@@ -866,6 +868,8 @@ export default {
   },
   created () {
     this.loanLastStatus = this.$route.params.des
+    this.finishCatalog = this.$route.params.catalogState === 'true'
+    this.finishForm = this.$route.params.formState === 'true'
     getTaskById(this.$route.params.mortgageId).then(data => {
       if (data) {
         getChecklistById(data[0].id).then(data => {
@@ -885,11 +889,16 @@ export default {
         })
       }
     })
-    this.getFormData().catch(() => {
-      this.$message({
-        type: 'error',
-        message: '表单数据获取失败'
-      })
+    getVisaById(this.$route.params.id).then(data => {
+      if (data) {
+        this.catalogForm = JSON.parse(JSON.stringify(data.catalog))
+        this.applicationForm = JSON.parse(JSON.stringify(data.form))
+      } else {
+        this.$message({
+          type: 'error',
+          message: '表单数据获取失败'
+        })
+      }
     })
     this.getStaticIndex(this.maritalStatus)
     this.getStaticIndex(this.familyStructure)
@@ -902,73 +911,47 @@ export default {
     this.getStaticIndex(this.isYour)
   },
   methods: {
-    getFormData () {
-      return new Promise((resolve, reject) => {
-        getVisaById(this.$route.params.id).then(data => {
-          if (data) {
-            this.catalogForm = data.catalog
-            this.applicationForm = data.form
-            // 修复element-ui model.number初始化出错
-            resolve()
-          } else {
-            reject()
-          }
-        })
-      })
-    },
-    saveCatalog () {
-      return new Promise((resolve, reject) => {
-        this.$refs['catalogForm'].validate((valid) => {
-          if (valid) {
-            saveCatalog(this.catalogForm).then(data => {
-              data ? resolve() : reject(true)
-            })
-          } else {
-            reject()
-          }
-        })
-      })
-    },
     saveCatalogHandler () {
-      this.saveCatalog().then(() => {
-        this.$message({
-          type: 'success',
-          message: '资料目录表保存成功'
-        })
-      }).catch((done) => {
-        if (done) {
-          this.$message({
-            type: 'error',
-            message: '资料目录表保存失败'
+      this.$refs['catalogForm'].validate((valid) => {
+        if (valid) {
+          saveCatalog(this.catalogForm).then(data => {
+            if (data) {
+              this.finishCatalog = true
+              this.$message({
+                type: 'success',
+                message: '资料目录表保存成功'
+              })
+            } else {
+              this.$message({
+                type: 'error',
+                message: '资料目录表保存失败'
+              })
+            }
           })
+        } else {
+          return false
         }
       })
     },
-    saveForm () {
-      return new Promise((resolve, reject) => {
-        this.$refs['applicationForm'].validate((valid) => {
-          if (valid) {
-            saveForm(this.applicationForm).then(data => {
-              data ? resolve() : reject()
-            })
-          } else {
-            reject()
-          }
-        })
-      })
-    },
     saveFormHandler () {
-      this.saveForm().then(() => {
-        this.$message({
-          type: 'success',
-          message: '个人贷款申请表保存成功'
-        })
-      }).catch((done) => {
-        if (done) {
-          this.$message({
-            type: 'error',
-            message: '个人贷款申请表保存失败'
+      this.$refs['applicationForm'].validate((valid) => {
+        if (valid) {
+          saveForm(this.applicationForm).then(data => {
+            if (data) {
+              this.finishForm = true
+              this.$message({
+                type: 'success',
+                message: '个人贷款申请表保存成功'
+              })
+            } else {
+              this.$message({
+                type: 'error',
+                message: '个人贷款申请表保存失败'
+              })
+            }
           })
+        } else {
+          return false
         }
       })
     },
@@ -996,28 +979,7 @@ export default {
         this.catalogForm.catalogOther.splice(index, 1)
       }).catch(() => {})
     },
-    nextStep () {
-      this.$confirm('是否提交资料目录表和个人贷款申请表？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        // 合并Promise
-        Promise.all([this.saveCatalog(), this.saveForm()]).then(() => {
-          this.$message({
-            type: 'success',
-            message: '资料目录表和个人贷款申请表保存成功'
-          })
-          this.activeStep++
-        }).catch(() => {
-          this.$message({
-            type: 'error',
-            message: '资料目录表和个人贷款申请表未能均保存成功'
-          })
-        })
-      }).catch(() => {})
-    },
-    confirmVisaStatus () {
+    confirmVisaHandler () {
       this.$refs['contractStatusForm'].validate((valid) => {
         if (valid) {
           this.$confirm('请确认信息填写无误，是否提交？', '提示', {

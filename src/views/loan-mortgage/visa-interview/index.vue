@@ -72,7 +72,7 @@ export default {
       })
     },
     goNext (item) {
-      this.$router.push({ path: `/loan-mortgage/visa-interview/edit-info/${item.id}/${item.rootId}/${item.des}` })
+      this.$router.push({ path: `/loan-mortgage/visa-interview/edit-info/${item.id}/${item.rootId}/${item.extra.catalogState.done}/${item.extra.formState.done}/${item.des}` })
     },
     tagState (item) {
       switch (item) {
