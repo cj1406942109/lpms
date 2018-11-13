@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
-    <h2>整件输机列表</h2>
-    <el-table :data="evaluateOrderList" v-loading.body="evaluateOrderListLoading" style="width: 100%" border stripe>
+    <h2>审批列表</h2>
+    <el-table :data="examineApproveList" v-loading.body="examineApproveListLoading" style="width: 100%" border stripe>
       <el-table-column type="index" label="序号" width="100"></el-table-column>
       <el-table-column :sortable="true" prop="rootId" label="贷款编号" width="200"></el-table-column>
       <el-table-column :sortable="true" prop="clientName" label="客户姓名"></el-table-column>
@@ -12,14 +12,11 @@
         filter-placement="bottom-end">
         <template slot-scope="scope">
           <template v-if="scope.row.state == 'open'">
-            <el-tag :type="scope.row.extra.checkState.done ? 'success' : 'primary'">
-              {{scope.row.extra.checkState.message}}
+            <el-tag :type="scope.row.extra.sendState.done ? 'success' : 'primary'">
+              {{scope.row.extra.sendState.message}}
             </el-tag>
-            <el-tag :type="scope.row.extra.catalogState.done ? 'success' : 'primary'">
-              {{scope.row.extra.catalogState.message}}
-            </el-tag>
-            <el-tag :type="scope.row.extra.inputState.done ? 'success' : 'primary'">
-              {{scope.row.extra.catalogState.message}}
+            <el-tag :type="scope.row.extra.approveState.done ? 'success' : 'primary'">
+              {{scope.row.extra.approveState.message}}
             </el-tag>
           </template>
           <el-tag :type="tagState(scope.row.state)" v-else>
@@ -39,18 +36,18 @@
 <script>
 import { mapGetters } from 'vuex'
 import {
-  getInputListByEmployeeId
+  getApproveListByEmployeeId
 } from '@/api/house'
 export default {
-  name: 'evaluate-order',
+  name: 'examineApprove',
   data () {
     return {
-      evaluateOrderList: null,
-      evaluateOrderListLoading: true
+      examineApproveList: null,
+      examineApproveListLoading: true
     }
   },
   created () {
-    this.getInputList()
+    this.getApproveList()
   },
   computed: {
     ...mapGetters([
@@ -58,21 +55,21 @@ export default {
     ])
   },
   methods: {
-    getInputList () {
-      getInputListByEmployeeId(this.userId).then(data => {
-        this.evaluateOrderListLoading = false
+    getApproveList () {
+      getApproveListByEmployeeId(this.userId).then(data => {
+        this.examineApproveListLoading = false
         if (data) {
-          this.evaluateOrderList = data
+          this.examineApproveList = data
         } else {
           this.$message({
             type: 'error',
-            message: '整件输机列表获取失败'
+            message: '审批列表获取失败'
           })
         }
       })
     },
     goNext (item) {
-      this.$router.push({ path: `/house/integrate-input/edit-info/${item.id}/${item.extra.checkState.done}/${item.extra.catalogState.done}/${item.des}` })
+      this.$router.push({ path: `/loan-mortgage/examine-approve/edit-info/${item.id}/${item.extra.sendState.done}/${item.des}` })
     },
     tagState (item) {
       switch (item) {
@@ -100,6 +97,9 @@ export default {
     },
     filterState (value, row) {
       return row.state === value
+    },
+    filterCommentType (value, row) {
+      return row.extra.commentType === value
     }
   }
 }

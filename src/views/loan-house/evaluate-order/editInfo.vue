@@ -143,8 +143,8 @@ export default {
       loanStatus: '',
       loanLastStatus: '',
       dialogVisible: false,
-      listPath: '/loan-mortgage/evaluate-order',
-      nextPath: '/loan-mortgage/examine-approve',
+      listPath: '/house/evaluate-order',
+      nextPath: '/house/integrate-input',
       finishOrder: false
     }
   },

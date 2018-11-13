@@ -5,7 +5,7 @@
  * @GitHub: https://github.com/cj1406942109
  * @Date: 2018-11-06 17:31:54
  * @LastEditors: Abraham
- * @LastEditTime: 2018-11-13 07:37:48
+ * @LastEditTime: 2018-11-13 13:26:09
  * @Description: 二手房贷款api
  */
 
@@ -261,6 +261,158 @@ export function saveReport (orderId, time, type, report) {
 }
 
 // ************************* 评估下单结束 *******************************
+
+// ************************* 整件输机开始 *******************************
+
+/**
+ * 获取整件输机下单列表
+ */
+export function getInputList () {
+  return request({
+    url: '/house/input',
+    method: 'get'
+  })
+}
+
+/**
+ * 根据id获取员工的整件输机列表
+ * @param {*} employeeId 员工id
+ */
+export function getInputListByEmployeeId (employeeId) {
+  return request({
+    url: `/house/input/employee/${employeeId}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 根据id获取整件输机
+ * @param {*} orderId id
+ */
+export function getInputById (orderId) {
+  return request({
+    url: `/house/input/${orderId}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 完成房查征信
+ * @param {*} orderId id
+ * @param {*} houseTime 房查完成时间
+ * @param {*} creditTime 征信完成时间
+ */
+export function confirmCheck (orderId, houseTime, creditTime) {
+  return request({
+    url: '	/house/input/check',
+    method: 'post',
+    data: qs.stringify({
+      orderId,
+      houseTime,
+      creditTime
+    })
+  })
+}
+
+/**
+ * 确定整件状态
+ * @param {*} inutId id
+ * @param {*} catalog 资料目录表
+ */
+export function confirmIntegrate (inutId, catalog) {
+  return request({
+    url: '/house/input/catalog',
+    method: 'post',
+    data: qs.stringify({
+      inutId,
+      catalog: JSON.stringify(catalog)
+    })
+  })
+}
+
+/**
+ * 确定输机状态
+ * @param {*} orderId id
+ * @param {*} time 输机完成时间
+ */
+export function confirmInput (orderId, time) {
+  return request({
+    url: '	/house/input/check',
+    method: 'post',
+    data: qs.stringify({
+      orderId,
+      time
+    })
+  })
+}
+
+// ************************* 整件输机结束 *******************************
+
+// ************************* 审批开始 *******************************
+
+/**
+ * 获取审批列表
+ */
+export function getApproveList () {
+  return request({
+    url: '/house/approve',
+    method: 'get'
+  })
+}
+
+/**
+ * 根据id获取员工的审批列表
+ * @param {*} employeeId 员工id
+ */
+export function getApproveListByEmployeeId (employeeId) {
+  return request({
+    url: `/house/approve/employee/${employeeId}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 根据id获取报审流程数据
+ * @param {*} approveId 报审id
+ */
+export function getApproveById (approveId) {
+  return request({
+    url: `/house/approve/${approveId}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 完成报审
+ * @param {*} approveId 报审id
+ * @param {*} time 时间
+ */
+export function completeApprove (approveId, time) {
+  return request({
+    url: `/house/approve/complete/${approveId}`,
+    method: 'post',
+    data: qs.stringify({
+      time
+    })
+  })
+}
+
+/**
+ * 确定报审状态
+ * @param {*} approveId 报审id
+ * @param {*} approve 报审表
+ */
+export function confirmApproveStatus (approveId, approve) {
+  return request({
+    url: `/house/approve/${approveId}`,
+    method: 'post',
+    data: qs.stringify({
+      approve: JSON.stringify(approve)
+    })
+  })
+}
+
+// ************************* 审批结束 *******************************
 
 // ************************* 表单字段及静态索引管理开始 *******************************
 

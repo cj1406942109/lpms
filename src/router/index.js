@@ -183,11 +183,22 @@ export const constantRouterMap = [
       name: '二手房贷款-整件输机',
       meta: { title: '整件输机', icon: 'integrate' }
     }, {
-      path: 'integrate-input/edit-info/:id/:des',
+      path: 'integrate-input/edit-info/:id/:checkState/:catalogState/:des',
       hidden: true,
       name: '二手房贷款-整件输机表格',
       meta: { title: '整件输机表格' },
       component: () => import('@/views/loan-house/integrate-input/editInfo')
+    }, {
+      path: 'examine-approve',
+      component: () => import('@/views/loan-house/examine-approve'),
+      name: '二手房贷款-审批',
+      meta: { title: '审批', icon: 'approve' }
+    }, {
+      path: 'examine-approve/edit-info/:id/:sendState/:des',
+      hidden: true,
+      name: '二手房贷款-审批表格',
+      meta: { title: '审批表格' },
+      component: () => import('@/views/loan-house/examine-approve/editInfo')
     }]
   },
   {
