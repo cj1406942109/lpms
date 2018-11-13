@@ -13,3 +13,7 @@ package-lock.json
 *.ntvs*
 *.njsproj
 *.sln
+
+# build file
+loan/
+loan.zip

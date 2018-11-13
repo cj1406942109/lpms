@@ -5,6 +5,8 @@ process.env.NODE_ENV = 'production'
 
 const ora = require('ora')
 const rm = require('rimraf')
+const JSZip = require('jszip')
+const saveAs = require('file-saver')
 const path = require('path')
 const chalk = require('chalk')
 const webpack = require('webpack')
@@ -32,7 +34,16 @@ rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
       console.log(chalk.red('  Build failed with errors.\n'))
       process.exit(1)
     }
-
+    // 删除压缩包
+    rm(path.resolve(__dirname, '../loan.zip'), err => {
+      if (err) throw err
+      // 重新压缩
+      const zip = new JSZip()
+      zip.folder(path.resolve(__dirname, '../loan'))
+      zip.generateAsync({type: 'base64'}).then(content => {
+        saveAs(content, 'loan.zip')
+      })
+    })
     console.log(chalk.cyan('  Build complete.\n'))
     console.log(chalk.yellow(
       '  Tip: built files are meant to be served over an HTTP server.\n' +
