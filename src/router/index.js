@@ -227,7 +227,7 @@ export const constantRouterMap = [
       name: '二手房贷款-担保',
       meta: { title: '担保', icon: 'guarantee' }
     }, {
-      path: 'guarantee/edit-info/:id/:guaranteeState/:des',
+      path: 'guarantee/edit-info/:id/:reportType/:guaranteeState/:des',
       hidden: true,
       name: '二手房贷款-担保表格',
       meta: { title: '担保表格' },

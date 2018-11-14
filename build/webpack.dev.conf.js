@@ -27,6 +27,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   devServer: {
     clientLogLevel: 'warning',
     historyApiFallback: true,
+    disableHostCheck: true,   // That solved the ngrok invalid host header problem
     hot: true,
     compress: true,
     host: HOST || config.dev.host,

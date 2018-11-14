@@ -31,6 +31,17 @@ export function getTaskById (mortgageId) {
   })
 }
 
+/**
+ * 根据员工id获取二手房贷款任务列表
+ * @param {*} employeeId 员工id
+ */
+export function getTaskListByEmployeeId (employeeId) {
+  return request({
+    url: `/mortgage/employee/${employeeId}`,
+    method: 'get'
+  })
+}
+
 // ************************* 主任务结束 *******************************
 
 // ************************* 接单开始 *******************************

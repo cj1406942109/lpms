@@ -11,10 +11,10 @@
         <el-row>
           <el-col :span="10">
             <el-form-item label="房查完成时间" prop="houseTime">
-              <el-date-picker type="date" placeholder="选择日期" v-model="checkForm.houseTime" value-format="timestamp" :disabled="finishCheck"></el-date-picker>
+              <el-date-picker type="date" placeholder="选择日期" v-model="checkForm.houseTime" value-format="timestamp"></el-date-picker>
             </el-form-item>
             <el-form-item label="征信完成时间" prop="creditTime">
-              <el-date-picker type="date" placeholder="选择日期" v-model="checkForm.creditTime" value-format="timestamp" :disabled="finishCheck"></el-date-picker>
+              <el-date-picker type="date" placeholder="选择日期" v-model="checkForm.creditTime" value-format="timestamp"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>

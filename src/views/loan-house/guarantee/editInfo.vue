@@ -137,8 +137,8 @@ export default {
       loanStatus: '',
       loanLastStatus: '',
       dialogVisible: false,
-      listPath: '/loan-mortgage/examine-approve',
-      nextPath: '/loan-mortgage/mortgage',
+      listPath: '/house/guarantee',
+      nextPath: '/house/make-loans',
       activeStep: 0,
       loanVariety: '',
       finishGuarantee: false // 担保流程完成
@@ -150,9 +150,9 @@ export default {
     this.finishGuarantee = this.$route.params.guaranteeState === 'true'
     getGuaranteeById(this.$route.params.id).then(data => {
       if (data) {
-        this.guaranteeForm.isNeedStamp = data.isNeedStamp ? parseInt(data.isNeedStamp) : null
-        this.guaranteeForm.stampTime = data.stampTime ? data.isNeedStamp : null
-        this.guaranteeForm.guaranteeTime = data.guaranteeTime ? data.guaranteeTime : null
+        this.guaranteeForm.isNeedStamp = data.guaranteeState.isNeedStamp ? parseInt(data.guaranteeState.isNeedStamp) : null
+        this.guaranteeForm.stampTime = data.guaranteeState.stampTime ? data.guaranteeState.isNeedStamp : null
+        this.guaranteeForm.guaranteeTime = data.guaranteeState.guaranteeTime ? data.guaranteeState.guaranteeTime : null
         if (data.report) {
           this.preReport = JSON.parse(JSON.stringify(data.report))
         }
@@ -187,6 +187,8 @@ export default {
     saveGuaranteeHandler () {
       this.$refs['guaranteeForm'].validate((valid) => {
         if (valid) {
+          // 奇葩设计，必须要设置一个数字值后台才能保存，否则报错，为空时，将null置为0
+          this.guaranteeForm.stampTime = this.guaranteeForm.stampTime ? this.guaranteeForm.stampTime : 0
           if (this.reportType === 1) {
             saveGuarantee(this.$route.params.id, this.guaranteeForm.isNeedStamp, this.guaranteeForm.stampTime, this.guaranteeForm.guaranteeTime).then(data => {
               if (data) {
@@ -212,18 +214,31 @@ export default {
                 type: 'info',
                 message: '正在处理...'
               })
-              skipGuarantee(this.$route.params.id).then(data => {
-                this.formLoading = false
-                this.$message.closeAll()
+              saveGuarantee(this.$route.params.id, this.guaranteeForm.isNeedStamp, this.guaranteeForm.stampTime, this.guaranteeForm.guaranteeTime).then(data => {
                 if (data) {
-                  this.loanId = data.rootId
-                  // this.loanStatus = data.des
-                  this.loanStatus = '放款'
-                  this.dialogVisible = true
+                  this.finishGuarantee = true
+                  this.$message({
+                    type: 'success',
+                    message: '担保流程提交成功'
+                  })
+                  skipGuarantee(this.$route.params.id).then(data => {
+                    this.formLoading = false
+                    this.$message.closeAll()
+                    if (data) {
+                      this.loanId = data.rootId
+                      this.loanStatus = data.des
+                      this.dialogVisible = true
+                    } else {
+                      this.$message({
+                        type: 'error',
+                        message: '流程跳转失败'
+                      })
+                    }
+                  })
                 } else {
                   this.$message({
                     type: 'error',
-                    message: '流程跳转失败'
+                    message: '担保流程提交失败'
                   })
                 }
               })
@@ -271,6 +286,9 @@ export default {
     copyReport () {
       // index1 正评索引，index2 预评索引
       this.reportForm.report = JSON.parse(JSON.stringify(this.preReport))
+      this.reportForm.report.reportHouseAge = parseInt(this.reportForm.report.reportHouseAge)
+      this.reportForm.report.reportLoanYear = parseInt(this.reportForm.report.reportLoanYear)
+      this.reportForm.report.reportFirst = parseInt(this.reportForm.report.reportFirst)
     }
   }
 }

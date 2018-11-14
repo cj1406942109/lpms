@@ -3,10 +3,16 @@
     <h2>待办事项</h2>
     <el-table :data="todoList" v-loading.body="toodoListLoading" border stripe style="width: 100%">
       <el-table-column type="index" label="序号" width="100"></el-table-column>
-      <el-table-column prop="rootId" label="贷款编号" width="200"></el-table-column>
-      <!-- <el-table-column prop="type" label="贷款类型"></el-table-column> -->
-      <el-table-column prop="clientName" label="姓名"></el-table-column>
-      <el-table-column prop="clientPhone" label="电话"></el-table-column>
+      <el-table-column :sortable="true" prop="id" label="贷款编号" width="200"></el-table-column>
+      <el-table-column :sortable="true" prop="type" label="贷款类型">
+        <template slot-scope="scope">
+          <el-tag :type="`${scope.row.id}`[0] == '1' ? 'success':'warning'">
+            {{`${scope.row.id}`[0] == '1' ? '抵押贷款' : '二手房贷款' }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column :sortable="true" prop="clientName" label="姓名"></el-table-column>
+      <el-table-column :sortable="true" prop="clientPhone" label="电话"></el-table-column>
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="goNext(scope.row)">办理</el-button>
@@ -28,7 +34,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getTodoList } from '@/api/dashboard'
+
+import { getTaskListByEmployeeId as getTaskMListByEmployeeId } from '@/api/mortgage'
+import { getTaskListByEmployeeId as getTaskHListByEmployeeId } from '@/api/house'
 
 export default {
   name: 'todo',
@@ -48,10 +56,29 @@ export default {
   },
   methods: {
     getTodoList () {
-      this.toodoListLoading = true
-      getTodoList(this.userId).then(data => {
-        this.todoList = data
+      let listM = []
+      let listH = []
+      Promise.all([getTaskMListByEmployeeId(this.userId).then(data => {
+        if (data) {
+          listM = data
+        } else {
+          this.$message({
+            type: 'error',
+            message: '获取抵押贷款任务列表失败'
+          })
+        }
+      }), getTaskHListByEmployeeId(this.userId).then(data => {
+        if (data) {
+          listH = data
+        } else {
+          this.$message({
+            type: 'error',
+            message: '获取二手房贷款任务列表失败'
+          })
+        }
+      })]).then(() => {
         this.toodoListLoading = false
+        this.todoList = listM.concat(listH)
       })
     },
     handleSizeChange (val) {
@@ -61,11 +88,65 @@ export default {
       console.log(`当前页: ${val}`)
     },
     goNext (item) {
-      console.log(item)
+      this.$router.push({ path: this.getNextPath(item) })
+    },
+    getNextPath (item) {
+      let baseUrl = ''
+      let currentState = ''
+      const type = parseInt(`${item.id}`[0])
+      switch (type) {
+        // 抵押贷款
+        case 1:
+          baseUrl = '/loan-mortgage'
+          break
+        case 2:
+          baseUrl = '/house'
+          break
+      }
+      switch (item.state) {
+        case 'checklist':
+          currentState = 'order-taking'
+          break
+        case 'view':
+          currentState = 'interview'
+          break
+        case 'visa':
+          currentState = 'visa-interview'
+          break
+        case 'order':
+          currentState = 'evaluate-order'
+          break
+        case 'input':
+          currentState = 'integrate-input'
+          break
+        case 'approve':
+          currentState = 'examine-approve'
+          break
+        case 'transfer':
+          currentState = 'visa-interview'
+          break
+        case 'mortgage':
+          currentState = 'mortgage'
+          break
+        case 'mortgageA':
+          currentState = 'mortgage'
+          break
+        case 'guarantee':
+          currentState = 'guarantee'
+          break
+        case 'loan':
+          currentState = 'make-loans'
+          break
+        case 'charge':
+          currentState = 'charge'
+          break
+      }
+      return `${baseUrl}/${currentState}`
     }
   }
 }
 </script>
+
 
 <style lang="scss" scoped>
   .app-container {

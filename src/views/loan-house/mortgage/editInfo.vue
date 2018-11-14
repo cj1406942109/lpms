@@ -5,23 +5,27 @@
       <el-step title="步骤2" description="担保流程"></el-step>
     </el-steps>
     <div class="form-wrapper">
-      <el-form :model="mortgageInfoForm" ref="mortgageInfoForm" label-width="200px" v-if="mortgageInfoForm">
-        <el-form-item label="银行支行">
-          <el-input disabled v-model="mortgageInfoForm.loanBank"></el-input>
-        </el-form-item>
-        <el-form-item label="产权人">
-          <el-input disabled v-model="mortgageInfoForm.borrowerName"></el-input>
-        </el-form-item>
-        <el-form-item label="电话">
-          <el-input disabled v-model="mortgageInfoForm.borrowerPhone"></el-input>
-        </el-form-item>
-        <el-form-item label="房屋所属区局">
-          <el-input disabled v-model="mortgageInfoForm.houseAffiliation"></el-input>
-        </el-form-item>
-        <el-form-item label="接单业务员">
-          <el-input disabled v-model="mortgageInfoForm.clerkName"></el-input>
-        </el-form-item>
-      </el-form>
+      <el-row :gutter="20">
+        <el-col :span="10">
+          <el-form :model="mortgageInfoForm" ref="mortgageInfoForm" label-width="200px" v-if="mortgageInfoForm">
+            <el-form-item label="银行支行">
+              <el-input disabled v-model="mortgageInfoForm.loanBank"></el-input>
+            </el-form-item>
+            <el-form-item label="产权人">
+              <el-input disabled v-model="mortgageInfoForm.borrowerName"></el-input>
+            </el-form-item>
+            <el-form-item label="电话">
+              <el-input disabled v-model="mortgageInfoForm.borrowerPhone"></el-input>
+            </el-form-item>
+            <el-form-item label="房屋所属区局">
+              <el-input disabled v-model="mortgageInfoForm.houseAffiliation"></el-input>
+            </el-form-item>
+            <el-form-item label="接单业务员">
+              <el-input disabled v-model="mortgageInfoForm.clerkName"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
     </div>
     <div class="form-wrapper" v-if="activeStep==0">
       <h3>确定抵押状态</h3>
@@ -106,8 +110,8 @@ export default {
       loanStatus: '',
       loanLastStatus: '',
       dialogVisible: false,
-      listPath: '/loan-mortgage/mortgage',
-      nextPath: '/loan-mortgage/charge',
+      listPath: '/house/mortgage',
+      nextPath: '/house/guarantee',
       finishMotgage: false, // 确定抵押状态完成
       finishTake: false // 确定取证时间完成
     }
