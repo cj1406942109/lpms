@@ -31,8 +31,8 @@
       <el-form :model="catalogForm" ref="catalogForm" label-width="200px" :rules="catalogFormRules" v-if="catalogForm">
         <el-row>
           <el-col :span="10">
-            <el-form-item label="整件完成时间" prop="finishTime" :rules="[{ required: true, message: '整件完成时间不能为空' }]">
-              <el-date-picker type="date" placeholder="选择日期" v-model="catalogForm.finishTime" value-format="timestamp"></el-date-picker>
+            <el-form-item label="整件完成时间" prop="inputFinishTime" :rules="[{ required: true, message: '整件完成时间不能为空' }]">
+              <el-date-picker type="date" placeholder="选择日期" v-model="catalogForm.inputFinishTime" value-format="timestamp"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
@@ -52,7 +52,7 @@
             <tr>
               <td>1</td>
               <td>
-                <el-checkbox v-model="catalogForm.hasClientInformation" :true-label="1" :false-label="0"></el-checkbox>
+                <el-checkbox v-model="catalogForm.hasClientInformation" true-label="1" false-label="0"></el-checkbox>
               </td>
               <td>客户情况登记明细表</td>
               <td>1 份</td>
@@ -63,14 +63,14 @@
             <tr>
               <td>2</td>
               <td>
-                <el-checkbox v-model="catalogForm.hasBothIdCard" :true-label="1" :false-label="0"></el-checkbox>
+                <el-checkbox v-model="catalogForm.hasBothIdCard" true-label="1" false-label="0"></el-checkbox>
               </td>
               <td>买卖双方身份证</td>
               <td>各 2 份</td>
               <td>
                 <el-radio-group v-model="catalogForm.bothIdCardDes">
-                  <el-radio :label="1" >原件</el-radio>
-                  <el-radio :label="2">复印件</el-radio>
+                  <el-radio label="1">原件</el-radio>
+                  <el-radio label="2">复印件</el-radio>
                 </el-radio-group>
               </td>
               <td>
@@ -83,18 +83,18 @@
             <tr>
               <td>3</td>
               <td>
-                <el-checkbox v-model="catalogForm.hasBothAccount" :true-label="1" :false-label="0"></el-checkbox>
+                <el-checkbox v-model="catalogForm.hasBothAccount" true-label="1" false-label="0"></el-checkbox>
               </td>
               <td>买卖双方户口：&nbsp;&nbsp;
-                <el-checkbox label="首页" v-model="catalogForm.bothAccountHome" :true-label="1" :false-label="0"></el-checkbox>
-                <el-checkbox label="户主页" v-model="catalogForm.bothAccountHousehold" :true-label="1" :false-label="0"></el-checkbox>
-                <el-checkbox label="本人页" v-model="catalogForm.bothAccountMyself" :true-label="1" :false-label="0"></el-checkbox>
+                <el-checkbox label="首页" v-model="catalogForm.bothAccountHome" true-label="1" false-label="0"></el-checkbox>
+                <el-checkbox label="户主页" v-model="catalogForm.bothAccountHousehold" true-label="1" false-label="0"></el-checkbox>
+                <el-checkbox label="本人页" v-model="catalogForm.bothAccountMyself" true-label="1" false-label="0"></el-checkbox>
               </td>
               <td>各 1 份</td>
               <td>
                 <el-radio-group v-model="catalogForm.bothAccountDes">
-                  <el-radio :label="1" >原件</el-radio>
-                  <el-radio :label="2">复印件</el-radio>
+                  <el-radio label="1">原件</el-radio>
+                  <el-radio label="2">复印件</el-radio>
                 </el-radio-group>
               </td>
               <td>
@@ -107,18 +107,18 @@
             <tr>
               <td>4</td>
               <td>
-                <el-checkbox v-model="catalogForm.hasMarriageProof" :true-label="1" :false-label="0"></el-checkbox>
+                <el-checkbox v-model="catalogForm.hasMarriageProof" true-label="1" false-label="0"></el-checkbox>
               </td>
               <td>婚姻证明：&nbsp;&nbsp;
-                <el-checkbox label="结婚证" v-model="catalogForm.marriageCertificate" :true-label="1" :false-label="0"></el-checkbox>
-                <el-checkbox label="离婚证" v-model="catalogForm.divorceCertificate" :true-label="1" :false-label="0"></el-checkbox>
-                <el-checkbox label="离婚协议" v-model="catalogForm.divorceAgreement" :true-label="1" :false-label="0"></el-checkbox>
+                <el-checkbox label="结婚证" v-model="catalogForm.marriageCertificate" true-label="1" false-label="0"></el-checkbox>
+                <el-checkbox label="离婚证" v-model="catalogForm.divorceCertificate" true-label="1" false-label="0"></el-checkbox>
+                <el-checkbox label="离婚协议" v-model="catalogForm.divorceAgreement" true-label="1" false-label="0"></el-checkbox>
               </td>
               <td>2 份</td>
               <td>
                 <el-radio-group v-model="catalogForm.marriageProofDes">
-                  <el-radio :label="1" >原件</el-radio>
-                  <el-radio :label="2">复印件</el-radio>
+                  <el-radio label="1">原件</el-radio>
+                  <el-radio label="2">复印件</el-radio>
                 </el-radio-group>
               </td>
               <td>
@@ -131,14 +131,14 @@
             <tr>
               <td>5</td>
               <td>
-                <el-checkbox v-model="catalogForm.hasHouseCertificate" :true-label="1" :false-label="0"></el-checkbox>
+                <el-checkbox v-model="catalogForm.hasHouseCertificate" true-label="1" false-label="0"></el-checkbox>
               </td>
               <td>抵押物房产两证</td>
               <td>1 份</td>
               <td>
                 <el-radio-group v-model="catalogForm.houseCertificateDes">
-                  <el-radio :label="1" >原件</el-radio>
-                  <el-radio :label="2">复印件</el-radio>
+                  <el-radio label="1">原件</el-radio>
+                  <el-radio label="2">复印件</el-radio>
                 </el-radio-group>
               </td>
               <td>
@@ -151,14 +151,14 @@
             <tr>
               <td>6</td>
               <td>
-                <el-checkbox v-model="catalogForm.hasPayReceipt" :true-label="1" :false-label="0"></el-checkbox>
+                <el-checkbox v-model="catalogForm.hasPayReceipt" true-label="1" false-label="0"></el-checkbox>
               </td>
               <td>首付款收据</td>
               <td>1 份</td>
               <td>
                 <el-radio-group v-model="catalogForm.payReceiptDes">
-                  <el-radio :label="1" >原件</el-radio>
-                  <el-radio :label="2">复印件</el-radio>
+                  <el-radio label="1">原件</el-radio>
+                  <el-radio label="2">复印件</el-radio>
                 </el-radio-group>
               </td>
               <td>
@@ -171,14 +171,14 @@
             <tr>
               <td>7</td>
               <td>
-                <el-checkbox v-model="catalogForm.hasBankCard" :true-label="1" :false-label="0"></el-checkbox>
+                <el-checkbox v-model="catalogForm.hasBankCard" true-label="1" false-label="0"></el-checkbox>
               </td>
               <td>银行卡复印件（夫妻两人都要开卡）</td>
               <td>各 1 份</td>
               <td>
                 <el-radio-group v-model="catalogForm.bankCardDes">
-                  <el-radio :label="1" >原件</el-radio>
-                  <el-radio :label="2">复印件</el-radio>
+                  <el-radio label="1">原件</el-radio>
+                  <el-radio label="2">复印件</el-radio>
                 </el-radio-group>
               </td>
               <td>
@@ -191,14 +191,14 @@
             <tr>
               <td>8</td>
               <td>
-                <el-checkbox v-model="catalogForm.hasSalaryProof" :true-label="1" :false-label="0"></el-checkbox>
+                <el-checkbox v-model="catalogForm.hasSalaryProof" true-label="1" false-label="0"></el-checkbox>
               </td>
               <td>收入证明</td>
               <td>1 份</td>
               <td>
                 <el-radio-group v-model="catalogForm.salaryProofDes">
-                  <el-radio :label="1" >原件</el-radio>
-                  <el-radio :label="2">复印件</el-radio>
+                  <el-radio label="1">原件</el-radio>
+                  <el-radio label="2">复印件</el-radio>
                 </el-radio-group>
               </td>
               <td>
@@ -211,14 +211,14 @@
             <tr>
               <td>9</td>
               <td>
-                <el-checkbox v-model="catalogForm.hasBankStatement" :true-label="1" :false-label="0"></el-checkbox>
+                <el-checkbox v-model="catalogForm.hasBankStatement" true-label="1" false-label="0"></el-checkbox>
               </td>
               <td>银行流水近六个月</td>
               <td></td>
               <td>
                 <el-radio-group v-model="catalogForm.bankStatementDes">
-                  <el-radio :label="1" >原件</el-radio>
-                  <el-radio :label="2">复印件</el-radio>
+                  <el-radio label="1">原件</el-radio>
+                  <el-radio label="2">复印件</el-radio>
                 </el-radio-group>
               </td>
               <td>
@@ -253,7 +253,7 @@
         <el-row>
           <el-col :span="10">
             <el-form-item label="输机完成时间" prop="time">
-              <el-date-picker type="date" placeholder="选择日期" v-model="inputForm.time" value-format="timestamp" :disabled="finishCheck"></el-date-picker>
+              <el-date-picker type="date" placeholder="选择日期" v-model="inputForm.time" value-format="timestamp"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
@@ -267,7 +267,7 @@
     </div>
     <div class="option">
       <el-button @click="activeStep--" v-if="activeStep > 0">上一步</el-button>
-      <el-button type="primary" @click="activeStep++" v-if="activeStep < 1" :disabled="nextStepStatus">下一步</el-button>
+      <el-button type="primary" @click="activeStep++" v-if="activeStep < 2" :disabled="nextStepStatus">下一步</el-button>
     </div>
     <flow-complete-dialog
       :loanId="loanId"
@@ -296,12 +296,16 @@ export default {
         houseTime: null,
         creditTime: null
       },
+      catalogForm: null,
       inputForm: {
         time: null
       },
       checkFormRules: {
         houseTime: [{ required: true, message: '房查完成时间不能为空' }],
         creditTime: [{ required: true, message: '征信完成时间不能为空' }]
+      },
+      catalogFormRules: {
+        inputFinishTime: [{ required: true, message: '整件完成时间不能为空' }]
       },
       inputFormRules: {
         time: [{ required: true, message: '输机完成时间不能为空' }]
@@ -435,7 +439,9 @@ export default {
     this.finishCatalog = this.$route.params.catalogState === 'true'
     getInputById(this.$route.params.id).then(data => {
       if (data) {
-        console.log(data)
+        this.checkForm.houseTime = data.houseTime
+        this.checkForm.creditTime = data.creditTime
+        this.catalogForm = JSON.parse(JSON.stringify(data.catalog))
       } else {
         this.$message({
           type: 'error',
@@ -453,9 +459,39 @@ export default {
       padding: 20px;
       margin-bottom: 20px;
       background-color: #fff;
+      h2 {
+        margin: 0;
+      }
       h3 {
         padding-left: 200px;
         color: #303133;
+      }
+      table {
+        border: 1px solid #ccc;
+        margin-left:200px;
+        width:calc(100% - 300px);
+        thead tr {
+          background-color: #fafafa;
+        }
+        tr {
+          
+          td, th {
+            padding: 10px 5px;
+            text-align: center;
+          }
+          td {
+            border-top: 1px solid #ddd;
+          }
+          td:nth-child(6) {
+            width: 100px;
+          }
+        }
+        tbody tr:nth-child(odd) {
+          background-color: #fff;
+        }
+        tbody tr:nth-child(even) {
+          background-color: #fafafa;
+        }
       }
     }
     .option {

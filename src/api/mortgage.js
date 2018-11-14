@@ -586,6 +586,10 @@ export function getLoanById (loanId) {
   })
 }
 
+/**
+ * 确认放款
+ * @param {*} loanId 放款id
+ */
 export function confirmLoan (loanId) {
   return request({
     url: `/mortgage/loan/${loanId}`,

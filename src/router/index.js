@@ -199,6 +199,44 @@ export const constantRouterMap = [
       name: '二手房贷款-审批表格',
       meta: { title: '审批表格' },
       component: () => import('@/views/loan-house/examine-approve/editInfo')
+    }, {
+      path: 'transfer',
+      component: () => import('@/views/loan-house/transfer'),
+      name: '二手房贷款-过户',
+      meta: { title: '过户', icon: 'transfer' }
+    }, {
+      path: 'transfer/edit-info/:id/:transferState/:des',
+      hidden: true,
+      name: '二手房贷款-过户表格',
+      meta: { title: '过户表格' },
+      component: () => import('@/views/loan-house/transfer/editInfo')
+    }, {
+      path: 'mortgage',
+      component: () => import('@/views/loan-house/mortgage'),
+      name: '二手房贷款-抵押',
+      meta: { title: '抵押', icon: 'mortgage' }
+    }, {
+      path: 'mortgage/edit-info/:id/:mortgageState/:takeEvidence/:des',
+      hidden: true,
+      name: '二手房贷款-抵押表格',
+      meta: { title: '抵押表格' },
+      component: () => import('@/views/loan-house/mortgage/editInfo')
+    }, {
+      path: 'guarantee',
+      component: () => import('@/views/loan-house/guarantee'),
+      name: '二手房贷款-担保',
+      meta: { title: '担保', icon: 'guarantee' }
+    }, {
+      path: 'guarantee/edit-info/:id/:guaranteeState/:des',
+      hidden: true,
+      name: '二手房贷款-担保表格',
+      meta: { title: '担保表格' },
+      component: () => import('@/views/loan-house/guarantee/editInfo')
+    }, {
+      path: 'make-loans',
+      component: () => import('@/views/loan-house/make-loans'),
+      name: '二手房贷款-放款',
+      meta: { title: '放款', icon: 'make-loans' }
     }]
   },
   {

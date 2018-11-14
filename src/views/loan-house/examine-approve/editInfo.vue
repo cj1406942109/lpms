@@ -156,7 +156,7 @@ export default {
     this.finishSend = this.$route.params.sendState === 'true'
     getApproveById(this.$route.params.id).then(data => {
       if (data) {
-        console.log(data)
+        this.approveForm.time = data.time
       } else {
         this.$message({
           type: 'error',

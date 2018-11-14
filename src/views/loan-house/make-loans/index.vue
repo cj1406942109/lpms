@@ -29,9 +29,8 @@
 import { mapGetters } from 'vuex'
 import {
   getLoanListByEmployeeId,
-  // getLoanById,
   confirmLoan
-} from '@/api/mortgage'
+} from '@/api/house'
 export default {
   name: 'make-loans',
   data () {

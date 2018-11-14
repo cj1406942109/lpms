@@ -1,22 +1,32 @@
 <template>
   <div class="app-container">
-    <h2>审批列表</h2>
-    <el-table :data="examineApproveList" v-loading.body="examineApproveListLoading" style="width: 100%" border stripe>
+    <h2>担保列表</h2>
+    <el-table :data="guaranteeList" v-loading.body="guaranteeListLoading" style="width: 100%" border stripe>
       <el-table-column type="index" label="序号" width="100"></el-table-column>
       <el-table-column :sortable="true" prop="rootId" label="贷款编号" width="200"></el-table-column>
       <el-table-column :sortable="true" prop="clientName" label="客户姓名"></el-table-column>
       <el-table-column :sortable="true" prop="clientPhone" label="联系方式" width="200"></el-table-column>
+      <el-table-column :sortable="true" prop="extra.commentType" label="正评状态" width="150"
+        :filter-method="filterCommentType"
+        :filters="[{ text: '已出正评', value: '正评' }, { text: '待出正评', value: '预评' }]"
+        filter-placement="bottom-end">
+        <template slot-scope="scope">
+          <el-tag :type="scope.row.extra.commentType == '正评' ? 'success' : 'warning'">
+            {{scope.row.extra.commentType}}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column :sortable="true" prop="state" label="当前状态"
         :filter-method="filterState"
         :filters="[{ text: '待填写相关表格', value: 'open' }, { text: '已完成', value: 'finish' }, { text: '已关闭', value: 'close' }]"
         filter-placement="bottom-end">
         <template slot-scope="scope">
           <template v-if="scope.row.state == 'open'">
-            <el-tag :type="scope.row.extra.sendState.done ? 'success' : 'primary'">
-              {{scope.row.extra.sendState.message}}
+            <el-tag :type="scope.row.extra.guaranteeState.done ? 'success' : 'primary'">
+              {{scope.row.extra.guaranteeState.message}}
             </el-tag>
-            <el-tag :type="scope.row.extra.approveState.done ? 'success' : 'primary'">
-              {{scope.row.extra.approveState.message}}
+            <el-tag :type="scope.row.extra.reportState.done ? 'success' : 'primary'" v-if="scope.row.extra.commentType == '预评'">
+              {{scope.row.extra.reportState.message}}
             </el-tag>
           </template>
           <el-tag :type="tagState(scope.row.state)" v-else>
@@ -36,18 +46,18 @@
 <script>
 import { mapGetters } from 'vuex'
 import {
-  getApproveListByEmployeeId
+  getGuaranteeListByEmployeeId
 } from '@/api/house'
 export default {
-  name: 'examineApprove',
+  name: 'guarantee',
   data () {
     return {
-      examineApproveList: null,
-      examineApproveListLoading: true
+      guaranteeList: null,
+      guaranteeListLoading: true
     }
   },
   created () {
-    this.getApproveList()
+    this.getGuaranteeList()
   },
   computed: {
     ...mapGetters([
@@ -55,21 +65,22 @@ export default {
     ])
   },
   methods: {
-    getApproveList () {
-      getApproveListByEmployeeId(this.userId).then(data => {
-        this.examineApproveListLoading = false
+    getGuaranteeList () {
+      getGuaranteeListByEmployeeId(this.userId).then(data => {
+        this.guaranteeListLoading = false
         if (data) {
-          this.examineApproveList = data
+          this.guaranteeList = data
         } else {
           this.$message({
             type: 'error',
-            message: '审批列表获取失败'
+            message: '担保列表获取失败'
           })
         }
       })
     },
     goNext (item) {
-      this.$router.push({ path: `/house/examine-approve/edit-info/${item.id}/${item.extra.sendState.done}/${item.des}` })
+      const reportType = item.extra.commentType === '正评' ? 2 : 1
+      this.$router.push({ path: `/house/guarantee/edit-info/${item.id}/${reportType}/${item.extra.guaranteeState.done}/${item.des}` })
     },
     tagState (item) {
       switch (item) {

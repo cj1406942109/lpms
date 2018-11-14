@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <h2>整件输机列表</h2>
-    <el-table :data="evaluateOrderList" v-loading.body="evaluateOrderListLoading" style="width: 100%" border stripe>
+    <el-table :data="integrateInputList" v-loading.body="integrateInputListLoading" style="width: 100%" border stripe>
       <el-table-column type="index" label="序号" width="100"></el-table-column>
       <el-table-column :sortable="true" prop="rootId" label="贷款编号" width="200"></el-table-column>
       <el-table-column :sortable="true" prop="clientName" label="客户姓名"></el-table-column>
@@ -19,7 +19,7 @@
               {{scope.row.extra.catalogState.message}}
             </el-tag>
             <el-tag :type="scope.row.extra.inputState.done ? 'success' : 'primary'">
-              {{scope.row.extra.catalogState.message}}
+              {{scope.row.extra.inputState.message}}
             </el-tag>
           </template>
           <el-tag :type="tagState(scope.row.state)" v-else>
@@ -45,8 +45,8 @@ export default {
   name: 'evaluate-order',
   data () {
     return {
-      evaluateOrderList: null,
-      evaluateOrderListLoading: true
+      integrateInputList: null,
+      integrateInputListLoading: true
     }
   },
   created () {
@@ -60,9 +60,9 @@ export default {
   methods: {
     getInputList () {
       getInputListByEmployeeId(this.userId).then(data => {
-        this.evaluateOrderListLoading = false
+        this.integrateInputListLoading = false
         if (data) {
-          this.evaluateOrderList = data
+          this.integrateInputList = data
         } else {
           this.$message({
             type: 'error',

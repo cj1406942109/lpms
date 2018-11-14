@@ -44,7 +44,7 @@
             <tr>
               <td>1</td>
               <td>
-                <el-checkbox v-model="catalogForm.hasClientInformation" :true-label="1" :false-label="0"></el-checkbox>
+                <el-checkbox v-model="catalogForm.hasClientInformation" true-label="1" false-label="0"></el-checkbox>
               </td>
               <td>客户情况登记明细表</td>
               <td>1 份</td>
@@ -55,14 +55,14 @@
             <tr>
               <td>2</td>
               <td>
-                <el-checkbox v-model="catalogForm.hasBothIdCard" :true-label="1" :false-label="0"></el-checkbox>
+                <el-checkbox v-model="catalogForm.hasBothIdCard" true-label="1" false-label="0"></el-checkbox>
               </td>
               <td>买卖双方身份证</td>
               <td>各 2 份</td>
               <td>
                 <el-radio-group v-model="catalogForm.bothIdCardDes">
-                  <el-radio :label="1" >原件</el-radio>
-                  <el-radio :label="2">复印件</el-radio>
+                  <el-radio label="1">原件</el-radio>
+                  <el-radio label="2">复印件</el-radio>
                 </el-radio-group>
               </td>
               <td>
@@ -75,18 +75,18 @@
             <tr>
               <td>3</td>
               <td>
-                <el-checkbox v-model="catalogForm.hasBothAccount" :true-label="1" :false-label="0"></el-checkbox>
+                <el-checkbox v-model="catalogForm.hasBothAccount" true-label="1" false-label="0"></el-checkbox>
               </td>
               <td>买卖双方户口：&nbsp;&nbsp;
-                <el-checkbox label="首页" v-model="catalogForm.bothAccountHome" :true-label="1" :false-label="0"></el-checkbox>
-                <el-checkbox label="户主页" v-model="catalogForm.bothAccountHousehold" :true-label="1" :false-label="0"></el-checkbox>
-                <el-checkbox label="本人页" v-model="catalogForm.bothAccountMyself" :true-label="1" :false-label="0"></el-checkbox>
+                <el-checkbox label="首页" v-model="catalogForm.bothAccountHome" true-label="1" false-label="0"></el-checkbox>
+                <el-checkbox label="户主页" v-model="catalogForm.bothAccountHousehold" true-label="1" false-label="0"></el-checkbox>
+                <el-checkbox label="本人页" v-model="catalogForm.bothAccountMyself" true-label="1" false-label="0"></el-checkbox>
               </td>
               <td>各 1 份</td>
               <td>
                 <el-radio-group v-model="catalogForm.bothAccountDes">
-                  <el-radio :label="1" >原件</el-radio>
-                  <el-radio :label="2">复印件</el-radio>
+                  <el-radio label="1">原件</el-radio>
+                  <el-radio label="2">复印件</el-radio>
                 </el-radio-group>
               </td>
               <td>
@@ -99,18 +99,18 @@
             <tr>
               <td>4</td>
               <td>
-                <el-checkbox v-model="catalogForm.hasMarriageProof" :true-label="1" :false-label="0"></el-checkbox>
+                <el-checkbox v-model="catalogForm.hasMarriageProof" true-label="1" false-label="0"></el-checkbox>
               </td>
               <td>婚姻证明：&nbsp;&nbsp;
-                <el-checkbox label="结婚证" v-model="catalogForm.marriageCertificate" :true-label="1" :false-label="0"></el-checkbox>
-                <el-checkbox label="离婚证" v-model="catalogForm.divorceCertificate" :true-label="1" :false-label="0"></el-checkbox>
-                <el-checkbox label="离婚协议" v-model="catalogForm.divorceAgreement" :true-label="1" :false-label="0"></el-checkbox>
+                <el-checkbox label="结婚证" v-model="catalogForm.marriageCertificate" true-label="1" false-label="0"></el-checkbox>
+                <el-checkbox label="离婚证" v-model="catalogForm.divorceCertificate" true-label="1" false-label="0"></el-checkbox>
+                <el-checkbox label="离婚协议" v-model="catalogForm.divorceAgreement" true-label="1" false-label="0"></el-checkbox>
               </td>
               <td>2 份</td>
               <td>
                 <el-radio-group v-model="catalogForm.marriageProofDes">
-                  <el-radio :label="1" >原件</el-radio>
-                  <el-radio :label="2">复印件</el-radio>
+                  <el-radio label="1">原件</el-radio>
+                  <el-radio label="2">复印件</el-radio>
                 </el-radio-group>
               </td>
               <td>
@@ -123,14 +123,14 @@
             <tr>
               <td>5</td>
               <td>
-                <el-checkbox v-model="catalogForm.hasHouseCertificate" :true-label="1" :false-label="0"></el-checkbox>
+                <el-checkbox v-model="catalogForm.hasHouseCertificate" true-label="1" false-label="0"></el-checkbox>
               </td>
               <td>抵押物房产两证</td>
               <td>1 份</td>
               <td>
                 <el-radio-group v-model="catalogForm.houseCertificateDes">
-                  <el-radio :label="1" >原件</el-radio>
-                  <el-radio :label="2">复印件</el-radio>
+                  <el-radio label="1">原件</el-radio>
+                  <el-radio label="2">复印件</el-radio>
                 </el-radio-group>
               </td>
               <td>
@@ -143,14 +143,14 @@
             <tr>
               <td>6</td>
               <td>
-                <el-checkbox v-model="catalogForm.hasPayReceipt" :true-label="1" :false-label="0"></el-checkbox>
+                <el-checkbox v-model="catalogForm.hasPayReceipt" true-label="1" false-label="0"></el-checkbox>
               </td>
               <td>首付款收据</td>
               <td>1 份</td>
               <td>
                 <el-radio-group v-model="catalogForm.payReceiptDes">
-                  <el-radio :label="1" >原件</el-radio>
-                  <el-radio :label="2">复印件</el-radio>
+                  <el-radio label="1">原件</el-radio>
+                  <el-radio label="2">复印件</el-radio>
                 </el-radio-group>
               </td>
               <td>
@@ -163,14 +163,14 @@
             <tr>
               <td>7</td>
               <td>
-                <el-checkbox v-model="catalogForm.hasBankCard" :true-label="1" :false-label="0"></el-checkbox>
+                <el-checkbox v-model="catalogForm.hasBankCard" true-label="1" false-label="0"></el-checkbox>
               </td>
               <td>银行卡复印件（夫妻两人都要开卡）</td>
               <td>各 1 份</td>
               <td>
                 <el-radio-group v-model="catalogForm.bankCardDes">
-                  <el-radio :label="1" >原件</el-radio>
-                  <el-radio :label="2">复印件</el-radio>
+                  <el-radio label="1">原件</el-radio>
+                  <el-radio label="2">复印件</el-radio>
                 </el-radio-group>
               </td>
               <td>
@@ -183,14 +183,14 @@
             <tr>
               <td>8</td>
               <td>
-                <el-checkbox v-model="catalogForm.hasSalaryProof" :true-label="1" :false-label="0"></el-checkbox>
+                <el-checkbox v-model="catalogForm.hasSalaryProof" true-label="1" false-label="0"></el-checkbox>
               </td>
               <td>收入证明</td>
               <td>1 份</td>
               <td>
                 <el-radio-group v-model="catalogForm.salaryProofDes">
-                  <el-radio :label="1" >原件</el-radio>
-                  <el-radio :label="2">复印件</el-radio>
+                  <el-radio label="1">原件</el-radio>
+                  <el-radio label="2">复印件</el-radio>
                 </el-radio-group>
               </td>
               <td>
@@ -203,14 +203,14 @@
             <tr>
               <td>9</td>
               <td>
-                <el-checkbox v-model="catalogForm.hasBankStatement" :true-label="1" :false-label="0"></el-checkbox>
+                <el-checkbox v-model="catalogForm.hasBankStatement" true-label="1" false-label="0"></el-checkbox>
               </td>
               <td>银行流水近六个月</td>
               <td></td>
               <td>
                 <el-radio-group v-model="catalogForm.bankStatementDes">
-                  <el-radio :label="1" >原件</el-radio>
-                  <el-radio :label="2">复印件</el-radio>
+                  <el-radio label="1">原件</el-radio>
+                  <el-radio label="2">复印件</el-radio>
                 </el-radio-group>
               </td>
               <td>

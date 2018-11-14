@@ -5,7 +5,7 @@
  * @GitHub: https://github.com/cj1406942109
  * @Date: 2018-11-06 17:31:54
  * @LastEditors: Abraham
- * @LastEditTime: 2018-11-13 13:26:09
+ * @LastEditTime: 2018-11-14 05:12:56
  * @Description: 二手房贷款api
  */
 
@@ -304,7 +304,7 @@ export function getInputById (orderId) {
  */
 export function confirmCheck (orderId, houseTime, creditTime) {
   return request({
-    url: '	/house/input/check',
+    url: '/house/input/check',
     method: 'post',
     data: qs.stringify({
       orderId,
@@ -316,15 +316,15 @@ export function confirmCheck (orderId, houseTime, creditTime) {
 
 /**
  * 确定整件状态
- * @param {*} inutId id
+ * @param {*} inputId id
  * @param {*} catalog 资料目录表
  */
-export function confirmIntegrate (inutId, catalog) {
+export function confirmIntegrate (inputId, catalog) {
   return request({
     url: '/house/input/catalog',
     method: 'post',
     data: qs.stringify({
-      inutId,
+      inputId,
       catalog: JSON.stringify(catalog)
     })
   })
@@ -337,7 +337,7 @@ export function confirmIntegrate (inutId, catalog) {
  */
 export function confirmInput (orderId, time) {
   return request({
-    url: '	/house/input/check',
+    url: '/house/input/input',
     method: 'post',
     data: qs.stringify({
       orderId,
@@ -413,6 +413,272 @@ export function confirmApproveStatus (approveId, approve) {
 }
 
 // ************************* 审批结束 *******************************
+
+// ************************* 过户开始 *******************************
+
+/**
+ * 获取过户列表
+ */
+export function getTransferList () {
+  return request({
+    url: '/house/transfer',
+    method: 'get'
+  })
+}
+
+/**
+ * 根据id获取员工的过户列表
+ * @param {*} employeeId 员工id
+ */
+export function getTransferListByEmployeeId (employeeId) {
+  return request({
+    url: `/house/transfer/employee/${employeeId}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 根据id获取过户流程数据
+ * @param {*} transferId 过户id
+ */
+export function getTransferById (transferId) {
+  return request({
+    url: `/house/transfer/${transferId}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 确定过户状态
+ * @param {*} transferId 过户id
+ * @param {*} time 时间
+ */
+export function confirmTransfer (transferId, time) {
+  return request({
+    url: `/house/transfer/${transferId}`,
+    method: 'post',
+    data: qs.stringify({
+      time
+    })
+  })
+}
+
+/**
+ * 确定回证时间
+ * @param {*} transferId 过户id
+ * @param {*} time 时间
+ */
+export function confirmReceipt (transferId, time) {
+  return request({
+    url: `/house/transfer/receipt/${transferId}`,
+    method: 'post',
+    data: qs.stringify({
+      time
+    })
+  })
+}
+
+// ************************* 过户结束 *******************************
+
+// ************************* 抵押开始 *******************************
+
+/**
+ * 获取抵押列表
+ */
+export function getMortgageList () {
+  return request({
+    url: '/house/mortgage',
+    method: 'get'
+  })
+}
+
+/**
+ * 根据id获取员工的抵押列表
+ * @param {*} employeeId 员工id
+ */
+export function getMortgageListByEmployeeId (employeeId) {
+  return request({
+    url: `/house/mortgage/employee/${employeeId}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 根据抵押id获取抵押数据
+ * @param {*} mortgageId 抵押id
+ */
+export function getMortgageById (mortgageId) {
+  return request({
+    url: `/house/mortgage/${mortgageId}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 确定抵押状态
+ * @param {*} mortgageId 抵押id
+ * @param {*} time 时间
+ */
+export function confirmMortgageStatus (mortgageId, time) {
+  return request({
+    url: `house/mortgage/${mortgageId}`,
+    method: 'post',
+    data: qs.stringify({
+      time
+    })
+  })
+}
+
+/**
+ * 确定取证时间
+ * @param {*} mortgageId 抵押id
+ * @param {*} time 时间
+ */
+export function takeEvidence (mortgageId, time) {
+  return request({
+    url: `house/mortgage/take/${mortgageId}`,
+    method: 'post',
+    data: qs.stringify({
+      time
+    })
+  })
+}
+
+/**
+ * 确定返证时间
+ * @param {*} mortgageId 抵押id
+ * @param {*} time 时间
+ */
+export function returnEvidence (mortgageId, time) {
+  return request({
+    url: `house/mortgage/return/${mortgageId}`,
+    method: 'post',
+    data: qs.stringify({
+      time
+    })
+  })
+}
+
+// ************************* 抵押结束 *******************************
+
+// ************************* 担保开始 *******************************
+
+/**
+ * 获取担保列表
+ */
+export function getGuaranteeList () {
+  return request({
+    url: '/house/guarantee',
+    method: 'get'
+  })
+}
+
+/**
+ * 根据id获取员工的担保列表
+ * @param {*} employeeId 员工id
+ */
+export function getGuaranteeListByEmployeeId (employeeId) {
+  return request({
+    url: `/house/guarantee/employee/${employeeId}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 根据抵押id获取担保数据
+ * @param {*} guaranteeId 抵押id
+ */
+export function getGuaranteeById (guaranteeId) {
+  return request({
+    url: `/house/guarantee/${guaranteeId}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 保存担保流程数据
+ * @param {*} guaranteeId 担保id
+ * @param {*} isNeedStamp 是否需要盖章
+ * @param {*} stampTime 盖章完成时间
+ * @param {*} guaranteeTime 出担保函时间
+ */
+export function saveGuarantee (guaranteeId, isNeedStamp, stampTime, guaranteeTime) {
+  return request({
+    url: `house/guarantee/${guaranteeId}`,
+    method: 'post',
+    data: qs.stringify({
+      isNeedStamp,
+      stampTime,
+      guaranteeTime
+    })
+  })
+}
+
+/**
+ * 出正评
+ * @param {*} guaranteeId 担保id
+ * @param {*} time 时间
+ * @param {*} report 报告
+ */
+export function saveFormalReport (guaranteeId, time, report) {
+  return request({
+    url: `house/guarantee/report/${guaranteeId}`,
+    method: 'post',
+    data: qs.stringify({
+      time,
+      report: JSON.stringify(report)
+    })
+  })
+}
+
+/**
+ * 结束当前担保流程
+ * @param {*} guaranteeId 担保id
+ */
+export function skipGuarantee (guaranteeId) {
+  return request({
+    url: `/house/guarantee/skip/${guaranteeId}`,
+    method: 'post'
+  })
+}
+
+// ************************* 担保结束 *******************************
+
+// ************************* 放款开始 *******************************
+
+/**
+ * 获取放款列表
+ */
+export function getLoanList () {
+  return request({
+    url: '/house/loan',
+    method: 'get'
+  })
+}
+
+/**
+ * 根据id获取员工的放款列表
+ * @param {*} employeeId 员工id
+ */
+export function getLoanListByEmployeeId (employeeId) {
+  return request({
+    url: `/house/loan/employee/${employeeId}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 确认放款
+ * @param {*} loanId 放款id
+ */
+export function confirmLoan (loanId) {
+  return request({
+    url: `/house/loan/${loanId}`,
+    method: 'post'
+  })
+}
+
+// ************************* 放款结束 *******************************
 
 // ************************* 表单字段及静态索引管理开始 *******************************
 
