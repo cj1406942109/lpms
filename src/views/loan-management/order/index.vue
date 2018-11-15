@@ -16,13 +16,16 @@
                   range-separator="-"
                   start-placeholder="开始日期"
                   end-placeholder="结束日期"
+                  value-format="timestamp"
                   :picker-options="pickerOptions">
                 </el-date-picker>
               </el-form-item>
               <br>
               <el-form-item label="订单类型">
                 <el-select v-model="optionForm.loanType" placeholder="请选择">
-                  <el-option label="所有" :value="0"></el-option>
+                  <el-option label="所有" value=""></el-option>
+                  <el-option label="抵押贷款" :value="1"></el-option>
+                  <el-option label="二手房贷款" :value="2"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="贷款编号">
@@ -32,9 +35,9 @@
               <el-form-item label="客户姓名">
                 <el-input clearable v-model="optionForm.clientName"></el-input>
               </el-form-item>
-              <el-form-item label="客户身份证号">
+              <!-- <el-form-item label="客户身份证号">
                 <el-input clearable v-model="optionForm.IDCard"></el-input>
-              </el-form-item>
+              </el-form-item> -->
               <br>
               <el-form-item label="经办银行">
                 <el-select v-model="optionForm.bank" placeholder="请选择">
@@ -45,7 +48,7 @@
                 <el-input clearable v-model="optionForm.employeeName"></el-input>
               </el-form-item>
               <br>
-              <el-form-item>
+              <el-form-item label=" ">
                 <el-button type="primary" @click="queryOrder()">查询</el-button>
                 <el-button @click="resetForm('optionForm')">重置</el-button>
               </el-form-item>
@@ -57,15 +60,17 @@
     <div>
       <el-table :data="orderList" v-loading.body="orderListLoading" style="width: 100%" border stripe>
         <el-table-column type="index" label="序号" width="100"></el-table-column>
-        <el-table-column prop="loanId" label="贷款编号" width="200"></el-table-column>
-        <el-table-column prop="loanType" label="借款品种">
+        <el-table-column :sortable="true" prop="rootId" label="贷款编号" width="200"></el-table-column>
+        <el-table-column :sortable="true" label="贷款类型">
           <template slot-scope="scope">
-            <el-tag :type="tagLoanType(scope.row.loanType)">{{formateLoanType(scope.row.loanType)}}</el-tag>
+            <el-tag :type="`${scope.row.id}`[0] == '1' ? 'success':'warning'">
+              {{`${scope.row.id}`[0] == '1' ? '抵押贷款' : '二手房贷款' }}
+            </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="客户姓名"></el-table-column>
-        <el-table-column prop="phone" label="联系方式"></el-table-column>
-        <el-table-column prop="state" label="贷款当前状态" width="200">
+        <el-table-column :sortable="true" prop="clientName" label="客户姓名"></el-table-column>
+        <el-table-column :sortable="true" prop="clientPhone" label="联系方式"></el-table-column>
+        <el-table-column :sortable="true" prop="des" label="贷款当前所处流程" width="200">
         </el-table-column>
         <el-table-column label="操作" width="250">
           <template slot-scope="scope">
@@ -106,7 +111,6 @@
 </template>
 
 <script>
-import { formateLoanType, tagLoanType } from '@/utils/loan'
 import { getOrderList, deleteOrder } from '@/api/loan'
 
 export default {
@@ -170,12 +174,6 @@ export default {
     this.queryOrder()
   },
   methods: {
-    formateLoanType (loanType) {
-      return formateLoanType(loanType)
-    },
-    tagLoanType (loanType) {
-      return tagLoanType(loanType)
-    },
     handleSizeChange (val) {
       console.log(`每页 ${val} 条`)
     },
@@ -186,41 +184,40 @@ export default {
       this.$refs[formName].resetFields()
     },
     queryOrder () {
-      getOrderList(
-        this.optionForm.loanType,
-        this.optionForm.loanNumber,
-        this.optionForm.clientName,
-        this.optionForm.IDCard,
-        this.optionForm.employeeName,
-        this.optionForm.bank,
-        this.optionForm.period ? this.optionForm.period[0] : '',
-        this.optionForm.period ? this.optionForm.period[1] : '',
-        this.pageNo,
-        this.pageSize
-      ).then(response => {
-        console.log(response)
+      getOrderList(this.optionForm, this.pageNo, this.pageSize).then(data => {
         this.orderListLoading = false
-        if (response.data.status) {
-          this.orderList = response.data.data
+        if (data) {
+          this.orderList = data.mortgage.concat(data.house)
+        } else {
+          this.$message({
+            type: 'error',
+            message: '订单列表获取失败'
+          })
         }
       })
     },
     goDetail (item) {
-      this.$router.push({ path: `/loan-management/order/status/${item.loanId}` })
+      this.$router.push({ path: `/loan-management/order/status/${item.rootId}` })
     },
     deleteOrder (item) {
       this.dialogFormVisible = true
       this.selectedOrder = item
     },
     confirmDelete () {
-      this.dialogFormVisible = false
-      deleteOrder(this.selectedOrder.loanId, this.selectedOrder.taskId, this.deleteform.comment).then(response => {
-        if (response.data.status) {
-          this.$message({
-            type: 'success',
-            message: '订单删除成功'
+      this.$refs['deleteForm'].validate((valid) => {
+        if (valid) {
+          this.dialogFormVisible = false
+          deleteOrder(this.selectedOrder.rootId, this.selectedOrder.id, this.deleteform.comment).then(data => {
+            if (data) {
+              this.$message({
+                type: 'success',
+                message: '订单删除成功'
+              })
+              this.queryOrder()
+            }
           })
-          this.queryOrder()
+        } else {
+          return false
         }
       })
     }

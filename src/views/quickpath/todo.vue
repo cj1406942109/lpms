@@ -13,9 +13,16 @@
       </el-table-column>
       <el-table-column :sortable="true" prop="clientName" label="姓名"></el-table-column>
       <el-table-column :sortable="true" prop="clientPhone" label="电话"></el-table-column>
+      <el-table-column :sortable="true" prop="state" label="当前状态">
+        <template slot-scope="scope">
+          <el-tag :type="`${scope.row.state}` == 'finish' ? 'success':'primary'">
+            {{ formateState(scope.row.state) }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="goNext(scope.row)">办理</el-button>
+          <el-button :disabled="scope.row.state == 'finish'" type="primary" size="mini" @click="goNext(scope.row)">办理</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -142,6 +149,36 @@ export default {
           break
       }
       return `${baseUrl}/${currentState}`
+    },
+    formateState (state) {
+      switch (state) {
+        case 'checklist':
+          return '接单'
+        case 'view':
+          return '面谈'
+        case 'visa':
+          return '面签'
+        case 'order':
+          return '评估下单'
+        case 'input':
+          return '整件输机'
+        case 'approve':
+          return '审批'
+        case 'transfer':
+          return '过户'
+        case 'mortgage':
+          return '抵押'
+        case 'mortgageA':
+          return '抵押'
+        case 'guarantee':
+          return '担保'
+        case 'loan':
+          return '放款'
+        case 'charge':
+          return '收费'
+        case 'finish':
+          return '已完成'
+      }
     }
   }
 }

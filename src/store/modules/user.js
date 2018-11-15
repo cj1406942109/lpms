@@ -1,4 +1,4 @@
-import { login, logout } from '@/api/login'
+import { login, logout } from '@/api/user'
 import {
   setToken, removeToken,
   getPhone, setPhone, removePhone,

@@ -25,9 +25,9 @@ export default {
     }
   },
   created () {
-    getOrderById(this.$route.params.orderId).then(response => {
-      if (response.data.status) {
-        this.order = response.data.data
+    getOrderById(this.$route.params.orderId).then(data => {
+      if (data) {
+        this.order = data
       } else {
         this.$message({
           type: 'error',
@@ -39,6 +39,9 @@ export default {
   methods: {
     formateLoanType (loanType) {
       return formateLoanType(loanType)
+    },
+    returnList () {
+      this.$router.push({ path: `/loan-management/order` })
     }
   }
 }

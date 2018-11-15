@@ -3,15 +3,8 @@ import request from '@/utils/request'
 
 // 贷款管理api
 
-export function getMortgageList () {
-  return request({
-    url: '/task/m/view',
-    method: 'get'
-  })
-}
-
 /**
- * 查询订单列表
+ * 查询所有的订单列表
  * @param {*} loanType 贷款类型
  * @param {*} loanNumber 贷款编号
  * @param {*} clientName 客户姓名
@@ -20,16 +13,27 @@ export function getMortgageList () {
  * @param {*} bank 经办银行
  * @param {*} startDate 开始日期
  * @param {*} endDate 结束日期
- * @param {*} pageNo 当前页数
- * @param {*} pageSize 当前页数显示的记录数
+ * @param {*} page 当前页数
+ * @param {*} rows 当前页数显示的记录数
  */
-export function getOrderList (loanType, loanNumber, clientName, IDCard, employeeName, bank, startDate, endDate, pageNo, pageSize) {
-  return request({
-    url: '/orderManage/queryOrder',
-    method: 'get',
-    params: {
-      loanType, loanNumber, clientName, IDCard, employeeName, bank, startDate, endDate, pageNo, pageSize
+// export function getOrderList (loanType, loanNumber, clientName, IDCard, employeeName, bank, startDate, endDate, page, rows) {
+export function getOrderList (options, page, rows) {
+  const params = JSON.parse(JSON.stringify(options))
+  params.startDate = params.period ? params.period[0] : ''
+  params.endDate = params.period ? params.period[0] : ''
+  delete params['period']
+  params.page = page
+  params.rows = rows
+  // 如果查询条件为空，则不添加改查询参数
+  for (const key in params) {
+    if (!params[key]) {
+      delete params[key]
     }
+  }
+  return request({
+    url: '/common/list',
+    method: 'get',
+    params
   })
 }
 
@@ -59,6 +63,21 @@ export function deleteOrder (loanId, taskId, comment) {
     method: 'post',
     data: qs.stringify({
       loanId, taskId, comment
+    })
+  })
+}
+
+/**
+ * 分配任务给员工
+ * @param {*} rootId 任务id
+ * @param {*} employeeId 员工id
+ */
+export function assinTaskToUser (rootId, employeeId) {
+  return request({
+    url: `/common/task/${rootId}/assign`,
+    method: 'post',
+    data: qs.stringify({
+      employeeId
     })
   })
 }
