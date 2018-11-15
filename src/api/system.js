@@ -108,4 +108,17 @@ export function getTableList () {
   })
 }
 
+/**
+ * 设置表格的值
+ * @param {*} valueType 值类型
+ * @param {*} value 值
+ * @param {*} remark 备注
+ */
+export function setTableValue (valueType, value, remark) {
+  return request({
+    url: `/tableValue/save/${valueType}/${value}/${remark}`,
+    method: 'post'
+  })
+}
+
 // ************************* 表格管理结束 *******************************
