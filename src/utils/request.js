@@ -10,10 +10,10 @@ const service = axios.create({
   // baseURL: 'http://192.168.10.225:3000',
   // baseURL: 'http://192.168.10.211:8080',
   // baseURL: 'http://47.93.43.106:8090',
-  // baseURL: 'http://aidr.vip:8080/loan',
+  baseURL: 'http://aidr.vip:8080/loan',
   // baseURL: 'http://192.168.3.2:8080',
   // baseURL: 'http://192.168.3.6:8080',
-  baseURL: 'http://loan.ngrok.xiaomiqiu.cn',
+  // baseURL: 'http://loan.ngrok.xiaomiqiu.cn',
   // baseURL: 'http://116.62.156.52:8080/loan',
   timeout: 15000 // 请求超时时间
 })

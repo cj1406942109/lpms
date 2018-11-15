@@ -21,7 +21,7 @@
             <el-table-column :sortable="true" prop="clientPhone" label="电话"></el-table-column>
             <el-table-column label="操作" width="250">
               <template slot-scope="scope">
-                <el-button type="primary" size="mini" @click="goNext(scope.row)">办理</el-button>
+                <el-button type="primary" size="mini" @click="goNext(getNextPath(scope.row))">办理</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -31,18 +31,11 @@
         <el-card class="box-card quick-entrance">
           <div slot="header">
             <span class="title">快捷入口</span>
-            <el-button type="text">编辑</el-button>
+            <!-- <el-button type="text">编辑</el-button> -->
           </div>
-          <div class="tag-wrapper">
-            <h3 v-if="quickEntrance && quickEntrance.diya.length > 0">抵押贷款</h3>
-            <el-tag v-for="item in quickEntrance.diya" :key="item" v-if="quickEntrance.diya">{{item}}</el-tag>
-          </div>
-          <div class="tag-wrapper">
-            <h3 v-if="quickEntrance && quickEntrance.ershoufang.length > 0">二手房贷款</h3>
-            <el-tag v-for="item in quickEntrance.ershoufang" :key="item"  v-if="quickEntrance.ershoufang">{{item}}</el-tag>
-          </div>
-          <div class="tag-edit-wrapper" v-if="quickEntrance">
-            <!-- <el-transfer v-model="quickEntrance.diya" :data="quickEntranceList"></el-transfer> -->
+          <div class="tag-wrapper" v-for="item in quickEntranceList" :key="item.id">
+            <h3>{{item.title}}</h3>
+            <el-tag v-for="tag in item.value" :key="tag.id" @click.native="goNext(`${item.baseUrl}/${tag.value}`)" :type="item.type">{{tag.title}}</el-tag>
           </div>
         </el-card>
       </el-col>
@@ -68,7 +61,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getQuickEntrance, getNotice } from '@/api/dashboard'
+import { getNotice } from '@/api/dashboard'
 import { getTaskListByEmployeeId as getTaskMListByEmployeeId } from '@/api/mortgage'
 import { getTaskListByEmployeeId as getTaskHListByEmployeeId } from '@/api/house'
 
@@ -78,8 +71,40 @@ export default {
     return {
       todoList: null,
       toodoListLoading: true,
-      quickEntrance: '',
-      quickEntranceList: ['接单', '面谈', '面签', '评估下单', '审批', '抵押', '放款'],
+      quickEntranceList: [
+        {
+          title: '抵押贷款',
+          baseUrl: '/loan-mortgage',
+          type: 'success',
+          value: [
+            { title: '接单', value: 'order-taking' },
+            { title: '面谈', value: 'interview' },
+            { title: '面签', value: 'visa-interview' },
+            { title: '评估下单', value: 'evaluate-order' },
+            { title: '审批', value: 'examine-approve' },
+            { title: '抵押', value: 'mortgage' },
+            { title: '收费', value: 'charge' },
+            { title: '放款', value: 'make-loans' }
+          ]
+        },
+        {
+          title: '二手房贷款',
+          baseUrl: '/house',
+          type: 'warning',
+          value: [
+            { title: '接单', value: 'order-taking' },
+            { title: '面签', value: 'visa-interview' },
+            { title: '评估下单', value: 'evaluate-order' },
+            { title: '整件输机', value: 'integrate-input' },
+            { title: '审批', value: 'examine-approve' },
+            { title: '过户', value: 'transfer' },
+            { title: '抵押', value: 'mortgage' },
+            { title: '担保', value: 'guarantee' },
+            { title: '放款', value: 'make-loans' },
+            { title: '收费', value: 'charge' }
+          ]
+        }
+      ],
       notice: null
     }
   },
@@ -90,7 +115,6 @@ export default {
   },
   created () {
     this.getTodoList()
-    this.GetQuickEntrance()
     this.GetNotice()
   },
   methods: {
@@ -120,11 +144,6 @@ export default {
         this.todoList = listM.concat(listH)
       })
     },
-    GetQuickEntrance () {
-      getQuickEntrance().then(data => {
-        this.quickEntrance = data
-      })
-    },
     GetNotice () {
       getNotice().then(data => {
         this.notice = data
@@ -136,8 +155,8 @@ export default {
     moreNotice () {
       this.$router.push({ path: '/quickpath/notice' })
     },
-    goNext (item) {
-      this.$router.push({ path: this.getNextPath(item) })
+    goNext (path) {
+      this.$router.push({ path })
     },
     getNextPath (item) {
       let baseUrl = ''
@@ -238,7 +257,7 @@ export default {
           }
           .el-tag {
             cursor: pointer;
-            margin-left: 10px;
+            margin: 10px;
           }
         }
       }
