@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
-    <h2>编辑用户</h2>
     <div class="form-wrapper">
+      <h2>编辑用户</h2>
       <el-form :model="accountForm" ref="accountForm" label-width="200px">
         <el-row :gutter="20">
           <el-col :span="10">
@@ -42,11 +42,11 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item>
-          <el-button type="primary" @click="submitForm('accountForm')">保存</el-button>
-          <el-button @click="resetForm('accountForm')">重置</el-button>
-        </el-form-item>
       </el-form>
+    </div>
+    <div class="option">
+      <el-button type="primary" @click="submitForm('accountForm')">保存</el-button>
+      <!-- <el-button @click="resetForm('accountForm')">重置</el-button> -->
     </div>
   </div>
 </template>
@@ -209,12 +209,19 @@ export default {
 
 <style lang="scss" scoped>
   .app-container {
-    padding: 20px;
-    background-color: #fff;
     .form-wrapper {
       padding: 20px;
+      margin-bottom: 20px;
+      background-color: #fff;
       h3 {
         margin-left: 50px;
+      }
+    }
+    .option {
+      text-align: center;
+      margin: 50px;
+      button {
+        width: 200px;
       }
     }
   }
