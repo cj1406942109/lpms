@@ -7,7 +7,7 @@
     </el-steps>
     <div class="form-wrapper" v-if="activeStep=='0'">
       <h3>确定房查征信状态</h3>
-      <el-form :model="checkForm" ref="checkForm" label-width="200px" :rules="checkFormRules">
+      <el-form :model="checkForm" ref="checkForm" label-width="200px" :rules="checkFormRules" key="checkForm">
         <el-row>
           <el-col :span="10">
             <el-form-item label="房查完成时间" prop="houseTime">
@@ -28,7 +28,7 @@
     </div>
     <div class="form-wrapper" v-if="activeStep=='1'">
       <h3>确定整件状态</h3>
-      <el-form :model="catalogForm" ref="catalogForm" label-width="200px" :rules="catalogFormRules" v-if="catalogForm">
+      <el-form :model="catalogForm" ref="catalogForm" label-width="200px" :rules="catalogFormRules" v-if="catalogForm" key="catalogForm">
         <el-row>
           <el-col :span="10">
             <el-form-item label="整件完成时间" prop="inputFinishTime" :rules="[{ required: true, message: '整件完成时间不能为空' }]">
@@ -249,7 +249,7 @@
     </div>
     <div class="form-wrapper" v-if="activeStep=='2'">
       <h3>确定输机状态</h3>
-      <el-form :model="inputForm" ref="inputForm" label-width="200px" :rules="inputFormRules">
+      <el-form :model="inputForm" ref="inputForm" label-width="200px" :rules="inputFormRules" key="inputForm">
         <el-row>
           <el-col :span="10">
             <el-form-item label="输机完成时间" prop="time">

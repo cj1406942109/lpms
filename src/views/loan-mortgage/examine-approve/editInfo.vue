@@ -8,7 +8,7 @@
     </el-steps>
     <div class="form-wrapper" v-if="activeStep=='0'">
       <h3>资料目录表</h3>
-       <el-form :model="catalogForm" ref="catalogForm" label-width="200px" :rules="catalogFormRules" v-if="catalogForm">
+       <el-form :model="catalogForm" ref="catalogForm" label-width="200px" :rules="catalogFormRules" v-if="catalogForm" key="catalogForm">
         <el-row>
           <el-col :span="10">
             <el-form-item label="完成时间" prop="finishTime">
@@ -358,7 +358,7 @@
     </div>
     <div class="form-wrapper" v-if="activeStep=='1'">
       <h3>报审</h3>
-      <el-form :model="approveForm" ref="approveForm" label-width="200px" :rules="approveFormRules">
+      <el-form :model="approveForm" ref="approveForm" label-width="200px" :rules="approveFormRules" key="approveForm">
         <el-form-item label="上报审批时间" prop="time">
           <el-date-picker type="date" placeholder="选择日期" v-model="approveForm.time" value-format="timestamp"></el-date-picker>
         </el-form-item>
@@ -369,7 +369,7 @@
     </div>
     <div class="form-wrapper" v-if="activeStep=='2'">
       <h3>确定审批状态</h3>
-      <el-form :model="approveStatusForm" ref="approveStatusForm" label-width="200px" :rules="approveStatusFormRules">
+      <el-form :model="approveStatusForm" ref="approveStatusForm" label-width="200px" :rules="approveStatusFormRules" key="approveStatusForm">
         <el-form-item label="审批状态" prop="approveState">
           <el-radio-group v-model="approveStatusForm.approveState" :disabled="finishApprove">
             <el-radio :label="1">已通过</el-radio>
@@ -393,9 +393,7 @@
               </el-form-item>
               <el-form-item label="放款条件" prop="loanCondition">
                 <el-select v-model="approveStatusForm.loanCondition" placeholder="请选择" :disabled="finishApprove">
-                  <el-option label="见抵押收件单放款" value="1"></el-option>
-                  <el-option label="见他项权证放款" value="2"></el-option>
-                  <el-option label="见担保函放款" value="3"></el-option>
+                  <el-option v-for="item in loanCondition.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="备注" prop="remark">
@@ -408,17 +406,13 @@
               </el-form-item>
               <el-form-item label="未通过原因" prop="failReason">
                 <el-select v-model="approveStatusForm.failReason" placeholder="请选择" :disabled="finishApprove">
-                  <el-option label="银行拒贷" value="1"></el-option>
-                  <el-option label="补充资料" value="2"></el-option>
-                  <el-option label="其他" value="-1"></el-option>
+                  <el-option v-for="item in failReason.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
                 </el-select>
-                <el-input clearable v-model="approveStatusForm.failReasonOther" placeholder="其他原因" v-if="approveStatusForm.failReason == '-1'" :disabled="finishApprove"></el-input>
+                <el-input clearable v-model="approveStatusForm.failReasonOther" placeholder="其他原因" v-if="approveStatusForm.failReason == '63'" :disabled="finishApprove"></el-input>
               </el-form-item>
               <el-form-item label="后续操作" prop="laterAction">
                 <el-select v-model="approveStatusForm.laterAction" placeholder="请选择" :disabled="finishApprove">
-                  <el-option label="继续操作" :value="1"></el-option>
-                  <el-option label="换行" :value="2"></el-option>
-                  <el-option label="废单" :value="3"></el-option>
+                  <el-option v-for="item in laterAction.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
             </template>
@@ -432,7 +426,7 @@
     </div>
     <div class="form-wrapper" v-if="activeStep=='3' && reportType == '1'">
       <h3>出报告</h3>
-      <el-form :model="reportForm" ref="reportForm" label-width="200px" :rules="reportFormRules">
+      <el-form :model="reportForm" ref="reportForm" label-width="200px" :rules="reportFormRules" key="reportForm">
         <el-form-item label="完成时间" prop="time">
           <el-date-picker type="date" placeholder="选择日期" v-model="reportForm.time" value-format="timestamp"></el-date-picker>
         </el-form-item>
@@ -477,7 +471,7 @@
         </el-row>
         <el-form-item>
           <el-button type="primary" :loading="formLoading" @click="saveReportHandler()">提交</el-button>
-          <!-- <el-button @click="resetForm('reportForm')">重置</el-button> -->
+          <el-button @click="resetForm('reportForm')">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -501,6 +495,7 @@
 // import moment from 'moment'
 import { mapGetters } from 'vuex'
 import {
+  getStaticIndexByKey,
   getTaskById,
   getChecklistById,
   getVisaById,
@@ -581,7 +576,7 @@ export default {
         ],
         rate: [
           { required: true, message: '利率不能为空' },
-          { type: 'number', message: '利率必须为数字值' }
+          { type: 'number', min: 0, max: 100, message: '利率必须为0到100之间的数字' }
         ],
         loanCondition: [{ required: true, message: '请选择放款条件' }],
         failReason: [{ required: true, message: '请选择未通过原因' }],
@@ -601,7 +596,19 @@ export default {
       loanVariety: '',
       finishCatalog: false, // 确认资料目录表完成
       finishSend: false, // 报审完成
-      finishApprove: false // 确定审批状态完成
+      finishApprove: false, // 确定审批状态完成
+      loanCondition: {
+        key: 'mortgageReleaseMoney',
+        value: []
+      },
+      failReason: {
+        key: 'mortgageApprovalNotPass',
+        value: []
+      },
+      laterAction: {
+        key: 'mortgageApprovalFollowUp',
+        value: []
+      }
     }
   },
   created () {
@@ -663,6 +670,9 @@ export default {
         })
       }
     })
+    this.getStaticIndex(this.loanCondition)
+    this.getStaticIndex(this.failReason)
+    this.getStaticIndex(this.laterAction)
   },
   computed: {
     ...mapGetters([
@@ -859,6 +869,18 @@ export default {
       this.reportForm.reports[index1].reportLoanYear = parseFloat(this.preReports[index1][index2].reportLoanYear)
       this.reportForm.reports[index1].reportRepose = this.preReports[index1][index2].reportRepose
       this.reportForm.reports[index1].reportFirst = parseInt(this.preReports[index1][index2].reportFirst)
+    },
+    getStaticIndex (staticIndex) {
+      getStaticIndexByKey(staticIndex.key).then(data => {
+        if (data) {
+          staticIndex.value = data[staticIndex.key]
+        } else {
+          this.$message({
+            type: 'success',
+            message: '静态索引获取失败'
+          })
+        }
+      })
     }
   }
 }

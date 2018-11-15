@@ -6,7 +6,7 @@
     </el-steps>
     <div class="form-wrapper" v-if="activeStep==0">
       <h3>确定抵押状态</h3>
-      <el-form :model="mortgageStatusForm" ref="mortgageStatusForm" label-width="200px" :rules="mortgageStatusFormRules">
+      <el-form :model="mortgageStatusForm" ref="mortgageStatusForm" label-width="200px" :rules="mortgageStatusFormRules" key="mortgageStatusForm">
         <el-form-item label="完成时间" prop="time">
           <el-date-picker type="date" placeholder="选择日期" v-model="mortgageStatusForm.time" value-format="timestamp"></el-date-picker>
         </el-form-item>
@@ -25,7 +25,7 @@
       <el-row>
         <el-col>
           <h3>担保函审批</h3>
-          <el-form :model="guaranteeApproveForm" ref="guaranteeApproveForm" label-width="200px" :rules="guaranteeApproveFormRules">
+          <el-form :model="guaranteeApproveForm" ref="guaranteeApproveForm" label-width="200px" :rules="guaranteeApproveFormRules" key="guaranteeApproveForm">
             <el-form-item label="审批结果" prop="approvePass">
               <el-select v-model="guaranteeApproveForm.approvePass" placeholder="请选择">
                 <el-option label="通过" :value="1"></el-option>
@@ -46,7 +46,7 @@
       <h3>出担保函</h3>
       <el-row :gutter="20">
         <el-col :span="10">
-          <el-form :model="guaranteePublishForm" ref="guaranteePublishForm" label-width="200px" :rules="guaranteePublishFormRules">
+          <el-form :model="guaranteePublishForm" ref="guaranteePublishForm" label-width="200px" :rules="guaranteePublishFormRules" key="guaranteePublishForm">
             <el-form-item label="审批结果" prop="approveResult">
               <el-input clearable v-model="guaranteePublishForm.approveResult"></el-input>
             </el-form-item>

@@ -6,7 +6,7 @@
     </el-steps>
     <div class="form-wrapper" v-if="activeStep=='0'">
       <h3>确定下单状态</h3>
-      <el-form :model="orderStatusForm" ref="orderStatusForm" label-width="200px" :rules="orderStatusFormRules">
+      <el-form :model="orderStatusForm" ref="orderStatusForm" label-width="200px" :rules="orderStatusFormRules" key="orderStatusForm">
         <el-row>
           <el-col :span="10">
             <el-form-item label="完成时间" prop="time">
@@ -14,8 +14,7 @@
             </el-form-item>
             <el-form-item label="评估公司" prop="company">
               <el-select v-model="orderStatusForm.company" placeholder="请选择评估公司" :disabled="finishOrder">
-                <el-option label="公司1" :value="1"></el-option>
-                <el-option label="公司2" :value="2"></el-option>
+                <el-option v-for="item in evaloateCompany.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -31,7 +30,7 @@
     </div>
     <div class="form-wrapper" v-if="activeStep=='1'">
       <h3>出报告</h3>
-      <el-form :model="reportForm" ref="reportForm" label-width="200px" :rules="reportFormRules">
+      <el-form :model="reportForm" ref="reportForm" label-width="200px" :rules="reportFormRules" key="reportForm">
         <el-form-item label="完成时间" prop="time">
           <el-date-picker type="date" placeholder="选择日期" v-model="reportForm.time" value-format="timestamp"></el-date-picker>
         </el-form-item>
@@ -105,6 +104,7 @@
 <script>
 // import moment from 'moment'
 import {
+  getStaticIndexByKey,
   getTaskById,
   getChecklistById,
   getOrderById,
@@ -155,7 +155,11 @@ export default {
       dialogVisible: false,
       listPath: '/loan-mortgage/evaluate-order',
       nextPath: '/loan-mortgage/examine-approve',
-      finishOrder: null
+      finishOrder: false,
+      evaloateCompany: {
+        key: 'mortgageordercompany',
+        value: []
+      }
     }
   },
   watch: {
@@ -277,6 +281,18 @@ export default {
           return false
         }
       })
+    },
+    getStaticIndex (staticIndex) {
+      getStaticIndexByKey(staticIndex.key).then(data => {
+        if (data) {
+          staticIndex.value = data[staticIndex.key]
+        } else {
+          this.$message({
+            type: 'error',
+            message: '静态索引获取失败'
+          })
+        }
+      })
     }
   },
   created () {
@@ -319,6 +335,7 @@ export default {
         })
       }
     })
+    this.getStaticIndex(this.evaloateCompany)
   }
 }
 </script>

@@ -7,7 +7,7 @@
     <div class="form-wrapper">
       <el-row :gutter="20">
         <el-col :span="10">
-          <el-form :model="mortgageInfoForm" ref="mortgageInfoForm" label-width="200px" v-if="mortgageInfoForm">
+          <el-form :model="mortgageInfoForm" ref="mortgageInfoForm" label-width="200px" v-if="mortgageInfoForm" key="mortgageInfoForm">
             <el-form-item label="银行支行">
               <el-input disabled v-model="mortgageInfoForm.loanBank"></el-input>
             </el-form-item>
@@ -18,7 +18,7 @@
               <el-input disabled v-model="mortgageInfoForm.borrowerPhone"></el-input>
             </el-form-item>
             <el-form-item label="房屋所属区局">
-              <el-input disabled v-model="mortgageInfoForm.houseAffiliation"></el-input>
+              <el-input disabled v-model="mortgageInfoForm.houseManager"></el-input>
             </el-form-item>
             <el-form-item label="接单业务员">
               <el-input disabled v-model="mortgageInfoForm.clerkName"></el-input>
@@ -29,7 +29,7 @@
     </div>
     <div class="form-wrapper" v-if="activeStep==0">
       <h3>确定抵押状态</h3>
-      <el-form :model="mortgageStatusForm" ref="mortgageStatusForm" label-width="200px" :rules="mortgageStatusFormRules">
+      <el-form :model="mortgageStatusForm" ref="mortgageStatusForm" label-width="200px" :rules="mortgageStatusFormRules" key="mortgageStatusForm">
         <el-form-item label="完成时间" prop="time">
           <el-date-picker type="date" placeholder="选择日期" v-model="mortgageStatusForm.time" value-format="timestamp"></el-date-picker>
         </el-form-item>
@@ -40,7 +40,7 @@
     </div>
     <div class="form-wrapper" v-if="activeStep==1">
       <h3>确定取证时间</h3>
-      <el-form :model="takeEvidenceForm" ref="takeEvidenceForm" label-width="200px" :rules="takeEvidenceFormRules">
+      <el-form :model="takeEvidenceForm" ref="takeEvidenceForm" label-width="200px" :rules="takeEvidenceFormRules" key="takeEvidenceForm">
         <el-form-item label="完成时间" prop="time">
           <el-date-picker type="date" placeholder="选择日期" v-model="takeEvidenceForm.time" value-format="timestamp"></el-date-picker>
         </el-form-item>
@@ -51,7 +51,7 @@
     </div>
     <div class="form-wrapper" v-if="activeStep==2">
       <h3>确定返证时间</h3>
-      <el-form :model="returnEvidenceForm" ref="returnEvidenceForm" label-width="200px" :rules="returnEvidenceFormRules">
+      <el-form :model="returnEvidenceForm" ref="returnEvidenceForm" label-width="200px" :rules="returnEvidenceFormRules" key="returnEvidenceForm">
         <el-form-item label="完成时间" prop="time">
           <el-date-picker type="date" placeholder="选择日期" v-model="returnEvidenceForm.time" value-format="timestamp"></el-date-picker>
         </el-form-item>

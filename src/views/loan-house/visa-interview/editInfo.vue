@@ -6,7 +6,7 @@
     </el-steps>
     <div class="form-wrapper" v-if="activeStep=='0'">
       <h3>资料目录表</h3>
-      <el-form :model="catalogForm" ref="catalogForm" label-width="200px" :rules="catalogFormRules" v-if="catalogForm">
+      <el-form :model="catalogForm" ref="catalogForm" label-width="200px" :rules="catalogFormRules" v-if="catalogForm" key="catalogForm">
         <el-row>
           <el-col :span="10">
             <el-form-item label="完成时间" prop="finishTime">
@@ -241,14 +241,13 @@
     </div>
     <div class="form-wrapper" v-if="activeStep=='1'">
       <h3>确定面签状态</h3>
-      <el-form :model="contractStatusForm" ref="contractStatusForm" label-width="200px" :rules="contractStatusFormRules">
+      <el-form :model="contractStatusForm" ref="contractStatusForm" label-width="200px" :rules="contractStatusFormRules" key="contractStatusForm">
         <el-form-item label="完成时间" prop="time">
           <el-date-picker type="date" placeholder="选择日期" v-model="contractStatusForm.time" value-format="timestamp"></el-date-picker>
         </el-form-item>
          <el-form-item label="约定地点" prop="address">
           <el-select v-model="contractStatusForm.address" placeholder="请选择签约地点">
-            <el-option label="地点1" :value="0"></el-option>
-            <el-option label="地点2" :value="1"></el-option>
+            <el-option v-for="item in visaPlace.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="">
@@ -275,6 +274,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import {
+  getStaticIndexByKey,
   getVisaById,
   saveCatalog,
   confirmVisa
@@ -393,7 +393,11 @@ export default {
       dialogVisible: false,
       listPath: '/house/visa-interview',
       nextPath: '/house/evaluate-order',
-      activeStep: 0
+      activeStep: 0,
+      visaPlace: {
+        key: 'mortgageviewplace',
+        value: []
+      }
     }
   },
   computed: {
@@ -416,6 +420,7 @@ export default {
         })
       }
     })
+    this.getStaticIndex(this.visaPlace)
   },
   methods: {
     saveCatalog () {
@@ -501,6 +506,18 @@ export default {
           }).catch(() => {})
         } else {
           return false
+        }
+      })
+    },
+    getStaticIndex (staticIndex) {
+      getStaticIndexByKey(staticIndex.key).then(data => {
+        if (data) {
+          staticIndex.value = data[staticIndex.key]
+        } else {
+          this.$message({
+            type: 'error',
+            message: '静态索引获取失败'
+          })
         }
       })
     }

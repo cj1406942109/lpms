@@ -21,7 +21,7 @@
             <el-input clearable v-model="checklistForm.borrowerCompanyPhone"></el-input>
           </el-form-item>
           <el-form-item label="月均收入" prop="borrowerSalary">
-            <el-input clearable v-model="checklistForm.borrowerSalary"><template slot="append">元</template></el-input>
+            <el-input clearable v-model.number="checklistForm.borrowerSalary" type="number" min="0"><template slot="append">元</template></el-input>
           </el-form-item>
           <el-form-item label="联系地址" prop="borrowerAddress">
             <el-input clearable v-model="checklistForm.borrowerAddress"></el-input>
@@ -57,7 +57,7 @@
           </el-form-item>
           <el-form-item label="证件类型" prop="borrowerSpouseCertificateType">
             <el-select placeholder="请选择" v-model="checklistForm.borrowerSpouseCertificateType">
-              <el-option label="身份证" value="1"></el-option>
+              <el-option v-for="item in cardType.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="证件号码" prop="borrowerSpouseCertificateNumber">
@@ -101,60 +101,51 @@
             <el-input clearable v-model="checklistForm.evaluationCompany"></el-input>
           </el-form-item>
           <el-form-item label="房屋成交价" prop="houseTransactionPrice">
-            <el-input clearable v-model="checklistForm.houseTransactionPrice"><template slot="append">万元</template></el-input>
+            <el-input clearable v-model.number="checklistForm.houseTransactionPrice" type="number" min="0"><template slot="append">万元</template></el-input>
           </el-form-item>
           <el-form-item label="房屋评估价" prop="houseEvaluatePrice">
-            <el-input clearable v-model="checklistForm.houseEvaluatePrice"><template slot="append">万元</template></el-input>
+            <el-input clearable v-model.number="checklistForm.houseEvaluatePrice" type="number" min="0"><template slot="append">万元</template></el-input>
           </el-form-item>
           <el-form-item label="贷款金额" prop="loanAmount">
-            <el-input clearable v-model="checklistForm.loanAmount"><template slot="append">万元</template></el-input>
+            <el-input clearable v-model.number="checklistForm.loanAmount" type="number" min="0"><template slot="append">万元</template></el-input>
           </el-form-item>
           <el-form-item label="贷款年限" prop="loanPeriod">
-            <el-input clearable v-model="checklistForm.loanPeriod"><template slot="append">年</template></el-input>
+            <el-input clearable v-model.number="checklistForm.loanPeriod" type="number" min="0"><template slot="append">年</template></el-input>
           </el-form-item>
           <el-form-item label="担保方式" prop="guaranteeType">
-            <el-select placeholder="请选择" v-model="checklistForm.guaranteeType">
-              <el-option label="方式1" value="1"></el-option>
-            </el-select>
+            <el-input clearable v-model="checklistForm.guaranteeType"></el-input>
           </el-form-item>
           <el-form-item label="还款方式" prop="payType">
             <el-select placeholder="请选择" v-model="checklistForm.payType">
-              <el-option label="等额本息" value="1"></el-option>
-              <el-option label="等额本金" value="2"></el-option>
+              <el-option v-for="item in payType.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="贷款类型" prop="loanType">
             <el-select placeholder="请选择" v-model="checklistForm.loanType">
-              <el-option label="普通按揭" value="1"></el-option>
-              <el-option label="组合" value="2"></el-option>
-              <el-option label="公积金" value="3"></el-option>
-              <el-option label="消费贷款" value="4"></el-option>
+              <el-option v-for="item in loanType.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="首付款金额" prop="downPayAmount">
-            <el-input clearable v-model="checklistForm.downPayAmount"><template slot="append">元</template></el-input>
+            <el-input clearable v-model.number="checklistForm.downPayAmount" type="number" min="0"><template slot="append">元</template></el-input>
           </el-form-item>
           <el-form-item label="首付款交付方式" prop="downPayType">
-            <el-select placeholder="请选择" v-model="checklistForm.downPayType">
-              <el-option label="方式1" value="1"></el-option>
-            </el-select>
+            <el-input clearable v-model="checklistForm.downPayType"></el-input>
           </el-form-item>
           <el-form-item label="成交是否真实" prop="isDealReal">
             <el-radio-group v-model="checklistForm.isDealReal">
-              <el-radio :label="1" >是</el-radio>
-              <el-radio :label="0">否</el-radio>
+              <el-radio label="1" >是</el-radio>
+              <el-radio label="0">否</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="客户情况是否真实" prop="isClientSituationReal">
             <el-radio-group v-model="checklistForm.isClientSituationReal">
-              <el-radio :label="1" >是</el-radio>
-              <el-radio :label="0">否</el-radio>
+              <el-radio label="1" >是</el-radio>
+              <el-radio label="0">否</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="卖方存折办理" prop="sellerHandle">
             <el-select placeholder="请选择" v-model="checklistForm.sellerHandle">
-              <el-option label="签约办理" value="1"></el-option>
-              <el-option label="签约后办理" value="2"></el-option>
+              <el-option v-for="item in sellerHandle.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="备注" prop="remark">
@@ -195,16 +186,15 @@
           </el-form-item>
           <el-form-item label="房屋类型" prop="houseType">
             <el-select placeholder="请选择" v-model="checklistForm.houseType">
-              <el-option label="" value=""></el-option>
+              <el-option v-for="item in houseType.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="房屋建筑面积" prop="houseArea">
-            <el-input clearable v-model="checklistForm.houseArea"><template slot="append">平米</template></el-input>
+            <el-input clearable v-model.number="checklistForm.houseArea" type="number" min="0"><template slot="append">平米</template></el-input>
           </el-form-item>
           <el-form-item label="土地属性" prop="houseLandType">
             <el-select placeholder="请选择" v-model="checklistForm.houseLandType">
-              <el-option label="划拨" value="1"></el-option>
-              <el-option label="出让" value="2"></el-option>
+              <el-option v-for="item in landType.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -235,58 +225,155 @@ export default {
   data () {
     return {
       checklistForm: {
-        borrowerAddress: null,
-        borrowerCertificateNumber: null,
-        borrowerCertificateType: null,
-        borrowerCompany: null,
-        borrowerCompanyPhone: null,
+        finishTime: null,
         borrowerName: null,
         borrowerPhone: null,
-        borrowerResidentCity: null,
+        borrowerCompany: null,
+        borrowerCompanyPhone: null,
         borrowerSalary: null,
-        borrowerSpouseCertificateNumber: null,
-        borrowerSpouseCertificateType: null,
-        borrowerSpouseCompany: null,
-        borrowerSpouseCompanyPhone: null,
+        borrowerAddress: null,
+        borrowerResidentCity: null,
+        borrowerCertificateType: null,
+        borrowerCertificateNumber: null,
         borrowerSpouseName: null,
         borrowerSpousePhone: null,
+        borrowerSpouseCompany: null,
+        borrowerSpouseCompanyPhone: null,
         borrowerSpouseResidentCity: null,
-        downPayAmount: null,
-        downPayType: null,
-        evaluationCompany: null,
-        finishTime: null,
-        guaranteeType: null,
-        guarantorCompany: null,
-        guarantorIdCard: null,
-        guarantorName: null,
-        guarantorPhone: null,
-        houseAddress: null,
-        houseAffiliation: null,
-        houseArea: null,
-        houseBuiltTime: null,
-        houseCertificateNumber: null,
-        houseEvaluatePrice: null,
-        houseLandCertificateNumber: null,
-        houseLandType: null,
-        houseTransactionPrice: null,
-        houseType: null,
-        isClientSituationReal: null,
-        isDealReal: null,
-        loanAmount: null,
-        loanBank: null,
-        loanPeriod: null,
-        loanType: null,
-        ownerIdCard: null,
+        borrowerSpouseCertificateType: null,
+        borrowerSpouseCertificateNumber: null,
         ownerName: null,
         ownerPhone: null,
-        ownerSpouseIdCard: null,
+        ownerIdCard: null,
         ownerSpouseName: null,
         ownerSpousePhone: null,
+        ownerSpouseIdCard: null,
+        guarantorName: null,
+        guarantorPhone: null,
+        guarantorIdCard: null,
+        guarantorCompany: null,
+        houseAddress: null,
+        houseCertificateNumber: null,
+        houseLandCertificateNumber: null,
+        houseAffiliation: null,
+        houseBuiltTime: null,
+        houseType: null,
+        houseArea: null,
+        houseLandType: null,
+        loanBank: null,
+        evaluationCompany: null,
+        houseTransactionPrice: null,
+        houseEvaluatePrice: null,
+        loanAmount: null,
+        loanPeriod: null,
+        guaranteeType: null,
         payType: null,
-        remark: null,
-        sellerHandle: null
+        loanType: null,
+        downPayAmount: null,
+        downPayType: null,
+        isDealReal: null,
+        isClientSituationReal: null,
+        sellerHandle: null,
+        remark: null
       },
       rules: {
+        finishTime: [{ required: true, message: '完成时间不能为空' }],
+        borrowerName: [{ required: true, message: '姓名不能为空' }],
+        borrowerPhone: [
+          { required: true, message: '手机号不能为空' },
+          { pattern: /^1[0-9]{10}$/, message: '手机号格式错误' }
+        ],
+        borrowerCompany: [{ required: true, message: '工作单位不能为空' }],
+        borrowerCompanyPhone: [{ required: true, message: '单位电话不能为空' }],
+        borrowerSalary: [
+          { required: true, message: '月均不能为空' },
+          { type: 'number', message: '月均收入必须为数字值' }
+        ],
+        borrowerAddress: [{ required: true, message: '联系地址不能为空' }],
+        borrowerResidentCity: [{ required: true, message: '户口所在地不能为空' }],
+        borrowerCertificateType: [{ required: true, message: '请选择证件类型' }],
+        borrowerCertificateNumber: [
+          { required: true, message: '证件号码不能为空' },
+          { pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}[0-9Xx]$)/, message: '证件号码格式错误' }
+        ],
+        borrowerSpouseName: [{ required: true, message: '姓名不能为空' }],
+        borrowerSpousePhone: [
+          { required: true, message: '手机号不能为空' },
+          { pattern: /^1[0-9]{10}$/, message: '手机号格式错误' }
+        ],
+        borrowerSpouseCompany: [{ required: true, message: '工作单位不能为空' }],
+        borrowerSpouseCompanyPhone: [{ required: true, message: '单位电话不能为空' }],
+        borrowerSpouseResidentCity: [{ required: true, message: '户口所在地不能为空' }],
+        borrowerSpouseCertificateType: [{ required: true, message: '请选择证件类型' }],
+        borrowerSpouseCertificateNumber: [
+          { required: true, message: '证件号码不能为空' },
+          { pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}[0-9Xx]$)/, message: '证件号码格式错误' }
+        ],
+        ownerName: [{ required: true, message: '姓名不能为空' }],
+        ownerPhone: [
+          { required: true, message: '手机号不能为空' },
+          { pattern: /^1[0-9]{10}$/, message: '手机号格式错误' }
+        ],
+        ownerIdCard: [
+          { required: true, message: '身份证号不能为空' },
+          { pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}[0-9Xx]$)/, message: '证件号码格式错误' }
+        ],
+        ownerSpouseName: [{ required: true, message: '姓名不能为空' }],
+        ownerSpousePhone: [
+          { required: true, message: '手机号不能为空' },
+          { pattern: /^1[0-9]{10}$/, message: '手机号格式错误' }
+        ],
+        ownerSpouseIdCard: [
+          { required: true, message: '身份证号不能为空' },
+          { pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}[0-9Xx]$)/, message: '证件号码格式错误' }
+        ],
+        guarantorName: [{ required: true, message: '姓名不能为空' }],
+        guarantorPhone: [
+          { required: true, message: '手机号不能为空' },
+          { pattern: /^1[0-9]{10}$/, message: '手机号格式错误' }
+        ],
+        guarantorIdCard: [
+          { required: true, message: '身份证号不能为空' },
+          { pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}[0-9Xx]$)/, message: '证件号码格式错误' }
+        ],
+        guarantorCompany: [{ required: true, message: '工作单位不能为空' }],
+        houseAddress: [{ required: true, message: '房屋地址不能为空' }],
+        houseCertificateNumber: [{ required: true, message: '房产证号不能为空' }],
+        houseLandCertificateNumber: [{ required: true, message: '土地证号不能为空' }],
+        houseAffiliation: [{ required: true, message: '房屋所属区局不能为空' }],
+        houseBuiltTime: [{ required: true, message: '建成年份不能为空' }],
+        houseType: [{ required: true, message: '请选择房屋类型' }],
+        houseArea: [
+          { required: true, message: '房屋建筑面积不能为空' },
+          { type: 'number', message: '房屋建筑面积必须为数字值' }
+        ],
+        houseLandType: [{ required: true, message: '请选择土地属性' }],
+        loanBank: [{ required: true, message: '贷款银行不能为空' }],
+        evaluationCompany: [{ required: true, message: '评估公司不能为空' }],
+        houseTransactionPrice: [
+          { required: true, message: '成交价不能为空' },
+          { type: 'number', message: '成交价必须为数字值' }
+        ],
+        houseEvaluatePrice: [
+          { required: true, message: '评估值不能为空' },
+          { type: 'number', message: '评估值必须为数字值' }
+        ],
+        loanAmount: [
+          { required: true, message: '贷款金额不能为空' },
+          { type: 'number', message: '贷款金额必须为数字值' }
+        ],
+        loanPeriod: [
+          { required: true, message: '贷款期限不能为空' },
+          { type: 'number', message: '贷款期限必须为数字值' }
+        ],
+        guaranteeType: [{ required: true, message: '担保方式不能为空' }],
+        payType: [{ required: true, message: '请选择还款方式' }],
+        loanType: [{ required: true, message: '请选择贷款类型' }],
+        downPayAmount: [{ required: true, message: '首付款交付金额不能为空' }],
+        downPayType: [{ required: true, message: '首付款交付方式不能为空' }],
+        isDealReal: [{ required: true, message: '请选择成交情况' }],
+        isClientSituationReal: [{ required: true, message: '请选择客户情况' }],
+        sellerHandle: [{ required: true, message: '请选择存折办理' }]
       },
       formLoading: false,
       loanId: '',
@@ -299,16 +386,24 @@ export default {
         key: 'mortgagechecklistcardtype',
         value: []
       },
-      workType: {
-        key: 'mortgagechecklistworktype',
+      houseType: {
+        key: 'sechandregisterlisthousetype',
+        value: []
+      },
+      landType: {
+        key: 'sechandregisterlistlandproperty',
+        value: []
+      },
+      payType: {
+        key: 'sechandregisterlistrepaymentmethod',
         value: []
       },
       loanType: {
-        key: 'mortgagechecklistloantype',
+        key: 'sechandregisterlistloanmethod',
         value: []
       },
-      listSource: {
-        key: 'mortgagechecklistsource',
+      sellerHandle: {
+        key: 'sechandregisterlistpassbooktrans',
         value: []
       }
     }
@@ -384,10 +479,12 @@ export default {
     }
   },
   created () {
-    // this.getStaticIndex(this.cardType)
-    // this.getStaticIndex(this.workType)
-    // this.getStaticIndex(this.loanType)
-    // this.getStaticIndex(this.listSource)
+    this.getStaticIndex(this.cardType)
+    this.getStaticIndex(this.houseType)
+    this.getStaticIndex(this.landType)
+    this.getStaticIndex(this.payType)
+    this.getStaticIndex(this.loanType)
+    this.getStaticIndex(this.sellerHandle)
   }
 }
 </script>

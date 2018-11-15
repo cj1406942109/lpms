@@ -6,7 +6,7 @@
     </el-steps>
     <div class="form-wrapper" v-if="activeStep=='0'">
       <h3>担保流程</h3>
-      <el-form :model="guaranteeForm" ref="guaranteeForm" label-width="200px" :rules="guaranteeFormRules">
+      <el-form :model="guaranteeForm" ref="guaranteeForm" label-width="200px" :rules="guaranteeFormRules" key="guaranteeForm">
         <el-form-item label="是否需要盖章" prop="isNeedStamp">
           <el-radio-group v-model="guaranteeForm.isNeedStamp">
             <el-radio :label="1">是</el-radio>
@@ -26,7 +26,7 @@
     </div>
     <div class="form-wrapper" v-if="activeStep=='1'">
       <h3>出报告</h3>
-      <el-form :model="reportForm" ref="reportForm" label-width="200px" :rules="reportFormRules">
+      <el-form :model="reportForm" ref="reportForm" label-width="200px" :rules="reportFormRules" key="reportForm">
         <el-form-item label="完成时间" prop="time">
           <el-date-picker type="date" placeholder="选择日期" v-model="reportForm.time" value-format="timestamp"></el-date-picker>
         </el-form-item>
@@ -70,6 +70,7 @@
         </el-row>
         <el-form-item>
           <el-button type="primary" :loading="formLoading" @click="saveReportHandler()">提交</el-button>
+          <el-button @click="resetForm('reportForm')">重置</el-button>
         </el-form-item>
       </el-form>
     </div>

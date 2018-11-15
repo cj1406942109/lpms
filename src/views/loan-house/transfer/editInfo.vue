@@ -6,7 +6,7 @@
     </el-steps>
     <div class="form-wrapper" v-if="activeStep=='0'">
       <h3>确定过户状态</h3>
-      <el-form :model="transferForm" ref="transferForm" label-width="200px" :rules="transferFormRules">
+      <el-form :model="transferForm" ref="transferForm" label-width="200px" :rules="transferFormRules" key="transferForm">
         <el-form-item label="完成时间" prop="time">
           <el-date-picker type="date" placeholder="选择日期" v-model="transferForm.time" value-format="timestamp"></el-date-picker>
         </el-form-item>
@@ -17,7 +17,7 @@
     </div>
     <div class="form-wrapper" v-if="activeStep=='1'">
       <h3>确定回证时间</h3>
-      <el-form :model="receiptForm" ref="receiptForm" label-width="200px" :rules="receiptFormRules">
+      <el-form :model="receiptForm" ref="receiptForm" label-width="200px" :rules="receiptFormRules" key="receiptForm">
         <el-form-item label="回证时间" prop="time">
           <el-date-picker type="date" placeholder="选择日期" v-model="receiptForm.time" value-format="timestamp"></el-date-picker>
         </el-form-item>
