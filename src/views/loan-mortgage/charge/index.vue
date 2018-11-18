@@ -53,7 +53,7 @@ export default {
         } else {
           this.$message({
             type: 'error',
-            message: '面签列表获取失败'
+            message: '收费列表获取失败'
           })
         }
       })

@@ -243,7 +243,7 @@ export const constantRouterMap = [
       name: '二手房贷款-收费',
       meta: { title: '收费', icon: 'charge' }
     }, {
-      path: 'guarantee/edit-info/:id/:des',
+      path: 'charge/edit-info/:id/:des',
       hidden: true,
       name: '二手房贷款-收费表格',
       meta: { title: '收费表格' },

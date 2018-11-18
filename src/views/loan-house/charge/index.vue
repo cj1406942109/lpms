@@ -27,7 +27,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getChargeListByEmployeeId } from '@/api/mortgage'
+import { getChargeListByEmployeeId } from '@/api/house'
 export default {
   name: 'charge',
   data () {
@@ -53,13 +53,13 @@ export default {
         } else {
           this.$message({
             type: 'error',
-            message: '面签列表获取失败'
+            message: '收费列表获取失败'
           })
         }
       })
     },
     goNext (item) {
-      this.$router.push({ path: `/loan-mortgage/charge/edit-info/${item.id}/${item.des}` })
+      this.$router.push({ path: `/house/charge/edit-info/${item.id}/${item.des}` })
     },
     tagState (item) {
       switch (item) {

@@ -5,7 +5,7 @@
  * @GitHub: https://github.com/cj1406942109
  * @Date: 2018-11-06 17:31:54
  * @LastEditors: Abraham
- * @LastEditTime: 2018-11-19 01:02:35
+ * @LastEditTime: 2018-11-19 01:51:25
  * @Description: 二手房贷款api
  */
 
@@ -706,14 +706,16 @@ export function getChargeListByEmployeeId (employeeId) {
 /**
  * 确定收费
  * @param {*} chargeId 收费id
- * @param {*} time 收费时间
+ * @param {*} param1 收费表单
  */
-export function confirmCharge (chargeId, time) {
+export function confirmCharge (chargeId, {
+  isA, timeA, isB, timeB, isC, timeC
+}) {
   return request({
-    url: `/house/charge/${chargeId}`,
+    url: `/house/charge/state/${chargeId}`,
     method: 'post',
     data: qs.stringify({
-      time
+      isA, timeA, isB, timeB, isC, timeC
     })
   })
 }
