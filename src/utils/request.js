@@ -1,7 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
 import { getToken, getUserId } from './auth'
-import { Message, Notification } from 'element-ui'
+import { Notification } from 'element-ui'
 
 // 创建axios实例
 const service = axios.create({
@@ -42,11 +42,21 @@ service.interceptors.response.use(
       if (response.data.result) {
         return response.data.data
       } else {
-        Message({
-          type: 'error',
-          message: `${response.data.data}`
-        })
-        return null
+        if (response.data.statusCode === 709) {
+          Notification({
+            title: '用户信息验证失败',
+            type: 'error',
+            message: response.data.data
+          })
+          return 709
+        } else {
+          Notification({
+            title: '请求出错',
+            type: 'error',
+            message: response.data.data
+          })
+          return null
+        }
       }
     }
   },
@@ -81,19 +91,11 @@ service.interceptors.response.use(
   // },
   error => {
     // console.log(error)// for debug
-    if (error.response.data.statusCode === 709) {
-      Notification({
-        title: '用户信息验证失败',
-        type: 'error',
-        message: error.response.data.data
-      })
-    } else {
-      Notification({
-        title: '请求出错',
-        type: 'error',
-        message: error.message
-      })
-    }
+    Notification({
+      title: '请求出错',
+      type: 'error',
+      message: error.message
+    })
     // return Promise.reject(error) 不抛出错误
   }
 )

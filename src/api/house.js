@@ -5,7 +5,7 @@
  * @GitHub: https://github.com/cj1406942109
  * @Date: 2018-11-06 17:31:54
  * @LastEditors: Abraham
- * @LastEditTime: 2018-11-15 03:20:06
+ * @LastEditTime: 2018-11-19 01:02:35
  * @Description: 二手房贷款api
  */
 
@@ -679,6 +679,46 @@ export function confirmLoan (loanId) {
 }
 
 // ************************* 放款结束 *******************************
+
+// ************************* 收费开始 *******************************
+
+/**
+ * 获取收费列表
+ */
+export function getChargeList () {
+  return request({
+    url: '/house/charge',
+    method: 'get'
+  })
+}
+
+/**
+ * 根据id获取员工的收费列表
+ * @param {*} employeeId 员工id
+ */
+export function getChargeListByEmployeeId (employeeId) {
+  return request({
+    url: `/house/charge/employee/${employeeId}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 确定收费
+ * @param {*} chargeId 收费id
+ * @param {*} time 收费时间
+ */
+export function confirmCharge (chargeId, time) {
+  return request({
+    url: `/house/charge/${chargeId}`,
+    method: 'post',
+    data: qs.stringify({
+      time
+    })
+  })
+}
+
+// ************************* 收费结束 *******************************
 
 // ************************* 表单字段及静态索引管理开始 *******************************
 

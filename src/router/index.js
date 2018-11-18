@@ -237,6 +237,17 @@ export const constantRouterMap = [
       component: () => import('@/views/loan-house/make-loans'),
       name: '二手房贷款-放款',
       meta: { title: '放款', icon: 'make-loans' }
+    }, {
+      path: 'charge',
+      component: () => import('@/views/loan-house/charge'),
+      name: '二手房贷款-收费',
+      meta: { title: '收费', icon: 'charge' }
+    }, {
+      path: 'guarantee/edit-info/:id/:des',
+      hidden: true,
+      name: '二手房贷款-收费表格',
+      meta: { title: '收费表格' },
+      component: () => import('@/views/loan-house/charge/editInfo')
     }]
   },
   {

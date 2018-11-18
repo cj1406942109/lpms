@@ -60,7 +60,7 @@
     <div>
       <el-table :data="orderList" v-loading.body="orderListLoading" style="width: 100%" border stripe>
         <el-table-column type="index" label="序号" width="100"></el-table-column>
-        <el-table-column :sortable="true" prop="rootId" label="贷款编号" width="200"></el-table-column>
+        <el-table-column :sortable="true" prop="id" label="贷款编号" width="200"></el-table-column>
         <el-table-column :sortable="true" label="贷款类型">
           <template slot-scope="scope">
             <el-tag :type="`${scope.row.id}`[0] == '1' ? 'success':'warning'">
@@ -70,7 +70,10 @@
         </el-table-column>
         <el-table-column :sortable="true" prop="clientName" label="客户姓名"></el-table-column>
         <el-table-column :sortable="true" prop="clientPhone" label="联系方式"></el-table-column>
-        <el-table-column :sortable="true" prop="des" label="贷款当前所处流程" width="200">
+        <el-table-column :sortable="true" prop="state" label="贷款当前所处流程" width="200">
+          <template slot-scope="scope">
+            {{scope.row.state | formatState}}
+          </template>
         </el-table-column>
         <el-table-column label="操作" width="250">
           <template slot-scope="scope">
@@ -83,7 +86,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="pageNo"
-        :page-sizes="[20, 50, 100]"
+        :page-sizes="[10, 20, 50, 100]"
         :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="pageTotal">
@@ -137,7 +140,7 @@ export default {
         ]
       },
       pageNo: 1,
-      pageSize: 20,
+      pageSize: 10,
       pageTotal: 0,
       dialogFormVisible: false,
       selectedOrder: '',
@@ -170,15 +173,49 @@ export default {
       }
     }
   },
+  filters: {
+    formatState: function (val) {
+      switch (val) {
+        case 'checklist':
+          return '接单'
+        case 'view':
+          return '面谈'
+        case 'visa':
+          return '面签'
+        case 'order':
+          return '评估下单'
+        case 'input':
+          return '整件输机'
+        case 'approve':
+          return '审批'
+        case 'transfer':
+          return '过户'
+        case 'mortgage':
+          return '抵押'
+        case 'mortgageA':
+          return '抵押'
+        case 'guarantee':
+          return '担保'
+        case 'loan':
+          return '放款'
+        case 'charge':
+          return '收费'
+        case 'finish':
+          return '已完成'
+      }
+    }
+  },
   created () {
     this.queryOrder()
   },
   methods: {
     handleSizeChange (val) {
-      console.log(`每页 ${val} 条`)
+      this.pageSize = val
+      this.queryOrder()
     },
     handleCurrentChange (val) {
-      console.log(`当前页: ${val}`)
+      this.pageNo = val
+      this.queryOrder()
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()
@@ -188,6 +225,7 @@ export default {
         this.orderListLoading = false
         if (data) {
           this.orderList = data.mortgage.concat(data.house)
+          this.pageTotal = data.houseListSize + data.mortgageListSize
         } else {
           this.$message({
             type: 'error',
@@ -197,7 +235,7 @@ export default {
       })
     },
     goDetail (item) {
-      this.$router.push({ path: `/loan-management/order/status/${item.rootId}` })
+      this.$router.push({ path: `/loan-management/order/status/${item.id}` })
     },
     deleteOrder (item) {
       this.dialogFormVisible = true

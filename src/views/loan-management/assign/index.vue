@@ -3,6 +3,14 @@
     <el-tabs v-model="activeTab">
       <el-tab-pane label="抵押贷款" name="mortgage">
         <h3>抵押贷款业务分配</h3>
+        <el-alert title="开始分配之前，请选择要分配的贷款状态，点击确定按钮获取待分配列表" type="warning"></el-alert>
+        <div class="option-wrapper">
+          贷款状态：
+          <el-select v-model="loanMStatus" placeholder="请选择贷款状态">
+            <el-option v-for="item in loanMStatusOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+          <el-button type="primary" @click="filterOrderList()">确定</el-button>
+        </div>
         <el-table :data="mortgageList" v-loading.body="mortgageListLoading" style="width: 100%" border stripe>
           <el-table-column type="index" label="序号" width="100"></el-table-column>
           <el-table-column :sortable="true" prop="rootId" label="贷款编号" width="200"></el-table-column>
@@ -25,6 +33,14 @@
       </el-tab-pane>
       <el-tab-pane label="二手房贷款" name="house">
         <h3>二手房贷款业务分配</h3>
+        <el-alert title="开始分配之前，请选择要分配的贷款状态，点击确定按钮获取待分配列表" type="warning"></el-alert>
+        <div class="option-wrapper">
+          贷款状态：
+          <el-select v-model="loanHStatus" placeholder="请选择贷款状态">
+            <el-option v-for="item in loanHStatusOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+          <el-button type="primary" @click="filterOrderList()">确定</el-button>
+        </div>
         <el-table :data="houseList" v-loading.body="houseListLoading" style="width: 100%" border stripe>
           <el-table-column type="index" label="序号" width="100"></el-table-column>
           <el-table-column :sortable="true" prop="rootId" label="贷款编号" width="200"></el-table-column>
@@ -82,18 +98,30 @@ export default {
   data () {
     return {
       mortgageList: [],
-      mortgageListLoading: true,
+      mortgageListLoading: false,
       houseList: [],
-      houseListLoading: true,
+      houseListLoading: false,
       activeTab: 'mortgage',
       dialogVisible: false,
       userList: [],
-      currentTask: ''
+      currentTask: '',
+      loanMStatus: 'ALL',
+      loanHStatus: 'ALL',
+      loanMStatusOptions: [
+        { label: '所有', value: 'ALL' },
+        { label: '面谈', value: 'VIEW' },
+        { label: '面签', value: 'VISA' }
+      ],
+      loanHStatusOptions: [
+        { label: '所有', value: 'ALL' },
+        { label: '面签', value: 'VISA' },
+        { label: '评估下单', value: 'ORDER' },
+        { label: '过户', value: 'TRANSFER' },
+        { label: '担保', value: 'GUARANTEE' }
+      ]
     }
   },
   created () {
-    this.getMortgageList()
-    this.getHouseList()
     this.getUserList()
   },
   methods: {
@@ -107,104 +135,43 @@ export default {
       const property = column['property']
       return row[property] === value
     },
-    getMortgageList () {
-      this.mortgageList = []
-      let viewList = []
-      let visaList = []
-      Promise.all([getViewList().then(data => {
-        if (data) {
-          viewList = data
-        } else {
-          this.$message({
-            type: 'error',
-            message: '获取抵押贷款面谈任务列表失败'
-          })
-        }
-      }), getVisaMList().then(data => {
-        if (data) {
-          visaList = data
-        } else {
-          this.$message({
-            type: 'error',
-            message: '获取抵押贷款面签任务列表失败'
-          })
-        }
-      })]).then(() => {
-        this.mortgageListLoading = false
-        viewList.forEach(ele => {
-          if (ele.state === 'open') {
-            this.mortgageList.push(ele)
-          }
-        })
-        visaList.forEach(ele => {
-          if (ele.state === 'open') {
-            this.mortgageList.push(ele)
-          }
-        })
-      })
+    getViewMList () {
+      return this.getListByStatus(getViewList, '抵押', '面谈')
     },
-    getHouseList () {
-      this.houseList = []
-      let visaList = []
-      let orderList = []
-      let transferList = []
-      let guaranteeList = []
-      Promise.all([getVisaHList().then(data => {
-        if (data) {
-          visaList = data
-        } else {
-          this.$message({
-            type: 'error',
-            message: '获取二手房贷款面签任务列表失败'
-          })
-        }
-      }), getOrderList().then(data => {
-        if (data) {
-          orderList = data
-        } else {
-          this.$message({
-            type: 'error',
-            message: '获取二手房贷款评估下单任务列表失败'
-          })
-        }
-      }), getTransferList().then(data => {
-        if (data) {
-          transferList = data
-        } else {
-          this.$message({
-            type: 'error',
-            message: '获取二手房贷款过户任务列表失败'
-          })
-        }
-      }), getGuaranteeList().then(data => {
-        if (data) {
-          guaranteeList = data
-        } else {
-          this.$message({
-            type: 'error',
-            message: '获取二手房贷款担保任务列表失败'
-          })
-        }
-      })]).then(() => {
-        this.houseListLoading = false
-        visaList.forEach(ele => {
-          if (ele.state === 'open') {
-            this.houseList.push(ele)
-          }
-        })
-        orderList.forEach(ele => {
-          if (ele.state === 'open') {
-            this.houseList.push(ele)
-          }
-        })
-        transferList.forEach(ele => {
-          if (ele.state === 'open') {
-            this.houseList.push(ele)
-          }
-        })
-        guaranteeList.forEach(ele => {
-          if (ele.state === 'open') {
-            this.houseList.push(ele)
+    getVisaMList () {
+      return this.getListByStatus(getVisaMList, '抵押', '面签')
+    },
+    getVisaHList () {
+      return this.getListByStatus(getVisaHList, '二手房', '面签')
+    },
+    getOrderHList () {
+      return this.getListByStatus(getOrderList, '二手房', '评估下单')
+    },
+    getTransferHList () {
+      return this.getListByStatus(getTransferList, '二手房', '过户')
+    },
+    getGuaranteeHList () {
+      return this.getListByStatus(getGuaranteeList, '二手房', '担保')
+    },
+    getListByStatus (f, loanType, status) {
+      return new Promise((resolve, reject) => {
+        f().then(data => {
+          if (data) {
+            if (data === 709) {
+              this.$message({
+                type: 'warning',
+                message: `没有权限获取${loanType}贷款${status}任务列表`
+              })
+              resolve([])
+            } else {
+              resolve(data)
+            }
+          } else {
+            this.$message({
+              type: 'error',
+              message: `获取${loanType}贷款${status}任务列表失败`
+            })
+            reject()
           }
         })
       })
@@ -243,8 +210,7 @@ export default {
               type: 'success',
               message: '任务分配成功'
             })
-            this.getMortgageList()
-            this.getHouseList()
+            this.filterOrderList()
           } else {
             this.$message({
               type: 'error',
@@ -269,6 +235,104 @@ export default {
         default:
           return 'primary'
       }
+    },
+    filterOrderList () {
+      let tempList = []
+      if (this.activeTab === 'mortgage') {
+        // 抵押贷款
+        this.mortgageList = []
+        this.mortgageListLoading = true
+        if (this.loanMStatus === 'ALL') {
+          const viewList = []
+          const visaList = []
+          Promise.all([this.getViewMList().then(data => {
+            this.viewList = data
+          }), this.getVisaMList().then(data => {
+            this.visaList = data
+          })]).then(() => {
+            this.mortgageListLoading = false
+            tempList = viewList.concat(visaList)
+          }).catch(() => {
+            this.mortgageListLoading = false
+          })
+        } else if (this.loanMStatus === 'VIEW') {
+          this.getViewMList().then((data) => {
+            this.mortgageListLoading = false
+            tempList = data
+          }).catch(() => {
+            this.mortgageListLoading = false
+          })
+        } else if (this.loanMStatus === 'VISA') {
+          this.getVisaMList().then((data) => {
+            this.mortgageListLoading = false
+            tempList = data
+          }).catch(() => {
+            this.mortgageListLoading = false
+          })
+        }
+        tempList.forEach(ele => {
+          if (ele.state === 'open') {
+            this.mortgageList.push(ele)
+          }
+        })
+      } else if (this.activeTab === 'house') {
+        // 二手房贷款
+        this.houseList = []
+        this.houseListLoading = true
+        if (this.loanHStatus === 'ALL') {
+          const visaList = []
+          const orderList = []
+          const transferList = []
+          const guaranteeList = []
+          Promise.all([this.getVisaHList().then(data => {
+            this.visaList = data
+          }), this.getOrderHList().then(data => {
+            this.orderList = data
+          }), this.getTransferHList().then(data => {
+            this.transferList = data
+          }), this.getGuaranteeHList().then(data => {
+            this.guaranteeList = data
+          })]).then(() => {
+            this.houseListLoading = false
+            tempList = visaList.concat(orderList).concat(transferList).concat(guaranteeList)
+          }).catch(() => {
+            this.houseListLoading = false
+          })
+        } else if (this.loanHStatus === 'VISA') {
+          this.getVisaHList().then((data) => {
+            this.houseListLoading = false
+            tempList = data
+          }).catch(() => {
+            this.houseListLoading = false
+          })
+        } else if (this.loanHStatus === 'ORDER') {
+          this.getOrderHList().then((data) => {
+            this.houseListLoading = false
+            tempList = data
+          }).catch(() => {
+            this.houseListLoading = false
+          })
+        } else if (this.loanHStatus === 'TRANSFER') {
+          this.getTransferHList().then((data) => {
+            this.houseListLoading = false
+            tempList = data
+          }).catch(() => {
+            this.houseListLoading = false
+          })
+        } else if (this.loanHStatus === 'GUARANTEE') {
+          this.getGuaranteeHList().then((data) => {
+            this.houseListLoading = false
+            tempList = data
+          }).catch(() => {
+            this.houseListLoading = false
+          })
+        }
+        tempList.forEach(ele => {
+          if (ele.state === 'open') {
+            this.mortgageList.push(ele)
+          }
+        })
+      }
     }
   }
 }
@@ -278,5 +342,8 @@ export default {
   .app-container {
     padding: 20px;
     background-color: #fff;
+    .option-wrapper {
+      margin: 20px;
+    }
   }
 </style>
