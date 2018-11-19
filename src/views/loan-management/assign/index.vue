@@ -236,6 +236,15 @@ export default {
           return 'primary'
       }
     },
+    orderStatusFilter (list) {
+      const tempList = []
+      list.forEach(ele => {
+        if (ele.state === 'open') {
+          tempList.push(ele)
+        }
+      })
+      return tempList
+    },
     filterOrderList () {
       let tempList = []
       if (this.activeTab === 'mortgage') {
@@ -243,15 +252,16 @@ export default {
         this.mortgageList = []
         this.mortgageListLoading = true
         if (this.loanMStatus === 'ALL') {
-          const viewList = []
-          const visaList = []
+          let viewList = []
+          let visaList = []
           Promise.all([this.getViewMList().then(data => {
-            this.viewList = data
+            viewList = data
           }), this.getVisaMList().then(data => {
-            this.visaList = data
+            visaList = data
           })]).then(() => {
             this.mortgageListLoading = false
             tempList = viewList.concat(visaList)
+            this.mortgageList = this.orderStatusFilter(tempList)
           }).catch(() => {
             this.mortgageListLoading = false
           })
@@ -259,6 +269,7 @@ export default {
           this.getViewMList().then((data) => {
             this.mortgageListLoading = false
             tempList = data
+            this.mortgageList = this.orderStatusFilter(tempList)
           }).catch(() => {
             this.mortgageListLoading = false
           })
@@ -266,35 +277,32 @@ export default {
           this.getVisaMList().then((data) => {
             this.mortgageListLoading = false
             tempList = data
+            this.mortgageList = this.orderStatusFilter(tempList)
           }).catch(() => {
             this.mortgageListLoading = false
           })
         }
-        tempList.forEach(ele => {
-          if (ele.state === 'open') {
-            this.mortgageList.push(ele)
-          }
-        })
       } else if (this.activeTab === 'house') {
         // 二手房贷款
         this.houseList = []
         this.houseListLoading = true
         if (this.loanHStatus === 'ALL') {
-          const visaList = []
-          const orderList = []
-          const transferList = []
-          const guaranteeList = []
+          let visaList = []
+          let orderList = []
+          let transferList = []
+          let guaranteeList = []
           Promise.all([this.getVisaHList().then(data => {
-            this.visaList = data
+            visaList = data
           }), this.getOrderHList().then(data => {
-            this.orderList = data
+            orderList = data
           }), this.getTransferHList().then(data => {
-            this.transferList = data
+            transferList = data
           }), this.getGuaranteeHList().then(data => {
-            this.guaranteeList = data
+            guaranteeList = data
           })]).then(() => {
             this.houseListLoading = false
             tempList = visaList.concat(orderList).concat(transferList).concat(guaranteeList)
+            this.houseList = this.orderStatusFilter(tempList)
           }).catch(() => {
             this.houseListLoading = false
           })
@@ -302,6 +310,7 @@ export default {
           this.getVisaHList().then((data) => {
             this.houseListLoading = false
             tempList = data
+            this.houseList = this.orderStatusFilter(tempList)
           }).catch(() => {
             this.houseListLoading = false
           })
@@ -309,6 +318,7 @@ export default {
           this.getOrderHList().then((data) => {
             this.houseListLoading = false
             tempList = data
+            this.houseList = this.orderStatusFilter(tempList)
           }).catch(() => {
             this.houseListLoading = false
           })
@@ -316,6 +326,7 @@ export default {
           this.getTransferHList().then((data) => {
             this.houseListLoading = false
             tempList = data
+            this.houseList = this.orderStatusFilter(tempList)
           }).catch(() => {
             this.houseListLoading = false
           })
@@ -323,15 +334,11 @@ export default {
           this.getGuaranteeHList().then((data) => {
             this.houseListLoading = false
             tempList = data
+            this.houseList = this.orderStatusFilter(tempList)
           }).catch(() => {
             this.houseListLoading = false
           })
         }
-        tempList.forEach(ele => {
-          if (ele.state === 'open') {
-            this.mortgageList.push(ele)
-          }
-        })
       }
     }
   }
