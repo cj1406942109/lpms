@@ -71,12 +71,12 @@ export default {
     confirmCharge () {
       this.$refs['chargeForm'].validate((valid) => {
         if (valid) {
-          if (this.showFlowDialog) {
-            this.$confirm('请确认信息填写无误，是否提交？', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
+          this.$confirm('请确认信息填写无误，是否提交？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            if (this.showFlowDialog) {
               this.formLoading = true
               this.$message({
                 type: 'info',
@@ -97,25 +97,25 @@ export default {
                   })
                 }
               })
-            }).catch(() => {})
-          } else {
-            this.formLoading = true
-            confirmCharge(this.chargeId, this.chargeForm.time).then(data => {
-              this.formLoading = false
-              if (data) {
-                this.finishCharge = true
-                this.$message({
-                  type: 'success',
-                  message: '确定收费状态成功'
-                })
-              } else {
-                this.$message({
-                  type: 'error',
-                  message: '确定收费状态失败'
-                })
-              }
-            })
-          }
+            } else {
+              this.formLoading = true
+              confirmCharge(this.chargeId, this.chargeForm.time).then(data => {
+                this.formLoading = false
+                if (data) {
+                  this.finishCharge = true
+                  this.$message({
+                    type: 'success',
+                    message: '确定收费状态成功'
+                  })
+                } else {
+                  this.$message({
+                    type: 'error',
+                    message: '确定收费状态失败'
+                  })
+                }
+              })
+            }
+          }).catch(() => {})
         } else {
           return false
         }

@@ -69,7 +69,7 @@ export default {
       })
     },
     goNext (item) {
-      this.$router.push({ path: `/house/visa-interview/edit-info/${item.id}/${item.des}` })
+      this.$router.push({ path: `/house/visa-interview/edit-info/${item.id}` })
     },
     tagState (item) {
       switch (item) {

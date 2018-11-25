@@ -5,7 +5,7 @@
  * @GitHub: https://github.com/cj1406942109
  * @Date: 2018-11-06 17:31:54
  * @LastEditors: Abraham
- * @LastEditTime: 2018-11-19 01:51:25
+ * @LastEditTime: 2018-11-26 04:30:01
  * @Description: 二手房贷款api
  */
 
@@ -62,6 +62,21 @@ export function getTaskListByEmployeeId (employeeId) {
 export function saveChecklist (checklistId, checklist) {
   return request({
     url: `/house/checklist/${checklistId}`,
+    method: 'post',
+    data: qs.stringify({
+      checklist: JSON.stringify(checklist)
+    })
+  })
+}
+
+/**
+ * 更新接单表
+ * @param {*} checklistId 接单表id
+ * @param {*} checkList 接单表
+ */
+export function updateChecklist (checklistId, checklist) {
+  return request({
+    url: `/house/checklist/update/${checklistId}`,
     method: 'post',
     data: qs.stringify({
       checklist: JSON.stringify(checklist)
@@ -152,6 +167,20 @@ export function getCatalogOtherStructure () {
 export function saveCatalog (catalog) {
   return request({
     url: '/house/visa/catalog',
+    method: 'post',
+    data: qs.stringify({
+      catalog: JSON.stringify(catalog)
+    })
+  })
+}
+
+/**
+ * 更新资料目录表
+ * @param {*} catalog 资料目录表
+ */
+export function updateCatalog (catalog) {
+  return request({
+    url: '/house/visa/update/catalog',
     method: 'post',
     data: qs.stringify({
       catalog: JSON.stringify(catalog)
@@ -260,6 +289,25 @@ export function saveReport (orderId, time, type, report) {
   })
 }
 
+/**
+ * 更新报告
+ * @param {*} orderId 订单id
+ * @param {*} time 时间
+ * @param {*} type 报告类型
+ * @param {*} report 报告
+ */
+export function updateReport (orderId, time, type, report) {
+  return request({
+    url: `/house/order/update/report/${orderId}`,
+    method: 'post',
+    data: qs.stringify({
+      time,
+      type,
+      report: JSON.stringify(report)
+    })
+  })
+}
+
 // ************************* 评估下单结束 *******************************
 
 // ************************* 整件输机开始 *******************************
@@ -322,6 +370,22 @@ export function confirmCheck (orderId, houseTime, creditTime) {
 export function confirmIntegrate (inputId, catalog) {
   return request({
     url: '/house/input/catalog',
+    method: 'post',
+    data: qs.stringify({
+      inputId,
+      catalog: JSON.stringify(catalog)
+    })
+  })
+}
+
+/**
+ * 更新整件状态
+ * @param {*} inputId id
+ * @param {*} catalog 资料目录表
+ */
+export function updateIntegrate (inputId, catalog) {
+  return request({
+    url: '/house/input/update/catalog',
     method: 'post',
     data: qs.stringify({
       inputId,
@@ -405,6 +469,21 @@ export function completeApprove (approveId, time) {
 export function confirmApproveStatus (approveId, approve) {
   return request({
     url: `/house/approve/${approveId}`,
+    method: 'post',
+    data: qs.stringify({
+      approve: JSON.stringify(approve)
+    })
+  })
+}
+
+/**
+ * 更新报审状态
+ * @param {*} approveId 报审id
+ * @param {*} approve 报审表
+ */
+export function updateApproveStatus (approveId, approve) {
+  return request({
+    url: `/house/approve/update/${approveId}`,
     method: 'post',
     data: qs.stringify({
       approve: JSON.stringify(approve)
@@ -632,6 +711,23 @@ export function saveFormalReport (guaranteeId, time, report) {
 }
 
 /**
+ * 更新正评
+ * @param {*} guaranteeId 担保id
+ * @param {*} time 时间
+ * @param {*} report 报告
+ */
+export function updateFormalReport (guaranteeId, time, report) {
+  return request({
+    url: `house/guarantee/update/report/${guaranteeId}`,
+    method: 'post',
+    data: qs.stringify({
+      time,
+      report: JSON.stringify(report)
+    })
+  })
+}
+
+/**
  * 结束当前担保流程
  * @param {*} guaranteeId 担保id
  */
@@ -668,13 +764,27 @@ export function getLoanListByEmployeeId (employeeId) {
 }
 
 /**
+ * 根据id获取放款
+ * @param {*} loanId id
+ */
+export function getLoanById (loanId) {
+  return request({
+    url: `/house/loan/${loanId}`,
+    method: 'get'
+  })
+}
+
+/**
  * 确认放款
  * @param {*} loanId 放款id
  */
-export function confirmLoan (loanId) {
+export function confirmLoan (loanId, { loanTime, backTime, name }) {
   return request({
     url: `/house/loan/${loanId}`,
-    method: 'post'
+    method: 'post',
+    data: qs.stringify({
+      loanTime, backTime, name
+    })
   })
 }
 
@@ -699,6 +809,17 @@ export function getChargeList () {
 export function getChargeListByEmployeeId (employeeId) {
   return request({
     url: `/house/charge/employee/${employeeId}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 根据id获取收费信息
+ * @param {*} chargeId 收费id
+ */
+export function getChargeById (chargeId) {
+  return request({
+    url: `/house/charge/${chargeId}`,
     method: 'get'
   })
 }

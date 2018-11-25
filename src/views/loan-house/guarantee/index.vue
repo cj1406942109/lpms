@@ -79,8 +79,7 @@ export default {
       })
     },
     goNext (item) {
-      const reportType = item.extra.commentType === '正评' ? 2 : 1
-      this.$router.push({ path: `/house/guarantee/edit-info/${item.id}/${reportType}/${item.extra.guaranteeState.done}/${item.des}` })
+      this.$router.push({ path: `/house/guarantee/edit-info/${item.id}` })
     },
     tagState (item) {
       switch (item) {

@@ -69,7 +69,7 @@ export default {
       })
     },
     goNext (item) {
-      this.$router.push({ path: `/house/examine-approve/edit-info/${item.id}/${item.extra.sendState.done}/${item.des}` })
+      this.$router.push({ path: `/house/examine-approve/edit-info/${item.id}` })
     },
     tagState (item) {
       switch (item) {

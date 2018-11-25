@@ -61,15 +61,16 @@
       <charge-m v-if="loanType == '1' && currentStep == '6'" :chargeId="currentFlow.id"/>
       <make-loan-m v-if="loanType == '1' && currentStep == '7'" :makeLoanId="currentFlow.id"/>
 
-      <order-taking-h v-if="loanType == '2' && currentStep == '0'"></order-taking-h>
-      <visa-interview-h v-if="loanType == '2' && currentStep == '1'"></visa-interview-h>
-      <evaluate-order-h v-if="loanType == '2' && currentStep == '2'"></evaluate-order-h>
-      <integrate-input-h v-if="loanType == '2' && currentStep == '3'"></integrate-input-h>
-      <examine-approve-h v-if="loanType == '2' && currentStep == '4'"></examine-approve-h>
-      <transfer-h v-if="loanType == '2' && currentStep == '5'"></transfer-h>
-      <mortgage-h v-if="loanType == '2' && currentStep == '6'"></mortgage-h>
-      <guarantee-h v-if="loanType == '2' && currentStep == '7'"></guarantee-h>
-      <charge-h v-if="loanType == '2' && currentStep == '8'"></charge-h>
+      <order-taking-h v-if="loanType == '2' && currentStep == '0'" :checklistId="currentFlow.id" :finishFlow="!(currentFlow.state == 'open')"/>
+      <visa-interview-h v-if="loanType == '2' && currentStep == '1'" :visaId="currentFlow.id"/>
+      <evaluate-order-h v-if="loanType == '2' && currentStep == '2'" :orderId="currentFlow.id"/>
+      <integrate-input-h v-if="loanType == '2' && currentStep == '3'" :inputId="currentFlow.id"/>
+      <examine-approve-h v-if="loanType == '2' && currentStep == '4'" :approveId="currentFlow.id"/>
+      <transfer-h v-if="loanType == '2' && currentStep == '5'" :transferId="currentFlow.id"/>
+      <mortgage-h v-if="loanType == '2' && currentStep == '6'" :mortgageId="currentFlow.id"/>
+      <guarantee-h v-if="loanType == '2' && currentStep == '7'" :guaranteeId="currentFlow.id"/>
+      <make-loan-h v-if="loanType == '2' && currentStep == '8'" :makeLoanId="currentFlow.id"/>
+      <charge-h v-if="loanType == '2' && currentStep == '9'" :chargeId="currentFlow.id"/>
     </div>
   </div>
 </template>
@@ -88,15 +89,16 @@ import MortgageM from '@/components/mortgage/mortgage'
 import ChargeM from '@/components/mortgage/charge'
 import MakeLoanM from '@/components/mortgage/make-loans'
 
-import OrderTakingH from '@/views/loan-house/order-taking'
-import VisaInterviewH from '@/views/loan-house/visa-interview/editInfo'
-import EvaluateOrderH from '@/views/loan-house/evaluate-order/editInfo'
-import IntegrateInputH from '@/views/loan-house/integrate-input/editInfo'
-import ExamineApproveH from '@/views/loan-house/examine-approve/editInfo'
-import TransferH from '@/views/loan-house/transfer/editInfo'
-import MortgageH from '@/views/loan-house/mortgage/editInfo'
-import GuaranteeH from '@/views/loan-house/guarantee/editInfo'
-import ChargeH from '@/views/loan-house/charge/editInfo'
+import OrderTakingH from '@/components/house/order-taking'
+import VisaInterviewH from '@/components/house/visa-interview'
+import EvaluateOrderH from '@/components/house/evaluate-order'
+import IntegrateInputH from '@/components/house/integrate-input'
+import ExamineApproveH from '@/components/house/examine-approve'
+import TransferH from '@/components/house/transfer'
+import MortgageH from '@/components/house/mortgage'
+import GuaranteeH from '@/components/house/guarantee'
+import MakeLoanH from '@/components/house/make-loans'
+import ChargeH from '@/components/house/charge'
 
 export default {
   data () {
@@ -151,6 +153,7 @@ export default {
     TransferH,
     MortgageH,
     GuaranteeH,
+    MakeLoanH,
     ChargeH
   },
   filters: {

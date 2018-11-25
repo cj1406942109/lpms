@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <h2>放款列表</h2>
-    <el-table :data="makeLoansList" v-loading.body="makeLoansListLoading" style="width: 100%" border stripe>
+    <el-table :data="loanList" v-loading.body="loanListLoading" style="width: 100%" border stripe>
       <el-table-column type="index" label="序号" width="100"></el-table-column>
       <el-table-column :sortable="true" prop="rootId" label="贷款编号" width="200"></el-table-column>
       <el-table-column :sortable="true" prop="clientName" label="客户姓名"></el-table-column>
@@ -18,7 +18,7 @@
       </el-table-column>
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
-          <el-button type="success" :disabled="scope.row.state == 'open' ? false : true" size="mini" @click="confirmLoan(scope.row)">确定放款</el-button>
+          <el-button :disabled="scope.row.state == 'open' ? false : true" type="primary" size="mini" @click="goNext(scope.row)">办理</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -27,20 +27,17 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import {
-  getLoanListByEmployeeId,
-  confirmLoan
-} from '@/api/house'
+import { getLoanListByEmployeeId } from '@/api/house'
 export default {
-  name: 'make-loans',
+  name: 'loan',
   data () {
     return {
-      makeLoansList: null,
-      makeLoansListLoading: true
+      loanList: null,
+      loanListLoading: true
     }
   },
   created () {
-    this.getLoanList()
+    this.getloanList()
   },
   computed: {
     ...mapGetters([
@@ -48,11 +45,11 @@ export default {
     ])
   },
   methods: {
-    getLoanList () {
+    getloanList () {
       getLoanListByEmployeeId(this.userId).then(data => {
-        this.makeLoansListLoading = false
+        this.loanListLoading = false
         if (data) {
-          this.makeLoansList = data
+          this.loanList = data
         } else {
           this.$message({
             type: 'error',
@@ -61,33 +58,8 @@ export default {
         }
       })
     },
-    confirmLoan (item) {
-      console.log(item)
-      this.$confirm('是否确定放款？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$message({
-          type: 'info',
-          message: '正在处理...'
-        })
-        confirmLoan(item.id).then(data => {
-          this.$message.closeAll()
-          if (data) {
-            this.$message({
-              type: 'success',
-              message: '放款成功'
-            })
-            this.getLoanList()
-          } else {
-            this.$message({
-              type: 'error',
-              message: '放款失败'
-            })
-          }
-        })
-      }).catch(() => {})
+    goNext (item) {
+      this.$router.push({ path: `/house/make-loans/edit-info/${item.id}` })
     },
     tagState (item) {
       switch (item) {
