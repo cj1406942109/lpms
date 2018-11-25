@@ -6,7 +6,7 @@
     <span slot="footer" class="dialog-footer">
       <el-button @click="changePath()">查看贷款状态</el-button>
       <el-button @click="changePath(listPath)" v-if="showReturnButton">返回{{loanLastStatus}}列表</el-button>
-      <el-button type="primary" @click="changePath(nextPath)">办理下一业务</el-button>
+      <el-button type="primary" @click="changePath(nextPath)" v-if="showNextButton">办理下一业务</el-button>
     </span>
   </el-dialog>
 </template>
@@ -27,6 +27,9 @@ export default {
     showReturnButton: {
       default: true
     },
+    showNextButton: {
+      default: true
+    },
     listPath: '',
     nextPath: ''
   },
@@ -41,7 +44,7 @@ export default {
       if (path) {
         this.$router.push({ path })
       } else {
-        this.$router.push({ path: `/loan-management/order/status/${this.loanNum}` })
+        this.$router.push({ path: `/loan-management/order/status/${this.loanId}` })
       }
     }
   }

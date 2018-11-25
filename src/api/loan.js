@@ -22,8 +22,8 @@ export function getOrderList (options, page, rows) {
   params.startDate = params.period ? params.period[0] : ''
   params.endDate = params.period ? params.period[0] : ''
   delete params['period']
-  params.page = page
-  params.rows = rows / 2
+  params.page = page - 1
+  params.rows = rows
   // 如果查询条件为空，则不添加改查询参数
   for (const key in params) {
     if (!params[key]) {

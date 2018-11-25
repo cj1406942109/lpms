@@ -69,7 +69,7 @@ export default {
       })
     },
     goNext (item) {
-      this.$router.push({ path: `/loan-mortgage/evaluate-order/edit-info/${item.id}/${item.rootId}/${item.extra.orderState.done}/${item.des}` })
+      this.$router.push({ path: `/loan-mortgage/evaluate-order/edit-info/${item.id}` })
     },
     tagState (item) {
       switch (item) {

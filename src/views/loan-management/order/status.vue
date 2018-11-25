@@ -21,6 +21,7 @@
                   <template v-if="item.extra">
                     <li v-if="item.extra.catalogState"><el-tag :type="item.extra.catalogState.done ? 'success' : 'primary'">{{item.extra.catalogState.message}}</el-tag></li>
                     <li v-if="item.extra.formState"><el-tag :type="item.extra.formState.done ? 'success' : 'primary'">{{item.extra.formState.message}}</el-tag></li>
+                    <li v-if="item.extra.visaState"><el-tag :type="item.extra.visaState.done ? 'success' : 'primary'">{{item.extra.visaState.message}}</el-tag></li>
                     <li v-if="item.extra.orderState"><el-tag :type="item.extra.orderState.done ? 'success' : 'primary'">{{item.extra.orderState.message}}</el-tag></li>
                     <li v-if="item.extra.reportState"><el-tag :type="item.extra.reportState.done ? 'success' : 'primary'">{{item.extra.reportState.message}}</el-tag></li>
                     <li v-if="item.extra.sendState"><el-tag :type="item.extra.sendState.done ? 'success' : 'primary'">{{item.extra.sendState.message}}</el-tag></li>
@@ -51,13 +52,14 @@
         </el-steps>
     </div>
     <div class="table-wrapper" v-if="showTable">
-      <order-taking-m v-if="loanType == '1' && currentStep == '0'"></order-taking-m>
-      <interview-m v-if="loanType == '1' && currentStep == '1'"></interview-m>
-      <visa-interview-m v-if="loanType == '1' && currentStep == '2'"></visa-interview-m>
-      <evaluate-order-m v-if="loanType == '1' && currentStep == '3'"></evaluate-order-m>
-      <examine-approve-m v-if="loanType == '1' && currentStep == '4'"></examine-approve-m>
-      <mortgage-m v-if="loanType == '1' && currentStep == '5'"></mortgage-m>
-      <charge-m v-if="loanType == '1' && currentStep == '6'"></charge-m>
+      <order-taking-m v-if="loanType == '1' && currentStep == '0'" :checklistId="currentFlow.id"/>
+      <interview-m v-if="loanType == '1' && currentStep == '1'" :interviewId="currentFlow.id"/>
+      <visa-interview-m v-if="loanType == '1' && currentStep == '2'" :visaId="currentFlow.id"/>
+      <evaluate-order-m v-if="loanType == '1' && currentStep == '3'" :orderId="currentFlow.id"/>
+      <examine-approve-m v-if="loanType == '1' && currentStep == '4'" :approveId="currentFlow.id"/>
+      <mortgage-m v-if="loanType == '1' && currentStep == '5'" :mortgageId="currentFlow.id" :finishFlow="!(currentFlow.state == 'open')"/>
+      <charge-m v-if="loanType == '1' && currentStep == '6'" :chargeId="currentFlow.id"/>
+      <make-loan-m v-if="loanType == '1' && currentStep == '7'" :makeLoanId="currentFlow.id"/>
 
       <order-taking-h v-if="loanType == '2' && currentStep == '0'"></order-taking-h>
       <visa-interview-h v-if="loanType == '2' && currentStep == '1'"></visa-interview-h>
@@ -77,13 +79,14 @@ import moment from 'moment'
 import { getTaskById as getTaskMById } from '@/api/mortgage'
 import { getTaskById as getTaskHById } from '@/api/house'
 
-import OrderTakingM from '@/views/loan-mortgage/order-taking'
-import InterviewM from '@/views/loan-mortgage/interview/editInfo'
-import VisaInterviewM from '@/views/loan-mortgage/visa-interview/editInfo'
-import EvaluateOrderM from '@/views/loan-mortgage/evaluate-order/editInfo'
-import ExamineApproveM from '@/views/loan-mortgage/examine-approve/editInfo'
-import MortgageM from '@/views/loan-mortgage/mortgage/editInfo'
-import ChargeM from '@/views/loan-mortgage/charge/editInfo'
+import OrderTakingM from '@/components/mortgage/order-taking'
+import InterviewM from '@/components/mortgage/interview'
+import VisaInterviewM from '@/components/mortgage/visa-interview'
+import EvaluateOrderM from '@/components/mortgage/evaluate-order'
+import ExamineApproveM from '@/components/mortgage/examine-approve'
+import MortgageM from '@/components/mortgage/mortgage'
+import ChargeM from '@/components/mortgage/charge'
+import MakeLoanM from '@/components/mortgage/make-loans'
 
 import OrderTakingH from '@/views/loan-house/order-taking'
 import VisaInterviewH from '@/views/loan-house/visa-interview/editInfo'
@@ -104,6 +107,7 @@ export default {
       activeStep: 0,
       showTable: false,
       currentStep: 0,
+      currentFlow: '',
       stepList: [
         [
           { des: '接单', description: '未完成' },
@@ -130,23 +134,24 @@ export default {
     }
   },
   components: {
-    'order-taking-m': OrderTakingM,
-    'interview-m': InterviewM,
-    'visa-interview-m': VisaInterviewM,
-    'evaluate-order-m': EvaluateOrderM,
-    'examine-approve-m': ExamineApproveM,
-    'mortgage-m': MortgageM,
-    'charge-m': ChargeM,
+    OrderTakingM,
+    InterviewM,
+    VisaInterviewM,
+    EvaluateOrderM,
+    ExamineApproveM,
+    MortgageM,
+    ChargeM,
+    MakeLoanM,
 
-    'order-taking-h': OrderTakingH,
-    'visa-interview-h': VisaInterviewH,
-    'evaluate-order-h': EvaluateOrderH,
-    'integrate-input-h': IntegrateInputH,
-    'examine-approve-h': ExamineApproveH,
-    'transfer-h': TransferH,
-    'mortgage-h': MortgageH,
-    'guarantee-h': GuaranteeH,
-    'charge-h': ChargeH
+    OrderTakingH,
+    VisaInterviewH,
+    EvaluateOrderH,
+    IntegrateInputH,
+    ExamineApproveH,
+    TransferH,
+    MortgageH,
+    GuaranteeH,
+    ChargeH
   },
   filters: {
     timeformat: function (value) {
@@ -159,10 +164,14 @@ export default {
     const getOrderById = this.loanType === 1 ? getTaskMById : getTaskHById
     getOrderById(this.$route.params.orderId).then(data => {
       if (data) {
-        console.log(data)
         this.orderStatus = data
-        this.activeStep = this.orderStatus.length - 1
+        if (this.orderStatus[data.length - 1].state === 'finish') {
+          this.activeStep = this.orderStatus.length
+        } else {
+          this.activeStep = this.orderStatus.length - 1
+        }
         this.orderStatus = this.orderStatus.concat(this.stepList[this.loanType - 1].splice(this.orderStatus.length))
+        this.currentFlow = this.orderStatus[0]
       } else {
         this.$message({
           type: 'error',
@@ -178,7 +187,8 @@ export default {
     showStep (item, index) {
       if (index <= this.activeStep) {
         this.currentStep = index
-        console.log(item)
+        this.currentFlow = item
+        console.log(this.currentFlow)
       }
     }
   }
@@ -244,7 +254,7 @@ export default {
     }
     .table-wrapper {
       border-radius: 5px;
-      border: 1px solid #999;
+      border: 1px solid #eee;
     }
   }
 </style>

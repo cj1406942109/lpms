@@ -1,5 +1,25 @@
 <template>
-  <div class="app-container">
+  <make-loans :showFlowDialog="true" currentFlow="放款" :makeLoanId="makeLoanId"/>
+</template>
+
+<script>
+import MakeLoans from '@/components/mortgage/make-loans'
+
+export default {
+  data () {
+    return {
+      makeLoanId: ''
+    }
+  },
+  components: {
+    MakeLoans
+  },
+  created () {
+    this.makeLoanId = this.$route.params.id
+  }
+}
+</script>
+  <!-- <div class="app-container">
     <div class="form-wrapper">
       <h2>担保函与收费明细</h2>
       <el-form :model="chargeDetailsForm" ref="chargeDetailsForm" label-width="200px" inline>
@@ -56,101 +76,100 @@
       </el-form>
     </div>
   </div>
-</template>
+</template> -->
 
-<script>
-export default {
-  name: 'sign-contract',
-  data () {
-    return {
-      chargeDetailsForm: {
-        guaranteeLetter: {
-          status: '',
-          date: ''
-        },
-        costA: {
-          status: '',
-          date: ''
-        },
-        costB: {
-          status: '',
-          date: ''
-        },
-        costC: {
-          status: '',
-          date: ''
-        }
-      },
-      makeLoansStatusForm: {
-        status: '',
-        date: ''
-      },
-      pickerOptions: {
-        disabledDate (time) {
-          return time.getTime() < Date.now()
-        }
-      }
-    }
-  },
-  methods: {
-    submitForm (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('success')
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
-    resetForm (formName) {
-      this.$refs[formName].resetFields()
-    },
-    finishMakeLoans () {
-      this.$confirm('确认23890474编号贷款已放款?', '确认放款', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '放款成功'
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消放款'
-        })
-      })
-    },
-    checkStatus () {
-      this.$msgbox.close()
-    },
-    returnList () {
-      this.$msgbox.close()
-      this.$router.push({ path: '/loan-mortgage/mortgage' })
-    },
-    nextOperation () {
-      this.$msgbox.close()
-      this.$router.push({ path: '/loan-mortgage/make-loans' })
-    }
-  }
-}
-</script>
+// export default {
+//   name: 'sign-contract',
+//   data () {
+//     return {
+//       chargeDetailsForm: {
+//         guaranteeLetter: {
+//           status: '',
+//           date: ''
+//         },
+//         costA: {
+//           status: '',
+//           date: ''
+//         },
+//         costB: {
+//           status: '',
+//           date: ''
+//         },
+//         costC: {
+//           status: '',
+//           date: ''
+//         }
+//       },
+//       makeLoansStatusForm: {
+//         status: '',
+//         date: ''
+//       },
+//       pickerOptions: {
+//         disabledDate (time) {
+//           return time.getTime() < Date.now()
+//         }
+//       }
+//     }
+//   },
+//   methods: {
+//     submitForm (formName) {
+//       this.$refs[formName].validate((valid) => {
+//         if (valid) {
+//           alert('success')
+//         } else {
+//           console.log('error submit!!')
+//           return false
+//         }
+//       })
+//     },
+//     resetForm (formName) {
+//       this.$refs[formName].resetFields()
+//     },
+//     finishMakeLoans () {
+//       this.$confirm('确认23890474编号贷款已放款?', '确认放款', {
+//         confirmButtonText: '确定',
+//         cancelButtonText: '取消',
+//         type: 'warning'
+//       }).then(() => {
+//         this.$message({
+//           type: 'success',
+//           message: '放款成功'
+//         })
+//       }).catch(() => {
+//         this.$message({
+//           type: 'info',
+//           message: '已取消放款'
+//         })
+//       })
+//     },
+//     checkStatus () {
+//       this.$msgbox.close()
+//     },
+//     returnList () {
+//       this.$msgbox.close()
+//       this.$router.push({ path: '/loan-mortgage/mortgage' })
+//     },
+//     nextOperation () {
+//       this.$msgbox.close()
+//       this.$router.push({ path: '/loan-mortgage/make-loans' })
+//     }
+//   }
+// }
+// </script>
 
-<style lang="scss" scoped>
-  .app-container {
-    .form-wrapper {
-      padding: 20px;
-      margin-bottom: 20px;
-      background-color: #fff;
-    }
-    .option {
-      text-align: center;
-      margin: 50px;
-      button {
-        width: 200px;
-      }
-    }
-  }
-</style>
+// <style lang="scss" scoped>
+//   .app-container {
+//     .form-wrapper {
+//       padding: 20px;
+//       margin-bottom: 20px;
+//       background-color: #fff;
+//     }
+//     .option {
+//       text-align: center;
+//       margin: 50px;
+//       button {
+//         width: 200px;
+//       }
+//     }
+//   }
+// </style>

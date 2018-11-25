@@ -71,7 +71,7 @@ export const constantRouterMap = [
       name: '抵押贷款-面谈',
       meta: { title: '面谈', icon: 'talk' }
     }, {
-      path: 'interview/edit-info/:id/:des',
+      path: 'interview/edit-info/:id',
       hidden: true,
       name: '抵押贷款-面谈建议',
       meta: { title: '面谈建议' },
@@ -82,7 +82,7 @@ export const constantRouterMap = [
       name: '抵押贷款-面签',
       meta: { title: '面签', icon: 'visa-interview' }
     }, {
-      path: 'visa-interview/edit-info/:id/:mortgageId/:catalogState/:formState/:des',
+      path: 'visa-interview/edit-info/:id',
       hidden: true,
       name: '抵押贷款-面签表格',
       meta: { title: '面签表格' },
@@ -93,7 +93,7 @@ export const constantRouterMap = [
       name: '抵押贷款-评估下单',
       meta: { title: '评估下单', icon: 'evaluate' }
     }, {
-      path: 'evaluate-order/edit-info/:id/:mortgageId/:orderState/:des',
+      path: 'evaluate-order/edit-info/:id',
       hidden: true,
       name: '抵押贷款-评估下单表格',
       meta: { title: '评估下单表格' },
@@ -104,7 +104,7 @@ export const constantRouterMap = [
       name: '抵押贷款-审批',
       meta: { title: '审批', icon: 'approve' }
     }, {
-      path: 'examine-approve/edit-info/:id/:mortgageId/:reportType/:catalogState/:sendState/:approveState/:des',
+      path: 'examine-approve/edit-info/:id',
       hidden: true,
       name: '抵押贷款-审批表格',
       meta: { title: '审批表格' },
@@ -115,7 +115,7 @@ export const constantRouterMap = [
       name: '抵押贷款-抵押',
       meta: { title: '抵押', icon: 'mortgage' }
     }, {
-      path: 'mortgage/edit-info/:id/:mortgageState/:guaranteeApprove/:guaranteePublish/:des',
+      path: 'mortgage/edit-info/:id',
       hidden: true,
       name: '抵押贷款-抵押表格',
       meta: { title: '抵押表格' },
@@ -126,7 +126,7 @@ export const constantRouterMap = [
       name: '抵押贷款-收费',
       meta: { title: '收费', icon: 'charge' }
     }, {
-      path: 'charge/edit-info/:id/:des',
+      path: 'charge/edit-info/:id',
       hidden: true,
       name: '抵押贷款-收费表格',
       meta: { title: '收费表格' },
@@ -137,7 +137,7 @@ export const constantRouterMap = [
       name: '抵押贷款-放款',
       meta: { title: '放款', icon: 'make-loans' }
     }, {
-      path: 'make-loans/edit-info',
+      path: 'make-loans/edit-info/:id',
       hidden: true,
       name: '抵押贷款-放款表格',
       meta: { title: '放款表格' },

@@ -51,7 +51,7 @@ export function getTaskListByEmployeeId (employeeId) {
  * @param {*} checklistId 接单表id
  */
 export function saveChecklist ({
-  datetime,
+  finishTime,
   clientName,
   clientPhone,
   clientIdType,
@@ -71,7 +71,7 @@ export function saveChecklist ({
     method: 'post',
     data: qs.stringify({
       checklistId,
-      datetime,
+      finishTime,
       clientName,
       clientPhone,
       clientIdType,
@@ -158,6 +158,17 @@ export function saveView ({
     })
   })
 }
+
+/**
+ * 根据面谈id获取面谈
+ * @param {*} viewId 面谈id
+ */
+export function getViewById (viewId) {
+  return request({
+    url: `/mortgage/view/${viewId}`,
+    method: 'get'
+  })
+}
 // ************************* 面谈结束 *******************************
 
 // ************************* 面签开始 *******************************
@@ -208,12 +219,40 @@ export function saveCatalog (catalog) {
 }
 
 /**
+ * 更新资料目录表
+ * @param {*} catalog 资料目录表
+ */
+export function updateCatalog (catalog) {
+  return request({
+    url: '/mortgage/visa/update/catalog',
+    method: 'post',
+    data: qs.stringify({
+      catalog: JSON.stringify(catalog)
+    })
+  })
+}
+
+/**
  * 保存个人贷款申请表
  * @param {*} form 个人贷款申请表
  */
 export function saveForm (form) {
   return request({
     url: '/mortgage/visa/form',
+    method: 'post',
+    data: qs.stringify({
+      form: JSON.stringify(form)
+    })
+  })
+}
+
+/**
+ * 更新个人贷款申请表
+ * @param {*} form 个人贷款申请表
+ */
+export function updateForm (form) {
+  return request({
+    url: '/mortgage/visa/update/form',
     method: 'post',
     data: qs.stringify({
       form: JSON.stringify(form)
@@ -303,6 +342,25 @@ export function confirmOrder (orderId, time, company) {
 export function saveReport (reportId, time, type, report) {
   return request({
     url: `/mortgage/order/report/${reportId}`,
+    method: 'post',
+    data: qs.stringify({
+      time,
+      type,
+      report: JSON.stringify(report)
+    })
+  })
+}
+
+/**
+ * 更新报告
+ * @param {*} reportId 报告id
+ * @param {*} time 时间
+ * @param {*} type 报告类型
+ * @param {*} report 报告
+ */
+export function updateReport (reportId, time, type, report) {
+  return request({
+    url: `/mortgage/order/update/report/${reportId}`,
     method: 'post',
     data: qs.stringify({
       time,
@@ -547,6 +605,17 @@ export function getChargeListByEmployeeId (employeeId) {
 }
 
 /**
+ * 根据id获取收费信息
+ * @param {*} chargeId 收费id
+ */
+export function getChargeById (chargeId) {
+  return request({
+    url: `/mortgage/charge/${chargeId}`,
+    method: 'get'
+  })
+}
+
+/**
  * 确定收费
  * @param {*} chargeId 收费id
  * @param {*} time 收费时间
@@ -600,11 +669,15 @@ export function getLoanById (loanId) {
 /**
  * 确认放款
  * @param {*} loanId 放款id
+ * @param {*} time 放款时间
  */
-export function confirmLoan (loanId) {
+export function confirmLoan (loanId, time) {
   return request({
     url: `/mortgage/loan/${loanId}`,
-    method: 'post'
+    method: 'post',
+    data: qs.stringify({
+      time
+    })
   })
 }
 

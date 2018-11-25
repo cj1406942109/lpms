@@ -69,7 +69,7 @@ export default {
       })
     },
     goNext (item) {
-      this.$router.push({ path: `/loan-mortgage/mortgage/edit-info/${item.id}/${item.extra.mortgageState.done}/${item.extra.guaranteeApprove.done}/${item.extra.guaranteePublish.done}/${item.des}` })
+      this.$router.push({ path: `/loan-mortgage/mortgage/edit-info/${item.id}` })
     },
     tagState (item) {
       switch (item) {

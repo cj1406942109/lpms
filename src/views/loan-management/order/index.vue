@@ -21,13 +21,13 @@
                 </el-date-picker>
               </el-form-item>
               <br>
-              <el-form-item label="订单类型">
+              <!-- <el-form-item label="订单类型">
                 <el-select v-model="optionForm.loanType" placeholder="请选择">
                   <el-option label="所有" value=""></el-option>
                   <el-option label="抵押贷款" :value="1"></el-option>
                   <el-option label="二手房贷款" :value="2"></el-option>
                 </el-select>
-              </el-form-item>
+              </el-form-item> -->
               <el-form-item label="贷款编号">
                 <el-input clearable v-model="optionForm.loanNumber"></el-input>
               </el-form-item>
@@ -58,30 +58,60 @@
       </el-collapse>
     </div>
     <div>
-      <el-table :data="orderList" v-loading.body="orderListLoading" style="width: 100%" border stripe>
-        <el-table-column type="index" label="序号" width="100"></el-table-column>
-        <el-table-column :sortable="true" prop="id" label="贷款编号" width="200"></el-table-column>
-        <el-table-column :sortable="true" label="贷款类型">
-          <template slot-scope="scope">
-            <el-tag :type="`${scope.row.id}`[0] == '1' ? 'success':'warning'">
-              {{`${scope.row.id}`[0] == '1' ? '抵押贷款' : '二手房贷款' }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column :sortable="true" prop="clientName" label="客户姓名"></el-table-column>
-        <el-table-column :sortable="true" prop="clientPhone" label="联系方式"></el-table-column>
-        <el-table-column :sortable="true" prop="state" label="贷款当前所处流程" width="200">
-          <template slot-scope="scope">
-            {{scope.row.state | formatState}}
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="250">
-          <template slot-scope="scope">
-            <el-button type="primary" size="mini" @click="goDetail(scope.row)">查看</el-button>
-            <el-button type="danger" size="mini" @click="deleteOrder(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+      <el-tabs v-model="activeTab" @tab-click="tabChange">
+        <el-tab-pane label="抵押贷款" name="mortgage">
+          <el-table :data="orderList" v-loading.body="orderListLoading" style="width: 100%" border stripe>
+            <el-table-column type="index" label="序号" width="100"></el-table-column>
+            <el-table-column :sortable="true" prop="id" label="贷款编号" width="200"></el-table-column>
+            <el-table-column :sortable="true" label="贷款类型">
+              <template slot-scope="scope">
+                <el-tag :type="`${scope.row.id}`[0] == '1' ? 'success':'warning'">
+                  {{`${scope.row.id}`[0] == '1' ? '抵押贷款' : '二手房贷款' }}
+                </el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column :sortable="true" prop="clientName" label="客户姓名"></el-table-column>
+            <el-table-column :sortable="true" prop="clientPhone" label="联系方式"></el-table-column>
+            <el-table-column :sortable="true" prop="state" label="贷款当前所处流程" width="200">
+              <template slot-scope="scope">
+                {{scope.row.state | formatState}}
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="250">
+              <template slot-scope="scope">
+                <el-button type="primary" size="mini" @click="goDetail(scope.row)">查看</el-button>
+                <el-button type="danger" size="mini" @click="deleteOrder(scope.row)">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="二手房贷款" name="house">
+          <el-table :data="orderList" v-loading.body="orderListLoading" style="width: 100%" border stripe>
+            <el-table-column type="index" label="序号" width="100"></el-table-column>
+            <el-table-column :sortable="true" prop="id" label="贷款编号" width="200"></el-table-column>
+            <el-table-column :sortable="true" label="贷款类型">
+              <template slot-scope="scope">
+                <el-tag :type="`${scope.row.id}`[0] == '1' ? 'success':'warning'">
+                  {{`${scope.row.id}`[0] == '1' ? '抵押贷款' : '二手房贷款' }}
+                </el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column :sortable="true" prop="clientName" label="客户姓名"></el-table-column>
+            <el-table-column :sortable="true" prop="clientPhone" label="联系方式"></el-table-column>
+            <el-table-column :sortable="true" prop="state" label="贷款当前所处流程" width="200">
+              <template slot-scope="scope">
+                {{scope.row.state | formatState}}
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="250">
+              <template slot-scope="scope">
+                <el-button type="primary" size="mini" @click="goDetail(scope.row)">查看</el-button>
+                <el-button type="danger" size="mini" @click="deleteOrder(scope.row)">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+      </el-tabs>
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -120,10 +150,11 @@ export default {
   name: 'order-management',
   data () {
     return {
+      activeTab: 'mortgage',
       orderList: null,
       orderListLoading: true,
       optionForm: {
-        loanType: '',
+        loanType: 1,
         loanNumber: '',
         clientName: '',
         IDCard: '',
@@ -202,6 +233,8 @@ export default {
           return '收费'
         case 'finish':
           return '已完成'
+        case 'close':
+          return '已废单'
       }
     }
   },
@@ -224,8 +257,8 @@ export default {
       getOrderList(this.optionForm, this.pageNo, this.pageSize).then(data => {
         this.orderListLoading = false
         if (data) {
-          this.orderList = data.mortgage.concat(data.house)
-          this.pageTotal = data.houseListSize + data.mortgageListSize
+          this.orderList = data.list
+          this.pageTotal = data.size
         } else {
           this.$message({
             type: 'error',
@@ -258,17 +291,26 @@ export default {
           return false
         }
       })
+    },
+    tabChange (tab) {
+      this.activeTab = tab.name
+      if (this.activeTab === 'house') {
+        this.optionForm.loanType = 2
+      } else {
+        this.optionForm.loanType = 1
+      }
+      this.queryOrder()
     }
   }
 }
 </script>
-
 
 <style lang="scss" scoped>
   .app-container {
     padding: 20px;
     background-color: #fff;
     .table-options {
+      margin-bottom: 20px;
       .el-collapse {
         border-top: none;
         border: 1px solid #409eff;
