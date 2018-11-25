@@ -1,3 +1,4 @@
+import qs from 'qs'
 import request from '@/utils/request'
 
 // 账号
@@ -8,13 +9,13 @@ import request from '@/utils/request'
 //   })
 // }
 
-// 公告
-export function getNoticeList () {
-  return request({
-    url: '/notice/getNoticeList',
-    method: 'get'
-  })
-}
+// // 公告
+// export function getNoticeList () {
+//   return request({
+//     url: '/notice/getNoticeList',
+//     method: 'get'
+//   })
+// }
 
 export function getEmployee (id) {
   return request({
@@ -122,3 +123,69 @@ export function setTableValue (valueType, value, remark) {
 }
 
 // ************************* 表格管理结束 *******************************
+
+// ************************* 公告管理开始 *******************************
+
+/**
+ * 获取公告列表
+ */
+export function getNoticeList () {
+  return request({
+    url: '/announcement',
+    method: 'get'
+  })
+}
+
+/**
+ * 根据id获取公告
+ * @param {*} id 公告id
+ */
+export function getNoticeById (id) {
+  return request({
+    url: `/announcement/${id}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 保存公告
+ * @param {*} title 标题
+ * @param {*} content 内容
+ */
+export function saveNotice (title, content) {
+  return request({
+    url: '/announcement/save',
+    method: 'post',
+    data: qs.stringify({
+      title, content
+    })
+  })
+}
+
+/**
+ * 根据id删除公告
+ * @param {*} id 公告id
+ */
+export function deleteNoticeById (id) {
+  return request({
+    url: `/announcement/delete/${id}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 根据id更新某个公告
+ * @param {*} id 公告id
+ * @param {*} title 标题
+ * @param {*} content 内容
+ */
+export function updateNoticeById (id, title, content) {
+  return request({
+    url: `/announcement/${id}`,
+    method: 'post',
+    data: qs.stringify({
+      title, content
+    })
+  })
+}
+// ************************* 公告管理结束 *******************************

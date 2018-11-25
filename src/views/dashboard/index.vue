@@ -60,8 +60,9 @@
 </template>
 
 <script>
+import moment from 'moment'
 import { mapGetters } from 'vuex'
-import { getNotice } from '@/api/dashboard'
+import { getNoticeList } from '@/api/system'
 import { getTaskListByEmployeeId as getTaskMListByEmployeeId } from '@/api/mortgage'
 import { getTaskListByEmployeeId as getTaskHListByEmployeeId } from '@/api/house'
 
@@ -105,7 +106,8 @@ export default {
           ]
         }
       ],
-      notice: null
+      notice: null,
+      moment
     }
   },
   computed: {
@@ -115,7 +117,7 @@ export default {
   },
   created () {
     this.getTodoList()
-    this.GetNotice()
+    this.getNotice()
   },
   methods: {
     getTodoList () {
@@ -144,9 +146,16 @@ export default {
         this.todoList = listM.concat(listH)
       })
     },
-    GetNotice () {
-      getNotice().then(data => {
-        this.notice = data
+    getNotice () {
+      getNoticeList().then(data => {
+        if (data) {
+          this.notice = JSON.parse(JSON.stringify(data[data.length - 1]))
+        } else {
+          this.$message({
+            type: 'error',
+            message: '获取公告信息失败'
+          })
+        }
       })
     },
     moreTodo () {
