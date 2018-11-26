@@ -81,3 +81,23 @@ export function assinTaskToUser (rootId, employeeId) {
     })
   })
 }
+
+/**
+ * 报表相关接口
+ */
+export function getOutputList () {
+  return request({
+    url: '/output',
+    method: 'get'
+  })
+}
+
+/**
+ * 二手房报表相关接口
+ */
+export function getHouseOutputList () {
+  return request({
+    url: '/output/createHouse',
+    method: 'get'
+  })
+}

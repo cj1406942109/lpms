@@ -278,6 +278,11 @@ export const constantRouterMap = [
       component: () => import('@/views/loan-management/assign'),
       name: '业务分配',
       meta: { title: '业务分配', icon: 'assign' }
+    }, {
+      path: 'form',
+      component: () => import('@/views/loan-management/form'),
+      name: '统计报表',
+      meta: { title: '统计报表', icon: 'form' }
     }]
   },
   {
