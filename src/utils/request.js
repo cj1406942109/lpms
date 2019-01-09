@@ -10,7 +10,8 @@ const service = axios.create({
   // baseURL: 'http://192.168.10.225:3000',
   // baseURL: 'http://192.168.10.211:8080',
   // baseURL: 'http://47.93.43.106:8090',
-  baseURL: 'http://aidr.vip:8080/loan',
+  // baseURL: 'http://aidr.vip:8080/loan',
+  baseURL: 'http://aidr.vip:8080/loan2',
   // baseURL: 'http://192.168.3.2:8080',
   // baseURL: 'http://192.168.3.6:8080',
   // baseURL: 'http://loan.ngrok.xiaomiqiu.cn',
@@ -48,7 +49,10 @@ service.interceptors.response.use(
             type: 'error',
             message: response.data.data
           })
-          return 709
+          // store.dispatch('Logout').then(() => {
+          //   location.reload()
+          // })
+          return null
         } else {
           Notification({
             title: '请求出错',
