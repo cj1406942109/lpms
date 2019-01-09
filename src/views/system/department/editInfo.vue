@@ -221,33 +221,37 @@ export default {
       this.$refs[formName].resetFields()
     },
     submit () {
-      if (this.isEditMode) {
-        updateRoleById({
-          id: this.$route.params.id,
-          name: this.departmentForm.name,
-          note: this.departmentForm.note,
-          permits: this.computedPermits
-        }).then(data => {
-          if (data) {
-            this.$message.success('更新成功')
+      this.$refs['departmentForm'].validate((valid) => {
+        if (valid) {
+          if (this.isEditMode) {
+            updateRoleById({
+              id: this.$route.params.id,
+              name: this.departmentForm.name,
+              note: this.departmentForm.note,
+              permits: this.computedPermits
+            }).then(data => {
+              if (data) {
+                this.$message.success('更新成功')
+              } else {
+                this.$message.error('更新失败')
+              }
+            })
           } else {
-            this.$message.error('更新失败')
+            createRole({
+              name: this.departmentForm.name,
+              note: this.departmentForm.note,
+              permits: this.computedPermits
+            }).then(data => {
+              if (data) {
+                this.$message.success('创建成功')
+                this.$router.push({ path: '/system/department' })
+              } else {
+                this.$message.error('更新失败')
+              }
+            })
           }
-        })
-      } else {
-        createRole({
-          name: this.departmentForm.name,
-          note: this.departmentForm.note,
-          permits: this.computedPermits
-        }).then(data => {
-          if (data) {
-            this.$message.success('创建成功')
-            this.$router.push({ path: '/system/department' })
-          } else {
-            this.$message.error('更新失败')
-          }
-        })
-      }
+        }
+      })
     }
   }
 }
