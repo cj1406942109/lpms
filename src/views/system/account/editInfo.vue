@@ -1,7 +1,8 @@
 <template>
   <div class="app-container">
     <div class="form-wrapper">
-      <h2>编辑用户</h2>
+      <h2 v-if="isEditMode">编辑用户</h2>
+      <h2 v-else>新增用户</h2>
       <el-form :model="accountForm" ref="accountForm" label-width="200px">
         <el-row :gutter="20">
           <el-col :span="10">
@@ -15,37 +16,40 @@
             <el-form-item label="姓名">
               <el-input v-model="accountForm.name"></el-input>
             </el-form-item>
-            <el-form-item label="部门">
+            <!-- <el-form-item label="部门">
               <el-select v-model="accountForm.department" placeholder="请选择部门">
                 <el-option label="部门1" value="1"></el-option>
                 <el-option label="部门2" value="2"></el-option>
               </el-select>
-            </el-form-item>
+            </el-form-item>-->
             <el-form-item label="角色">
               <el-select v-model="accountForm.role" placeholder="请选择角色">
-                <el-option label="管理员" value="1"></el-option>
-                <el-option label="普通员工" value="2"></el-option>
+                <el-option
+                  v-for="role in roleList"
+                  :key="role.id"
+                  :label="role.name"
+                  :value="role.id"
+                ></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="手机号">
               <el-input v-model="accountForm.phone"></el-input>
             </el-form-item>
+            <el-form-item label="备注">
+              <el-input v-model="accountForm.position"></el-input>
+            </el-form-item>
           </el-col>
           <el-col :span="10">
-            <h3>账号权限</h3>
+            <!-- <h3>账号权限</h3>
             <el-form-item>
-              <el-tree
-                :data="permissions"
-                show-checkbox
-                node-key="id">
-              </el-tree>
-            </el-form-item>
+              <el-tree :data="permissions" show-checkbox node-key="id"></el-tree>
+            </el-form-item>-->
           </el-col>
         </el-row>
       </el-form>
     </div>
     <div class="option">
-      <el-button type="primary" @click="submitForm('accountForm')">保存</el-button>
+      <el-button type="primary" @click="submit">保存</el-button>
       <!-- <el-button @click="resetForm('accountForm')">重置</el-button> -->
     </div>
   </div>
@@ -54,128 +58,16 @@
 <script>
 import {
   getUserById,
+  getRoleList,
+  createUser,
+  updateUserById,
   gePermissionByEmployeeId
 } from '@/api/system'
-const permissionOptions = [{
-  id: 'handle',
-  label: '业务办理',
-  children: [{
-    id: 'handle_m',
-    label: '抵押贷款',
-    children: [
-      { id: 'handle_m_order_receive', label: '接单' },
-      { id: 'handle_m_view', label: '面谈' },
-      { id: 'handle_m_sign', label: '面签' },
-      { id: 'handle_m_ordering', label: '评估下单' },
-      { id: 'handle_m_approve', label: '审批' },
-      { id: 'handle_m_mortgage', label: '抵押' },
-      { id: 'handle_m_loan', label: '放款' }
-    ]
-  }, {
-    id: 'handle_h',
-    label: '二手房贷款',
-    children: [
-      { id: 'handle_h_order_receive', label: '接单' },
-      { id: 'handle_h_sign', label: '面签' },
-      { id: 'handle_h_ordering', label: '评估下单' },
-      { id: 'handle_h_zjsj', label: '整件输机' },
-      { id: 'handle_h_approve', label: '审批' },
-      { id: 'handle_h_transfer', label: '过户' },
-      { id: 'handle_h_mortgage', label: '抵押' },
-      { id: 'handle_h_guarantee', label: '担保' },
-      { id: 'handle_h_loan', label: '放款' },
-      { id: 'handle_h_charge', label: '收费' },
-      { id: 'handle_h_mortgage_manage', label: '抵押管理' },
-      { id: 'handle_h_chargeback', label: '退单' }
-    ]
-  }]
-}, {
-  id: 'query',
-  label: '贷款查询',
-  children: [{
-    id: 'status',
-    label: '查看状态',
-    children: [
-      { id: 'query_m_status', label: '抵押贷款' },
-      { id: 'query_h_status', label: '二手房贷款' }
-    ]
-  }, {
-    id: 'query_',
-    label: '查看表格',
-    children: [{
-      id: 'query_m',
-      label: '抵押贷款',
-      children: [
-        { id: 'query_m_order_receive', label: '接单' },
-        { id: 'query_m_view', label: '面谈' },
-        { id: 'query_m_sign', label: '面签' },
-        { id: 'query_m_ordering', label: '评估下单' },
-        { id: 'query_m_approve', label: '审批' },
-        { id: 'query_m_mortgage', label: '抵押' },
-        { id: 'query_m_loan', label: '放款' }
-      ]
-    }, {
-      id: 'query_h',
-      label: '二手房贷款',
-      children: [
-        { id: 'query_h_order_receive', label: '接单' },
-        { id: 'query_h_sign', label: '面签' },
-        { id: 'query_h_ordering', label: '评估下单' },
-        { id: 'query_h_zjsj', label: '整件输机' },
-        { id: 'query_h_approve', label: '审批' },
-        { id: 'query_h_transfer', label: '过户' },
-        { id: 'query_h_mortgage', label: '抵押' },
-        { id: 'query_h_guarantee', label: '担保' },
-        { id: 'query_h_loan', label: '放款' },
-        { id: 'query_h_charge', label: '收费' },
-        { id: 'query_h_mortgage_manage', label: '抵押管理' },
-        { id: 'query_h_chargeback', label: '退单' }
-      ]
-    }]
-  }]
-}, {
-  id: '',
-  label: '系统管理',
-  children: [{
-    id: 'department',
-    label: '部门管理',
-    children: [
-      { id: 'manage_department_add', label: '添加部门' },
-      { id: 'manage_department_edit', label: '编辑部门' },
-      { id: 'manage_department_delete', label: '删除部门' },
-      { id: 'manage_department_query', label: '查看部门' }
-    ]
-  }, {
-    id: 'account',
-    label: '账号管理',
-    children: [
-      { id: 'manage_account_add', label: '创建账号' },
-      { id: 'manage_account_edit', label: '编辑账号' },
-      { id: 'manage_account_delete', label: '删除账号' },
-      { id: 'manage_account_query', label: '查看账号' }
-    ]
-  }, {
-    id: 'notice',
-    label: '公告管理',
-    children: [
-      { id: 'manage_notice_add', label: '添加公告' },
-      { id: 'manage_notice_edit', label: '编辑公告' },
-      { id: 'manage_notice_delete', label: '删除公告' },
-      { id: '', label: '查看公告' }
-    ]
-  }, {
-    id: 'notice',
-    label: '表格管理',
-    children: [
-      { id: 'manage_notice_add', label: '抵押贷款' },
-      { id: 'manage_notice_edit', label: '二手房贷款' }
-    ]
-  }]
-}]
 
 export default {
   data () {
     return {
+      isEditMode: false,
       accountForm: {
         account: '',
         password: '',
@@ -185,44 +77,112 @@ export default {
         cellphone: '',
         permission: {}
       },
-      permissions: permissionOptions
+      roleList: []
     }
   },
   methods: {
     getUser () {
       getUserById(this.$route.params.id).then(data => {
-        console.log(data)
+        // console.log(data)
+        if (data) {
+          this.accountForm.account = data.account
+          this.accountForm.name = data.name
+          this.accountForm.phone = data.phone
+          this.accountForm.position = data.position
+          this.accountForm.role = data.roles ? data.roles[0] : ''
+        } else {
+          this.$message({
+            type: 'error',
+            message: '获取用户信息失败'
+          })
+        }
+      })
+    },
+    getRoleList () {
+      getRoleList().then(data => {
+        if (data) {
+          this.roleList = data
+        } else {
+          this.$message({
+            type: 'error',
+            message: '获取角色列表失败'
+          })
+        }
       })
     },
     getPermission () {
       gePermissionByEmployeeId(this.$route.params.id).then(data => {
         console.log(data)
       })
+    },
+    submit () {
+      if (this.isEditMode) {
+        const updateUserData = {
+          id: this.$route.params.id,
+          account: this.accountForm.account,
+          name: this.accountForm.name,
+          phone: this.accountForm.phone,
+          position: this.accountForm.position,
+          roles: [this.accountForm.role]
+        }
+        if (this.accountForm.password) {
+          updateUserData.password = this.accountForm.password
+        }
+        updateUserById(updateUserData).then(data => {
+          if (data) {
+            this.$message.success('更新成功')
+          } else {
+            this.$message.error('更新失败')
+          }
+        })
+      } else {
+        createUser({
+          name: this.accountForm.name,
+          account: this.accountForm.account,
+          password: this.accountForm.password,
+          phone: this.accountForm.phone,
+          position: this.accountForm.position,
+          roles: [this.accountForm.role]
+        }).then(data => {
+          if (data) {
+            this.$message.success('创建成功')
+            this.$router.push({ path: '/system/account' })
+          } else {
+            this.$message.error('更新失败')
+          }
+        })
+      }
     }
   },
   created () {
-    this.getUser()
-    this.getPermission()
+    this.getRoleList()
+    if (this.$route.params.id !== undefined) {
+      this.getUser()
+      this.isEditMode = true
+      // this.getPermission()
+    } else {
+      this.isEditMode = false
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .app-container {
-    .form-wrapper {
-      padding: 20px;
-      margin-bottom: 20px;
-      background-color: #fff;
-      h3 {
-        margin-left: 50px;
-      }
-    }
-    .option {
-      text-align: center;
-      margin: 50px;
-      button {
-        width: 200px;
-      }
+.app-container {
+  .form-wrapper {
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    h3 {
+      margin-left: 50px;
     }
   }
+  .option {
+    text-align: center;
+    margin: 50px;
+    button {
+      width: 200px;
+    }
+  }
+}
 </style>

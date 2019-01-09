@@ -121,6 +121,16 @@ export function updateRoleById (data) {
   })
 }
 
+export function deleteRoleById (id) {
+  return request({
+    url: '/role/delete',
+    method: 'post',
+    data: qs.stringify({
+      id
+    })
+  })
+}
+
 // ************************* 角色管理结束 *******************************
 
 // ************************* 权限管理开始 *******************************
@@ -175,6 +185,16 @@ export function updateUserById (data) {
     url: '/user/update',
     method: 'post',
     data
+  })
+}
+
+export function deleteUserById (id) {
+  return request({
+    url: '/user/delete',
+    method: 'post',
+    data: qs.stringify({
+      id
+    })
   })
 }
 

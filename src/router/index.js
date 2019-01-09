@@ -303,13 +303,27 @@ export const constantRouterMap = [
       meta: { title: '部门详情' },
       component: () => import('@/views/system/department/editInfo')
     }, {
+      path: 'department/create-info',
+      hidden: true,
+      name: '部门管理-新建部门',
+      meta: { title: '新建部门' },
+      component: () => import('@/views/system/department/editInfo')
+    }, {
       path: 'account',
       component: () => import('@/views/system/account'),
       name: '账号管理',
       meta: { title: '账号管理', icon: 'account' }
     }, {
+      path: 'account/create-info',
+      hidden: true,
+      name: '账号管理-新建账号',
+      meta: { title: '新建账号' },
+      component: () => import('@/views/system/account/editInfo')
+    }, {
       path: 'account/edit-info/:id',
       hidden: true,
+      name: '账号管理-账号详情',
+      meta: { title: '账号详情' },
       component: () => import('@/views/system/account/editInfo')
     }, {
       path: 'table',
