@@ -68,7 +68,7 @@
         <el-table-column prop="id" label="ID"></el-table-column>
         <el-table-column prop="name" label="姓名"></el-table-column>
         <el-table-column prop="phone" label="手机号"></el-table-column>
-        <el-table-column prop="departmentId" label="部门ID"></el-table-column>
+        <el-table-column prop="roles.0.name" label="部门-角色"></el-table-column>
         <el-table-column label="操作" width="250">
           <template slot-scope="scope">
             <el-button type="success" size="mini" @click="assignUser(scope.row)">确定分配</el-button>
