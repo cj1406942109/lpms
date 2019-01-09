@@ -4,8 +4,7 @@
       <el-main>
         <div class="form-wrapper">
           <h3 class="title">
-            <img :src="logo" alt="日晟行贷款" style="max-width:100%">
-            <!-- <br>日晟行贷款管理系统 -->
+            <img :src="logo" alt="永兴日成贷款管理系统" style="max-width:100%">
           </h3>
           <el-card class="box-card">
             <div slot="header" class="form-title">
@@ -36,7 +35,7 @@
 </template>
 
 <script>
-import logo from '@/assets/logo.png'
+import logo from '@/assets/logo-new.png'
 export default {
   name: 'login',
   data () {
