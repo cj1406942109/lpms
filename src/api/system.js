@@ -68,6 +68,70 @@ export function getEmployeeListByDepartmentId (departmentId) {
 
 // ************************* 部门管理结束 *******************************
 
+// ************************* 角色管理开始 *******************************
+
+/**
+ * 获取角色列表
+ */
+export function getRoleList () {
+  return request({
+    url: '/role',
+    method: 'get'
+  })
+}
+
+/**
+ * 根据id获取角色信息
+ * @param {*} roleId 部门id
+ */
+export function getRoleById (roleId) {
+  return request({
+    url: `/role/${roleId}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 根据userId获取角色列表
+ * @param {*} roleId 部门id
+ */
+export function getRoleListByUserId (userId) {
+  return request({
+    url: `/role/user`,
+    method: 'get',
+    params: {
+      userId
+    }
+  })
+}
+
+export function createRole (data) {
+  return request({
+    url: '/role',
+    method: 'post',
+    data
+  })
+}
+
+export function updateRoleById (data) {
+  return request({
+    url: '/role/update',
+    method: 'post',
+    data
+  })
+}
+
+// ************************* 角色管理结束 *******************************
+
+// ************************* 权限管理开始 *******************************
+export function getPermitList () {
+  return request({
+    url: '/permit',
+    method: 'get'
+  })
+}
+// ************************* 权限管理结束 *******************************
+
 // ************************* 账号管理开始 *******************************
 
 /**
@@ -95,6 +159,22 @@ export function gePermissionByEmployeeId (employeeId) {
   return request({
     url: `/permission/interface/${employeeId}`,
     method: 'get'
+  })
+}
+
+export function createUser (data) {
+  return request({
+    url: '/user',
+    method: 'post',
+    data
+  })
+}
+
+export function updateUserById (data) {
+  return request({
+    url: '/user/update',
+    method: 'post',
+    data
   })
 }
 
@@ -157,7 +237,8 @@ export function saveNotice (title, content) {
     url: '/announcement/save',
     method: 'post',
     data: qs.stringify({
-      title, content
+      title,
+      content
     })
   })
 }
@@ -184,7 +265,8 @@ export function updateNoticeById (id, title, content) {
     url: `/announcement/${id}`,
     method: 'post',
     data: qs.stringify({
-      title, content
+      title,
+      content
     })
   })
 }

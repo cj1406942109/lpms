@@ -31,7 +31,7 @@ export function login (name, password) {
     url: '/user/login',
     method: 'get',
     params: {
-      name,
+      account: name,
       password
     }
   })
