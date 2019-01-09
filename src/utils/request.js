@@ -44,11 +44,11 @@ service.interceptors.response.use(
         return response.data.data
       } else {
         if (response.data.statusCode === 709) {
-          Notification({
-            title: '用户信息验证失败',
-            type: 'error',
-            message: response.data.data
-          })
+          // Notification({
+          //   title: '用户信息验证失败',
+          //   type: 'error',
+          //   message: response.data.data
+          // })
           // store.dispatch('Logout').then(() => {
           //   location.reload()
           // })

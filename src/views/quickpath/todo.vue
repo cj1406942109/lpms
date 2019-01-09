@@ -69,19 +69,19 @@ export default {
         if (data) {
           listM = data
         } else {
-          this.$message({
-            type: 'error',
-            message: '获取抵押贷款任务列表失败'
-          })
+          // this.$message({
+          //   type: 'error',
+          //   message: '获取抵押贷款任务列表失败'
+          // })
         }
       }), getTaskHListByEmployeeId(this.userId).then(data => {
         if (data) {
           listH = data
         } else {
-          this.$message({
-            type: 'error',
-            message: '获取二手房贷款任务列表失败'
-          })
+          // this.$message({
+          //   type: 'error',
+          //   message: '获取二手房贷款任务列表失败'
+          // })
         }
       })]).then(() => {
         this.toodoListLoading = false
