@@ -52,6 +52,11 @@ export const constantRouterMap = [
       component: () => import('@/views/quickpath/notice'),
       name: '快速访问-通知公告',
       meta: { title: '通知公告', icon: 'notice' }
+    }, {
+      path: 'monitor',
+      component: () => import('@/views/quickpath/monitor'),
+      name: '快速访问-运行监控',
+      meta: { title: '运行监控', icon: 'monitor' }
     }]
   },
   {
