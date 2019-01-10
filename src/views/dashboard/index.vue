@@ -7,21 +7,33 @@
             <span class="title">待办事项</span>
             <el-button type="text" @click="moreTodo">查看更多>>></el-button>
           </div>
-          <el-table :data="todoList" v-loading.body="toodoListLoading" border stripe style="width: 100%" height="400">
+          <el-table
+            :data="todoList"
+            v-loading.body="toodoListLoading"
+            border
+            stripe
+            style="width: 100%"
+            height="400"
+          >
             <el-table-column type="index" label="序号" width="100"></el-table-column>
             <el-table-column :sortable="true" prop="id" label="贷款编号" width="200"></el-table-column>
             <el-table-column :sortable="true" prop="type" label="贷款类型">
               <template slot-scope="scope">
-                <el-tag :type="`${scope.row.id}`[0] == '1' ? 'success':'warning'">
-                  {{`${scope.row.id}`[0] == '1' ? '抵押贷款' : '二手房贷款' }}
-                </el-tag>
+                <el-tag
+                  :type="`${scope.row.id}`[0] == '1' ? 'success':'warning'"
+                >{{`${scope.row.id}`[0] == '1' ? '抵押贷款' : '二手房贷款' }}</el-tag>
               </template>
             </el-table-column>
             <el-table-column :sortable="true" prop="clientName" label="姓名"></el-table-column>
             <el-table-column :sortable="true" prop="clientPhone" label="电话"></el-table-column>
             <el-table-column label="操作" width="250">
               <template slot-scope="scope">
-                <el-button :disabled="scope.row.state == 'finish'" type="primary" size="mini" @click="goNext(getNextPath(scope.row))">办理</el-button>
+                <el-button
+                  :disabled="scope.row.state == 'finish'"
+                  type="primary"
+                  size="mini"
+                  @click="goNext(getNextPath(scope.row))"
+                >办理</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -35,7 +47,12 @@
           </div>
           <div class="tag-wrapper" v-for="item in quickEntranceList" :key="item.id">
             <h3>{{item.title}}</h3>
-            <el-tag v-for="tag in item.value" :key="tag.id" @click.native="goNext(`${item.baseUrl}/${tag.value}`)" :type="item.type">{{tag.title}}</el-tag>
+            <el-tag
+              v-for="tag in item.value"
+              :key="tag.id"
+              @click.native="goNext(`${item.baseUrl}/${tag.value}`)"
+              :type="item.type"
+            >{{tag.title}}</el-tag>
           </div>
         </el-card>
       </el-col>
@@ -125,7 +142,9 @@ export default {
       let listH = []
       Promise.all([getTaskMListByEmployeeId(this.userId).then(data => {
         if (data) {
-          listM = data
+          listM = data.filter((todo) => {
+            return todo.state !== 'finish'
+          })
         } else {
           // this.$message({
           //   type: 'error',
@@ -134,7 +153,9 @@ export default {
         }
       }), getTaskHListByEmployeeId(this.userId).then(data => {
         if (data) {
-          listH = data
+          listH = data.filter((todo) => {
+            return todo.state !== 'finish'
+          })
         } else {
           // this.$message({
           //   type: 'error',
@@ -240,10 +261,10 @@ export default {
       }
       .todo-list {
         .title {
-          color: #F86C6B;
+          color: #f86c6b;
         }
         .el-button {
-          color: #F86C6B;
+          color: #f86c6b;
         }
         .el-table {
           .el-button {
@@ -254,10 +275,10 @@ export default {
       }
       .quick-entrance {
         .title {
-          color: #4DBD74;
+          color: #4dbd74;
         }
         .el-button {
-          color: #4DBD74;
+          color: #4dbd74;
         }
         .tag-wrapper {
           h3 {
@@ -272,14 +293,13 @@ export default {
       }
       .notice {
         .title {
-          color: #20A8D8;
+          color: #20a8d8;
         }
         .el-button {
-          color: #20A8D8;
+          color: #20a8d8;
         }
       }
     }
   }
 }
-
 </style>

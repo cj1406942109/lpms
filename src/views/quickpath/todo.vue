@@ -6,23 +6,28 @@
       <el-table-column :sortable="true" prop="id" label="贷款编号" width="200"></el-table-column>
       <el-table-column :sortable="true" prop="type" label="贷款类型">
         <template slot-scope="scope">
-          <el-tag :type="`${scope.row.id}`[0] == '1' ? 'success':'warning'">
-            {{`${scope.row.id}`[0] == '1' ? '抵押贷款' : '二手房贷款' }}
-          </el-tag>
+          <el-tag
+            :type="`${scope.row.id}`[0] == '1' ? 'success':'warning'"
+          >{{`${scope.row.id}`[0] == '1' ? '抵押贷款' : '二手房贷款' }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column :sortable="true" prop="clientName" label="姓名"></el-table-column>
       <el-table-column :sortable="true" prop="clientPhone" label="电话"></el-table-column>
       <el-table-column :sortable="true" prop="state" label="当前状态">
         <template slot-scope="scope">
-          <el-tag :type="`${scope.row.state}` == 'finish' ? 'success':'primary'">
-            {{ formateState(scope.row.state) }}
-          </el-tag>
+          <el-tag
+            :type="`${scope.row.state}` == 'finish' ? 'success':'primary'"
+          >{{ formateState(scope.row.state) }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
-          <el-button :disabled="scope.row.state == 'finish'" type="primary" size="mini" @click="goNext(scope.row)">办理</el-button>
+          <el-button
+            :disabled="scope.row.state == 'finish'"
+            type="primary"
+            size="mini"
+            @click="goNext(scope.row)"
+          >办理</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -33,8 +38,8 @@
         :page-sizes="[100, 200, 300, 400]"
         :page-size="100"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400">
-      </el-pagination>
+        :total="400"
+      ></el-pagination>
     </div>
   </div>
 </template>
@@ -67,7 +72,9 @@ export default {
       let listH = []
       Promise.all([getTaskMListByEmployeeId(this.userId).then(data => {
         if (data) {
-          listM = data
+          listM = data.filter((todo) => {
+            return todo.state !== 'finish'
+          })
         } else {
           // this.$message({
           //   type: 'error',
@@ -76,7 +83,9 @@ export default {
         }
       }), getTaskHListByEmployeeId(this.userId).then(data => {
         if (data) {
-          listH = data
+          listH = data.filter((todo) => {
+            return todo.state !== 'finish'
+          })
         } else {
           // this.$message({
           //   type: 'error',
@@ -186,14 +195,14 @@ export default {
 
 
 <style lang="scss" scoped>
-  .app-container {
-    padding: 20px;
-    background-color: #fff;
-    .pagination-wrapper {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 20px;
-    }
+.app-container {
+  padding: 20px;
+  background-color: #fff;
+  .pagination-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
   }
+}
 </style>
 
