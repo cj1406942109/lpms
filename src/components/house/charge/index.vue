@@ -2,16 +2,60 @@
   <div class="app-container">
     <div class="form-wrapper">
       <h2>确定收费状态</h2>
-      <el-form :model="chargeForm" ref="chargeForm" label-width="200px" :rules="chargeFormRules" inline>
-         <el-form-item label="费用 A 收费状态" prop="isA">
+      <el-form
+        :model="chargeForm"
+        ref="chargeForm"
+        label-width="200px"
+        :rules="chargeFormRules"
+        inline
+      >
+        <el-form-item label="费用 A 收费状态" prop="isA">
           <el-radio-group v-model="chargeForm.isA" :disabled="finishCharge">
             <el-radio label="1">已收</el-radio>
             <el-radio label="0">未收</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="收费 A 收费时间" prop="timeA" v-if="chargeForm.isA == '1'">
-          <el-date-picker type="date" placeholder="选择日期" v-model="chargeForm.timeA" value-format="timestamp" :disabled="finishCharge"></el-date-picker>
-        </el-form-item>
+        <el-card v-if="chargeForm.isA == '1'">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="回款时间" prop="timeA">
+                <el-date-picker
+                  type="date"
+                  placeholder="选择日期"
+                  v-model="chargeForm.timeA"
+                  value-format="timestamp"
+                  :disabled="finishCharge"
+                ></el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="回款类型">
+                <el-input :disabled="finishCharge"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="回款金额">
+                <el-input :disabled="finishCharge">
+                  <template slot="append">元</template>
+                </el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="转账银行">
+                <el-input :disabled="finishCharge"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="转账人">
+                <el-input :disabled="finishCharge"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-card>
         <br>
         <el-form-item label="费用 B 收费状态" prop="isB">
           <el-radio-group v-model="chargeForm.isB" :disabled="finishCharge">
@@ -19,9 +63,56 @@
             <el-radio label="0">未收</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="收费 B 收费时间" prop="timeB" v-if="chargeForm.isB == '1'">
-          <el-date-picker type="date" placeholder="选择日期" v-model="chargeForm.timeB" value-format="timestamp" :disabled="finishCharge"></el-date-picker>
-        </el-form-item>
+        <!-- <el-form-item label="收费 B 收费时间" prop="timeB" v-if="chargeForm.isB == '1'">
+          <el-date-picker
+            type="date"
+            placeholder="选择日期"
+            v-model="chargeForm.timeB"
+            value-format="timestamp"
+            :disabled="finishCharge"
+          ></el-date-picker>
+        </el-form-item>-->
+        <el-card v-if="chargeForm.isB == '1'">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="回款时间" prop="timeB">
+                <el-date-picker
+                  type="date"
+                  placeholder="选择日期"
+                  v-model="chargeForm.timeB"
+                  value-format="timestamp"
+                  :disabled="finishCharge"
+                ></el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="回款类型">
+                <el-input :disabled="finishCharge"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="回款金额">
+                <el-input :disabled="finishCharge">
+                  <template slot="append">元</template>
+                </el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="转账银行">
+                <el-input :disabled="finishCharge"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="转账人">
+                <el-input :disabled="finishCharge"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-card>
         <br>
         <el-form-item label="费用 C 收费状态" prop="isC">
           <el-radio-group v-model="chargeForm.isC" :disabled="finishCharge">
@@ -29,9 +120,56 @@
             <el-radio label="0">未收</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="收费 C 收费时间" prop="timeC" v-if="chargeForm.isC == '1'">
-          <el-date-picker type="date" placeholder="选择日期" v-model="chargeForm.timeC" value-format="timestamp" :disabled="finishCharge"></el-date-picker>
-        </el-form-item>
+        <!-- <el-form-item label="收费 C 收费时间" prop="timeC" v-if="chargeForm.isC == '1'">
+          <el-date-picker
+            type="date"
+            placeholder="选择日期"
+            v-model="chargeForm.timeC"
+            value-format="timestamp"
+            :disabled="finishCharge"
+          ></el-date-picker>
+        </el-form-item>-->
+        <el-card v-if="chargeForm.isC == '1'">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="回款时间" prop="timeC">
+                <el-date-picker
+                  type="date"
+                  placeholder="选择日期"
+                  v-model="chargeForm.timeC"
+                  value-format="timestamp"
+                  :disabled="finishCharge"
+                ></el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="回款类型">
+                <el-input :disabled="finishCharge"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="回款金额">
+                <el-input :disabled="finishCharge">
+                  <template slot="append">元</template>
+                </el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="转账银行">
+                <el-input :disabled="finishCharge"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="转账人">
+                <el-input :disabled="finishCharge"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-card>
         <br>
         <el-form-item label=" ">
           <el-button type="info" disabled v-if="finishCharge">已收费</el-button>
@@ -156,7 +294,7 @@ export default {
                 }
               })
             }
-          }).catch(() => {})
+          }).catch(() => { })
         } else {
           return false
         }
@@ -167,18 +305,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .app-container {
-    .form-wrapper {
-      padding: 20px;
-      margin-bottom: 20px;
-      background-color: #fff;
-    }
-    .option {
-      text-align: center;
-      margin: 50px;
-      button {
-        width: 200px;
-      }
+.app-container {
+  .form-wrapper {
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #fff;
+  }
+  .option {
+    text-align: center;
+    margin: 50px;
+    button {
+      width: 200px;
     }
   }
+}
 </style>
