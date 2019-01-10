@@ -8,7 +8,7 @@
         <div class="todo-container">
           <div class="todo-button success" @click="goTodo">完成 {{unreadTodoCount}}</div>
           <div class="todo-button" @click="goTodo">待办 {{unreadTodoCount}}</div>
-          <div class="todo-button warning" @click="goTodo">紧急 {{unreadTodoCount}}</div>
+          <div class="todo-button warning" @click="goTodo">警告 {{unreadTodoCount}}</div>
         </div>
         <el-dropdown trigger="click">
           <div class="avatar-wrapper">

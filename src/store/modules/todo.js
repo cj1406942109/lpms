@@ -35,6 +35,7 @@ const todo = {
             customClass: 'notification-todo',
             message: `有${state.unreadTodoCount}条新的待办事项`,
             duration: 0,
+            offset: 40,
             onClick () {
               notification.close()
               router.push({ path: '/quickpath/todo' })

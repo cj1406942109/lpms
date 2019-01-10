@@ -1,7 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
 import { getToken, getUserId } from './auth'
-import { Notification, Message } from 'element-ui'
+import { Notification } from 'element-ui'
 
 // 创建axios实例
 const service = axios.create({
@@ -58,10 +58,10 @@ service.interceptors.response.use(
           return null
         }
         if (response.data.statusCode === 800) {
-          Message.error('用户登录过期，请重新登录')
-          store.dispatch('Logout').then(() => {
-            location.reload()
-          })
+          // Message.error('用户登录过期，请重新登录')
+          // store.dispatch('Logout').then(() => {
+          //   location.reload()
+          // })
         } else {
           Notification({
             title: '请求出错',
