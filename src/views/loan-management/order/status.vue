@@ -35,7 +35,7 @@
         <el-step :title="item.des" v-for="item in orderStatus" :key="item.id">
           <div slot="description" class="step-desc">
             <ul v-if="item.createTime">
-              <template v-if="userList[item.employeeId]">
+              <template v-if="userList && userList[item.employeeId]">
                 <li>{{userList[item.employeeId].name}}</li>
                 <li
                   v-if="userList[item.employeeId].roles && userList[item.employeeId].roles[0]"
@@ -217,7 +217,8 @@ export default {
           { des: '放款', description: '未完成' }
         ]
       ],
-      userList: {}
+      userList: {},
+      userListCache: []
     }
   },
   components: {
@@ -285,12 +286,19 @@ export default {
       }
     },
     getUserById (id) {
-      if (!this.userList[id]) {
-        getUserById(id).then(data => {
-          if (data) {
-            this.userList[id] = data
-          }
-        })
+      if (id) {
+        const userListCacheIndex = this.userListCache.indexOf(id)
+        if (userListCacheIndex === -1) {
+          this.userListCache.push(id)
+          getUserById(id).then(data => {
+            if (data) {
+              this.userList = {
+                ...this.userList,
+                [id]: data
+              }
+            }
+          })
+        }
       }
     }
   }
