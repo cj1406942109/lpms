@@ -7,6 +7,9 @@ const getters = {
   userId: state => state.user.userId,
   departmentId: state => state.user.departmentId,
   permission: state => state.user.permission,
-  unreadTodoCount: state => state.todo.unreadTodoCount
+  unreadTodoCount: state => state.todo.unreadTodoCount,
+  todoCount: state => state.todo.todoCount,
+  successCount: state => state.todo.successCount,
+  warningCount: state => state.todo.warningCount
 }
 export default getters

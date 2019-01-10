@@ -6,9 +6,9 @@
     <div class="avatar-container">
       <div class="avatar-container-patch">
         <div class="todo-container">
-          <div class="todo-button success" @click="goTodo">完成 {{unreadTodoCount}}</div>
-          <div class="todo-button" @click="goTodo">待办 {{unreadTodoCount}}</div>
-          <div class="todo-button warning" @click="goTodo">警告 {{unreadTodoCount}}</div>
+          <div class="todo-button success" @click="goTodo">完成 {{successCount}}</div>
+          <div class="todo-button" @click="goTodo">待办 {{todoCount}}</div>
+          <div class="todo-button warning" @click="goTodo">警告 {{warningCount}}</div>
         </div>
         <el-dropdown trigger="click">
           <div class="avatar-wrapper">
@@ -50,7 +50,10 @@ export default {
       'sidebar',
       'username',
       'userId',
-      'unreadTodoCount'
+      'successCount',
+      'todoCount',
+      'unreadTodoCount',
+      'warningCount'
     ])
   },
   methods: {
