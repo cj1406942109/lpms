@@ -1,7 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
 import { getToken, getUserId } from './auth'
-import { Notification } from 'element-ui'
+import { Notification, Message } from 'element-ui'
 
 // 创建axios实例
 const service = axios.create({
@@ -20,17 +20,20 @@ const service = axios.create({
 })
 
 // request拦截器
-service.interceptors.request.use(config => {
-  if (store.getters.userId && getToken()) {
-    config.headers['token'] = getToken() // 让每个请求携带自定义token
-    config.headers['userId'] = getUserId() // 让每个请求携带自定义userId
+service.interceptors.request.use(
+  config => {
+    if (store.getters.userId && getToken()) {
+      config.headers['token'] = getToken() // 让每个请求携带自定义token
+      config.headers['userId'] = getUserId() // 让每个请求携带自定义userId
+    }
+    return config
+  },
+  error => {
+    // Do something with request error
+    console.log(error) // for debug
+    Promise.reject(error)
   }
-  return config
-}, error => {
-  // Do something with request error
-  console.log(error) // for debug
-  Promise.reject(error)
-})
+)
 
 // respone拦截器
 service.interceptors.response.use(
@@ -53,6 +56,12 @@ service.interceptors.response.use(
           //   location.reload()
           // })
           return null
+        }
+        if (response.data.statusCode === 800) {
+          Message.error('用户登录过期，请重新登录')
+          store.dispatch('Logout').then(() => {
+            location.reload()
+          })
         } else {
           Notification({
             title: '请求出错',
