@@ -42,8 +42,8 @@ export default {
     return {
       logo,
       loginForm: {
-        name: '15827258233',
-        password: 'cj123456'
+        name: '',
+        password: ''
       },
       loginRules: {
         name: [
