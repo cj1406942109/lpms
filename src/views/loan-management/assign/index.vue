@@ -155,7 +155,7 @@ export default {
     },
     getListByStatus (f, loanType, status) {
       return new Promise((resolve, reject) => {
-        f().then(data => {
+        f().then(({ data }) => {
           if (data) {
             if (data === 709) {
               this.$message({
@@ -177,7 +177,7 @@ export default {
       })
     },
     getUserList () {
-      getUserList().then(data => {
+      getUserList().then(({ data }) => {
         if (data) {
           this.userList = data
         } else {
@@ -202,7 +202,7 @@ export default {
           type: 'info',
           message: '正在处理...'
         })
-        assinTaskToUser(this.currentTask.rootId, item.id).then(data => {
+        assinTaskToUser(this.currentTask.rootId, item.id).then(({ data }) => {
           this.$message.closeAll()
           if (data) {
             this.dialogVisible = false
@@ -254,9 +254,9 @@ export default {
         if (this.loanMStatus === 'ALL') {
           let viewList = []
           let visaList = []
-          Promise.all([this.getViewMList().then(data => {
+          Promise.all([this.getViewMList().then(({ data }) => {
             viewList = data
-          }), this.getVisaMList().then(data => {
+          }), this.getVisaMList().then(({ data }) => {
             visaList = data
           })]).then(() => {
             this.mortgageListLoading = false
@@ -291,13 +291,13 @@ export default {
           let orderList = []
           let transferList = []
           let guaranteeList = []
-          Promise.all([this.getVisaHList().then(data => {
+          Promise.all([this.getVisaHList().then(({ data }) => {
             visaList = data
-          }), this.getOrderHList().then(data => {
+          }), this.getOrderHList().then(({ data }) => {
             orderList = data
-          }), this.getTransferHList().then(data => {
+          }), this.getTransferHList().then(({ data }) => {
             transferList = data
-          }), this.getGuaranteeHList().then(data => {
+          }), this.getGuaranteeHList().then(({ data }) => {
             guaranteeList = data
           })]).then(() => {
             this.houseListLoading = false

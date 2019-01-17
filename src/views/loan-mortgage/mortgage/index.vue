@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     getMortgageList () {
-      getMortgageListByEmployeeId(this.userId).then(data => {
+      getMortgageListByEmployeeId(this.userId).then(({ data }) => {
         this.mortgageListLoading = false
         this.mortgageList = data
       })

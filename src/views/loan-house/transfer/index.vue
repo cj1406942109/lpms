@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     getTransferList () {
-      getTransferListByEmployeeId(this.userId).then(data => {
+      getTransferListByEmployeeId(this.userId).then(({ data }) => {
         this.transferListLoading = false
         if (data) {
           this.transferList = data

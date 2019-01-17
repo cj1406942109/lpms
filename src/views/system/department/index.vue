@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     getRoleList () {
-      getRoleList().then(data => {
+      getRoleList().then(({ data }) => {
         this.departmentListLoading = false
         this.departmentList = data
       })
@@ -66,7 +66,7 @@ export default {
       this.$confirm(`是否删除部门角色：${item.name}`, '提示', {
         type: 'warning'
       }).then(() => {
-        deleteRoleById(item.id).then(data => {
+        deleteRoleById(item.id).then(({ data }) => {
           if (data) {
             this.$message.success('删除成功')
             this.getRoleList()

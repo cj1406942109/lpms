@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     getchargeList () {
-      getChargeListByEmployeeId(this.userId).then(data => {
+      getChargeListByEmployeeId(this.userId).then(({ data }) => {
         this.chargeListLoading = false
         if (data) {
           this.chargeList = data

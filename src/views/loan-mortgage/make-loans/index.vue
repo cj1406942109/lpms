@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     getloanList () {
-      getLoanListByEmployeeId(this.userId).then(data => {
+      getLoanListByEmployeeId(this.userId).then(({ data }) => {
         this.loanListLoading = false
         if (data) {
           this.loanList = data

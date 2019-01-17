@@ -168,7 +168,7 @@ export default {
   },
   methods: {
     getRole () {
-      getRoleById(this.$route.params.id).then(data => {
+      getRoleById(this.$route.params.id).then(({ data }) => {
         if (data) {
           this.departmentForm.name = data.name
           this.departmentForm.note = data.note
@@ -182,7 +182,7 @@ export default {
           })
         }
       })
-      // getEmployeeListByDepartmentId(this.$route.params.id).then(data => {
+      // getEmployeeListByDepartmentId(this.$route.params.id).then(({ data }) => {
       //   if (data) {
       //     this.userList = data
       //     this.userListLoading = false
@@ -195,7 +195,7 @@ export default {
       // })
     },
     getPermitList () {
-      getPermitList().then(data => {
+      getPermitList().then(({ data }) => {
         if (data) {
           this.permitList = data || []
         } else {
@@ -229,7 +229,7 @@ export default {
               name: this.departmentForm.name,
               note: this.departmentForm.note,
               permits: this.computedPermits
-            }).then(data => {
+            }).then(({ data }) => {
               if (data) {
                 this.$message.success('更新成功')
               } else {
@@ -241,7 +241,7 @@ export default {
               name: this.departmentForm.name,
               note: this.departmentForm.note,
               permits: this.computedPermits
-            }).then(data => {
+            }).then(({ data }) => {
               if (data) {
                 this.$message.success('创建成功')
                 this.$router.push({ path: '/system/department' })

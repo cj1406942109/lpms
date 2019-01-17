@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     getApproveList () {
-      getApproveListByEmployeeId(this.userId).then(data => {
+      getApproveListByEmployeeId(this.userId).then(({ data }) => {
         this.examineApproveListLoading = false
         if (data) {
           this.examineApproveList = data

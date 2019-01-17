@@ -20,6 +20,14 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      v-if="itemCount"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-size="pageSize"
+      :total="itemCount"
+      layout="total, prev, pager, next, jumper"
+    ></el-pagination>
   </div>
 </template>
 
@@ -34,7 +42,10 @@ export default {
   data () {
     return {
       userList: null,
-      userListLoading: true
+      userListLoading: true,
+      currentPage: 1,
+      pageSize: 15,
+      itemCount: 0
     }
   },
   created () {
@@ -47,10 +58,13 @@ export default {
     ])
   },
   methods: {
-    getUserList () {
-      getUserList().then(data => {
+    getUserList (page = 1) {
+      getUserList(page, this.pageSize).then(data => {
         this.userListLoading = false
-        this.userList = data
+        this.userList = data.data
+        if (typeof data.extra === 'number') {
+          this.itemCount = data.extra
+        }
       })
     },
     goDetail (item) {
@@ -61,7 +75,7 @@ export default {
       this.$confirm(`是否删除账号：${item.name}`, '提示', {
         type: 'warning'
       }).then(() => {
-        deleteUserById(item.id).then(data => {
+        deleteUserById(item.id).then(({ data }) => {
           if (data) {
             this.$message.success('删除成功')
             this.getUserList()
@@ -73,6 +87,9 @@ export default {
     },
     goCreate () {
       this.$router.push({ path: '/system/account/create-info' })
+    },
+    handleCurrentChange (page) {
+      this.getUserList(page)
     }
   }
 }

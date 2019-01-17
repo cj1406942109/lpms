@@ -141,7 +141,7 @@ export default {
                 type: 'info',
                 message: '正在处理...'
               })
-              saveView(this.interviewSuggestionForm, this.interviewId).then(data => {
+              saveView(this.interviewSuggestionForm, this.interviewId).then(({ data }) => {
                 this.$message.closeAll()
                 this.formLoading = false
                 if (data) {
@@ -158,7 +158,7 @@ export default {
             }).catch(() => {})
           } else {
             this.formLoading = true
-            saveView(this.interviewSuggestionForm, this.interviewId).then(data => {
+            saveView(this.interviewSuggestionForm, this.interviewId).then(({ data }) => {
               this.$message.closeAll()
               this.formLoading = false
               if (data) {
@@ -183,7 +183,7 @@ export default {
       this.$refs[formName].resetFields()
     },
     getStaticIndex (staticIndex) {
-      getStaticIndexByKey(staticIndex.key).then(data => {
+      getStaticIndexByKey(staticIndex.key).then(({ data }) => {
         if (data) {
           staticIndex.value = data[staticIndex.key]
         } else {
@@ -197,7 +197,7 @@ export default {
   },
   created () {
     this.loanLastStatus = this.currentFlow
-    getViewById(this.interviewId).then(data => {
+    getViewById(this.interviewId).then(({ data }) => {
       if (data.finishTime) {
         this.interviewSuggestionForm = JSON.parse(JSON.stringify(data))
         this.interviewSuggestionForm.proposedAmount = parseInt(this.interviewSuggestionForm.proposedAmount)

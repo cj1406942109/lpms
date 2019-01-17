@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     getTableList () {
-      getTableList().then(data => {
+      getTableList().then(({ data }) => {
         this.tableListLoading = false
         if (data) {
           this.tableList[0].value = data['mortgageViewPlace']
@@ -124,7 +124,7 @@ export default {
         const pList = []
         this.newValueList.forEach(ele => {
           pList.push(new Promise((resolve, reject) => {
-            setTableValue(ele.valueType, ele.value, ele.remark).then(data => {
+            setTableValue(ele.valueType, ele.value, ele.remark).then(({ data }) => {
               data ? resolve() : reject()
             })
           }))

@@ -87,7 +87,7 @@ export default {
   methods: {
     getUserList () {
       this.userListLoading = true
-      getUserList().then(data => {
+      getUserList().then(({ data }) => {
         if (data) {
           this.userList = data.map((user) => {
             return {

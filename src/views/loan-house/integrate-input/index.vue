@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     getInputList () {
-      getInputListByEmployeeId(this.userId).then(data => {
+      getInputListByEmployeeId(this.userId).then(({ data }) => {
         this.integrateInputListLoading = false
         if (data) {
           this.integrateInputList = data

@@ -100,7 +100,7 @@ export default {
   },
   methods: {
     getUser () {
-      getUserById(this.$route.params.id).then(data => {
+      getUserById(this.$route.params.id).then(({ data }) => {
         // console.log(data)
         if (data) {
           this.accountForm.account = data.account
@@ -117,7 +117,7 @@ export default {
       })
     },
     getRoleList () {
-      getRoleList().then(data => {
+      getRoleList().then(({ data }) => {
         if (data) {
           this.roleList = data
         } else {
@@ -129,7 +129,7 @@ export default {
       })
     },
     getPermission () {
-      gePermissionByEmployeeId(this.$route.params.id).then(data => {
+      gePermissionByEmployeeId(this.$route.params.id).then(({ data }) => {
         console.log(data)
       })
     },
@@ -148,7 +148,7 @@ export default {
             if (this.accountForm.password) {
               updateUserData.password = this.accountForm.password
             }
-            updateUserById(updateUserData).then(data => {
+            updateUserById(updateUserData).then(({ data }) => {
               if (data) {
                 this.$message.success('更新成功')
               } else {
@@ -163,7 +163,7 @@ export default {
               phone: this.accountForm.phone,
               position: this.accountForm.position,
               roles: [this.accountForm.role]
-            }).then(data => {
+            }).then(({ data }) => {
               if (data) {
                 this.$message.success('创建成功')
                 this.$router.push({ path: '/system/account' })

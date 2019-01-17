@@ -146,7 +146,7 @@ export default {
   methods: {
     getFormData () {
       return new Promise((resolve, reject) => {
-        getOutputList().then(data => {
+        getOutputList().then(({ data }) => {
           if (data) {
             this.tableLoading = false
             this.tableData = data
@@ -168,7 +168,7 @@ export default {
       // return wbout
     },
     generateForm () {
-      getHouseOutputList().then(data => {
+      getHouseOutputList().then(({ data }) => {
         if (data) {
           this.tableLoading = true
           this.getFormData().then(() => {

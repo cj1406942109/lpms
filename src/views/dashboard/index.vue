@@ -140,7 +140,7 @@ export default {
     getTodoList () {
       let listM = []
       let listH = []
-      Promise.all([getTaskMListByEmployeeId(this.userId).then(data => {
+      Promise.all([getTaskMListByEmployeeId(this.userId).then(({ data }) => {
         if (data) {
           listM = data.filter((todo) => {
             return todo.state !== 'finish'
@@ -151,7 +151,7 @@ export default {
           //   message: '获取抵押贷款任务列表失败'
           // })
         }
-      }), getTaskHListByEmployeeId(this.userId).then(data => {
+      }), getTaskHListByEmployeeId(this.userId).then(({ data }) => {
         if (data) {
           listH = data.filter((todo) => {
             return todo.state !== 'finish'
@@ -168,7 +168,7 @@ export default {
       })
     },
     getNotice () {
-      getNoticeList().then(data => {
+      getNoticeList().then(({ data }) => {
         if (data) {
           this.notice = JSON.parse(JSON.stringify(data[data.length - 1]))
         } else {

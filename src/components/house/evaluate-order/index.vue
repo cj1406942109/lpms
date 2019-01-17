@@ -170,7 +170,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            confirmOrder(this.orderId, this.orderStatusForm.time, this.orderStatusForm.company).then(data => {
+            confirmOrder(this.orderId, this.orderStatusForm.time, this.orderStatusForm.company).then(({ data }) => {
               if (data) {
                 this.finishOrder = true
                 this.$message({
@@ -220,7 +220,7 @@ export default {
               this.formLoading = true
               // 给报告类型赋值
               this.reportForm.report.reportType = this.reportForm.type
-              saveReport(this.orderId, this.reportForm.time, this.reportForm.type, this.reportForm.report).then(data => {
+              saveReport(this.orderId, this.reportForm.time, this.reportForm.type, this.reportForm.report).then(({ data }) => {
                 this.$message.closeAll()
                 this.formLoading = false
                 if (data) {
@@ -240,7 +240,7 @@ export default {
               // 给报告类型赋值
               this.reportForm.report.reportType = this.reportForm.type
               const saveMethod = this.finishReport ? updateReport : saveReport
-              saveMethod(this.orderId, this.reportForm.time, this.reportForm.type, this.reportForm.report).then(data => {
+              saveMethod(this.orderId, this.reportForm.time, this.reportForm.type, this.reportForm.report).then(({ data }) => {
                 this.formLoading = false
                 if (data) {
                   this.finishReport = true
@@ -263,7 +263,7 @@ export default {
       })
     },
     getStaticIndex (staticIndex) {
-      getStaticIndexByKey(staticIndex.key).then(data => {
+      getStaticIndexByKey(staticIndex.key).then(({ data }) => {
         if (data) {
           staticIndex.value = data[staticIndex.key]
         } else {
@@ -277,7 +277,7 @@ export default {
   },
   created () {
     this.loanLastStatus = this.currentFlow
-    getOrderById(this.orderId).then(data => {
+    getOrderById(this.orderId).then(({ data }) => {
       if (data) {
         console.log(data)
         this.finishOrder = data.orderState.done

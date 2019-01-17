@@ -450,11 +450,11 @@ export default {
                 message: '正在处理...'
               })
               this.formLoading = true
-              createTask(this.userId).then(data => {
+              createTask(this.userId).then(({ data }) => {
                 if (data) {
                   const checklistId = data.id
                   this.loanLastStatus = data.des
-                  saveChecklist(checklistId, this.checklistForm).then(data => {
+                  saveChecklist(checklistId, this.checklistForm).then(({ data }) => {
                     // 关闭所有消息
                     this.$message.closeAll()
                     this.formLoading = false
@@ -482,7 +482,7 @@ export default {
           } else {
             this.formLoading = true
             const saveMethod = this.finishFlow ? updateChecklist : saveChecklist
-            saveMethod(this.checklistId, this.checklistForm).then(data => {
+            saveMethod(this.checklistId, this.checklistForm).then(({ data }) => {
               this.formLoading = false
               if (data) {
                 this.$message({
@@ -506,7 +506,7 @@ export default {
       this.$refs[formName].resetFields()
     },
     getStaticIndex (staticIndex) {
-      getStaticIndexByKey(staticIndex.key).then(data => {
+      getStaticIndexByKey(staticIndex.key).then(({ data }) => {
         if (data) {
           staticIndex.value = data[staticIndex.key]
         } else {
@@ -520,7 +520,7 @@ export default {
   },
   created () {
     if (this.checklistId) {
-      getChecklistById(this.checklistId).then(data => {
+      getChecklistById(this.checklistId).then(({ data }) => {
         if (data) {
           // console.log(data)
           this.checklistForm = JSON.parse(JSON.stringify(data))

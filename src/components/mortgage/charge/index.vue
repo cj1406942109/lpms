@@ -98,7 +98,7 @@ export default {
   },
   created () {
     this.loanLastStatus = this.currentFlow
-    getChargeById(this.chargeId).then(data => {
+    getChargeById(this.chargeId).then(({ data }) => {
       if (data) {
         this.finishCharge = data.done
         if (this.finishCharge) {
@@ -127,7 +127,7 @@ export default {
                 type: 'info',
                 message: '正在处理...'
               })
-              confirmCharge(this.chargeId, this.chargeForm.time).then(data => {
+              confirmCharge(this.chargeId, this.chargeForm.time).then(({ data }) => {
                 this.$message.closeAll()
                 this.formLoading = false
                 if (data) {
@@ -144,7 +144,7 @@ export default {
               })
             } else {
               this.formLoading = true
-              confirmCharge(this.chargeId, this.chargeForm.time).then(data => {
+              confirmCharge(this.chargeId, this.chargeForm.time).then(({ data }) => {
                 this.formLoading = false
                 if (data) {
                   this.finishCharge = true

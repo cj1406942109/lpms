@@ -147,10 +147,14 @@ export function getPermitList () {
 /**
  * 获取用户列表
  */
-export function getUserList () {
+export function getUserList (page = 1, rows = 15) {
   return request({
     url: '/user',
-    method: 'get'
+    method: 'get',
+    params: {
+      page,
+      rows
+    }
   })
 }
 

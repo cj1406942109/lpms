@@ -880,7 +880,7 @@ export default {
   },
   created () {
     this.loanLastStatus = this.currentFlow
-    getVisaById(this.visaId).then(data => {
+    getVisaById(this.visaId).then(({ data }) => {
       this.finishCatalog = data.catalogState.done
       this.finishForm = data.formState.done
       this.finishStatus = data.visaState.done
@@ -914,7 +914,7 @@ export default {
       this.$refs['catalogForm'].validate((valid) => {
         if (valid) {
           const saveMethod = this.finishCatalog ? updateCatalog : saveCatalog
-          saveMethod(this.catalogForm).then(data => {
+          saveMethod(this.catalogForm).then(({ data }) => {
             if (data) {
               this.finishCatalog = true
               this.$message({
@@ -937,7 +937,7 @@ export default {
       this.$refs['applicationForm'].validate((valid) => {
         if (valid) {
           const saveMethod = this.finishForm ? updateForm : saveForm
-          saveMethod(this.applicationForm).then(data => {
+          saveMethod(this.applicationForm).then(({ data }) => {
             if (data) {
               this.finishForm = true
               this.$message({
@@ -994,7 +994,7 @@ export default {
                 type: 'info',
                 message: '正在处理...'
               })
-              confirmVisa(this.visaId, this.contractStatusForm.time, this.contractStatusForm.address).then(data => {
+              confirmVisa(this.visaId, this.contractStatusForm.time, this.contractStatusForm.address).then(({ data }) => {
                 this.$message.closeAll()
                 this.formLoading = false
                 if (data) {
@@ -1012,7 +1012,7 @@ export default {
             }).catch(() => {})
           } else {
             this.formLoading = true
-            confirmVisa(this.visaId, this.contractStatusForm.time, this.contractStatusForm.address).then(data => {
+            confirmVisa(this.visaId, this.contractStatusForm.time, this.contractStatusForm.address).then(({ data }) => {
               this.formLoading = false
               if (data) {
                 this.finishStatus = true
@@ -1034,7 +1034,7 @@ export default {
       })
     },
     getStaticIndex (staticIndex) {
-      getStaticIndexByKey(staticIndex.key).then(data => {
+      getStaticIndexByKey(staticIndex.key).then(({ data }) => {
         if (data) {
           staticIndex.value = data[staticIndex.key]
         } else {

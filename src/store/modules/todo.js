@@ -54,12 +54,12 @@ const todo = {
       let listM = []
       let listH = []
       Promise.all([
-        getTaskMListByEmployeeId(store.state.user.userId).then(data => {
+        getTaskMListByEmployeeId(store.state.user.userId).then(({ data }) => {
           if (data) {
             listM = data
           }
         }),
-        getTaskHListByEmployeeId(store.state.user.userId).then(data => {
+        getTaskHListByEmployeeId(store.state.user.userId).then(({ data }) => {
           if (data) {
             listH = data
           }

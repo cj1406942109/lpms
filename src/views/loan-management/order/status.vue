@@ -251,7 +251,7 @@ export default {
   created () {
     this.loanType = parseInt(this.$route.params.orderId.substring(0, 1))
     const getOrderById = this.loanType === 1 ? getTaskMById : getTaskHById
-    getOrderById(this.$route.params.orderId).then(data => {
+    getOrderById(this.$route.params.orderId).then(({ data }) => {
       if (data) {
         this.orderStatus = data
         if (this.orderStatus[data.length - 1].state === 'finish') {
@@ -290,7 +290,7 @@ export default {
         const userListCacheIndex = this.userListCache.indexOf(id)
         if (userListCacheIndex === -1) {
           this.userListCache.push(id)
-          getUserById(id).then(data => {
+          getUserById(id).then(({ data }) => {
             if (data) {
               this.userList = {
                 ...this.userList,

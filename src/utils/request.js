@@ -44,7 +44,7 @@ service.interceptors.response.use(
       return response
     } else {
       if (response.data.result) {
-        return response.data.data
+        return response.data
       } else {
         if (response.data.statusCode === 709) {
           // Notification({
@@ -55,7 +55,7 @@ service.interceptors.response.use(
           // store.dispatch('Logout').then(() => {
           //   location.reload()
           // })
-          return null
+          return {}
         }
         if (response.data.statusCode === 800) {
           // Message.error('用户登录过期，请重新登录')
@@ -68,7 +68,7 @@ service.interceptors.response.use(
             type: 'error',
             message: response.data.data
           })
-          return null
+          return {}
         }
       }
     }
