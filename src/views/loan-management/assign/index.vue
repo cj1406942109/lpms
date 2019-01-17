@@ -4,23 +4,31 @@
       <el-tab-pane label="抵押贷款" name="mortgage">
         <h3>抵押贷款业务分配</h3>
         <el-alert title="开始分配之前，请选择要分配的贷款状态，点击确定按钮获取待分配列表" type="warning"></el-alert>
-        <div class="option-wrapper">
-          贷款状态：
+        <div class="option-wrapper">贷款状态：
           <el-select v-model="loanMStatus" placeholder="请选择贷款状态">
-            <el-option v-for="item in loanMStatusOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            <el-option
+              v-for="item in loanMStatusOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
           </el-select>
           <el-button type="primary" @click="filterOrderList()">确定</el-button>
         </div>
-        <el-table :data="mortgageList" v-loading.body="mortgageListLoading" style="width: 100%" border stripe>
+        <el-table
+          :data="mortgageList"
+          v-loading.body="mortgageListLoading"
+          style="width: 100%"
+          border
+          stripe
+        >
           <el-table-column type="index" label="序号" width="100"></el-table-column>
           <el-table-column :sortable="true" prop="rootId" label="贷款编号" width="200"></el-table-column>
           <el-table-column :sortable="true" prop="clientName" label="客户姓名"></el-table-column>
           <el-table-column :sortable="true" prop="clientPhone" label="联系方式"></el-table-column>
           <el-table-column :sortable="true" prop="des" label="贷款当前所处流程" width="200">
             <template slot-scope="scope">
-              <el-tag :type="tagState(scope.row.des)">
-                {{scope.row.des}}
-              </el-tag>
+              <el-tag :type="tagState(scope.row.des)">{{scope.row.des}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column :sortable="true" prop="employeeId" label="所属用户ID" width="200"></el-table-column>
@@ -34,23 +42,31 @@
       <el-tab-pane label="二手房贷款" name="house">
         <h3>二手房贷款业务分配</h3>
         <el-alert title="开始分配之前，请选择要分配的贷款状态，点击确定按钮获取待分配列表" type="warning"></el-alert>
-        <div class="option-wrapper">
-          贷款状态：
+        <div class="option-wrapper">贷款状态：
           <el-select v-model="loanHStatus" placeholder="请选择贷款状态">
-            <el-option v-for="item in loanHStatusOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            <el-option
+              v-for="item in loanHStatusOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
           </el-select>
           <el-button type="primary" @click="filterOrderList()">确定</el-button>
         </div>
-        <el-table :data="houseList" v-loading.body="houseListLoading" style="width: 100%" border stripe>
+        <el-table
+          :data="houseList"
+          v-loading.body="houseListLoading"
+          style="width: 100%"
+          border
+          stripe
+        >
           <el-table-column type="index" label="序号" width="100"></el-table-column>
           <el-table-column :sortable="true" prop="rootId" label="贷款编号" width="200"></el-table-column>
           <el-table-column :sortable="true" prop="clientName" label="客户姓名"></el-table-column>
           <el-table-column :sortable="true" prop="clientPhone" label="联系方式"></el-table-column>
           <el-table-column :sortable="true" prop="des" label="贷款当前所处流程" width="200">
             <template slot-scope="scope">
-              <el-tag :type="tagState(scope.row.des)">
-                {{scope.row.des}}
-              </el-tag>
+              <el-tag :type="tagState(scope.row.des)">{{scope.row.des}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column :sortable="true" prop="employeeId" label="所属用户ID" width="200"></el-table-column>
@@ -75,6 +91,14 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        v-if="itemCount"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-size="pageSize"
+        :total="itemCount"
+        layout="total, prev, pager, next, jumper"
+      ></el-pagination>
     </el-dialog>
   </div>
 </template>
@@ -118,7 +142,10 @@ export default {
         { label: '评估下单', value: 'ORDER' },
         { label: '过户', value: 'TRANSFER' },
         { label: '担保', value: 'GUARANTEE' }
-      ]
+      ],
+      currentPage: 1,
+      pageSize: 15,
+      itemCount: 0
     }
   },
   created () {
@@ -176,10 +203,13 @@ export default {
         })
       })
     },
-    getUserList () {
-      getUserList().then(({ data }) => {
-        if (data) {
-          this.userList = data
+    getUserList (page = 1) {
+      getUserList(page, this.pageSize).then(data => {
+        if (data.data) {
+          this.userList = data.data
+          if (typeof data.extra === 'number') {
+            this.itemCount = data.extra
+          }
         } else {
           this.$message({
             type: 'error',
@@ -218,7 +248,7 @@ export default {
             })
           }
         })
-      }).catch(() => {})
+      }).catch(() => { })
     },
     tagState (state) {
       switch (state) {
@@ -340,17 +370,20 @@ export default {
           })
         }
       }
+    },
+    handleCurrentChange (page) {
+      this.getUserList(page)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .app-container {
-    padding: 20px;
-    background-color: #fff;
-    .option-wrapper {
-      margin: 20px;
-    }
+.app-container {
+  padding: 20px;
+  background-color: #fff;
+  .option-wrapper {
+    margin: 20px;
   }
+}
 </style>
