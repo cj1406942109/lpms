@@ -15,18 +15,33 @@
                 <el-input v-model="loginForm.name" placeholder="请输入手机号"></el-input>
               </el-form-item>
               <el-form-item label="密码" prop="password">
-                <el-input type="password" v-model="loginForm.password" auto-complete="off" @keyup.enter.native="handleLogin" placeholder="请输入密码"></el-input>
+                <el-input
+                  type="password"
+                  v-model="loginForm.password"
+                  auto-complete="off"
+                  @keyup.enter.native="handleLogin"
+                  placeholder="请输入密码"
+                ></el-input>
               </el-form-item>
               <el-form-item class="form-action">
-                <el-button type="primary" @click.native.prevent="handleLogin" :loading="loading">{{loading?'正在登录...':'登录'}}</el-button>
+                <el-button
+                  type="primary"
+                  @click.native.prevent="handleLogin"
+                  :loading="loading"
+                >{{loading?'正在登录...':'登录'}}</el-button>
               </el-form-item>
             </el-form>
           </el-card>
         </div>
       </el-main>
       <el-footer>
-        <span>{{new Date().getFullYear()}} &copy; <abbr title="Intelligent Medical">IM</abbr> </span>
-        <span>Powered by <abbr title="WuHan University">WHU</abbr> |
+        <span>
+          {{new Date().getFullYear()}} &copy;
+          <abbr title="Intelligent Medical">IM</abbr>
+        </span>
+        <span>
+          Powered by
+          <abbr title="WuHan University">WHU</abbr> |
           <a target="_blank" href="http://libingteam.com">LiBingTeam</a>
         </span>
       </el-footer>
@@ -64,7 +79,7 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('LoginByUsername', this.loginForm).then(({ data }) => {
+          this.$store.dispatch('LoginByUsername', this.loginForm).then((data) => {
             this.loading = false
             if (data) {
               // 登录成功，跳转到首页
@@ -83,7 +98,7 @@ export default {
 
 <style lang="scss" scoped>
 .app-wrapper {
-  background-color: #E7E5E4;
+  background-color: #e7e5e4;
   height: 100vh;
   .el-header {
     padding: 0 100px;
