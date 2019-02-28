@@ -41,6 +41,7 @@ service.interceptors.response.use(
     // console.log(response)
     if (!getToken() || !getUserId()) {
       // 未登录
+      // 用户名或密码错误
       if ((response.data.statusCode + '')[0] === '7') {
         Message.error(response.data.extra)
       }
@@ -61,10 +62,12 @@ service.interceptors.response.use(
           return {}
         }
         if (response.data.statusCode === 800) {
-          // Message.error('用户登录过期，请重新登录')
-          // store.dispatch('Logout').then(() => {
-          //   location.reload()
-          // })
+          Message.error('用户登录过期，请重新登录，即将跳转到登录页...')
+          setTimeout(()=> {
+            store.dispatch('Logout').then(() => {
+              location.reload()
+            })
+          }, 3000)
         } else {
           Notification({
             title: '请求出错',
