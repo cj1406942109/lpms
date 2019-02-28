@@ -1,7 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
 import { getToken, getUserId } from './auth'
-import { Notification } from 'element-ui'
+import { Notification, Message } from 'element-ui'
 
 // 创建axios实例
 const service = axios.create({
@@ -41,6 +41,9 @@ service.interceptors.response.use(
     // console.log(response)
     if (!getToken() || !getUserId()) {
       // 未登录
+      if ((response.data.statusCode + '')[0] === '7') {
+        Message.error(response.data.extra)
+      }
       return response
     } else {
       if (response.data.result) {
