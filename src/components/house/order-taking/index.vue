@@ -285,23 +285,23 @@ export default {
         remark: null
       },
       rules: {
-        finishTime: [{ required: true, message: '完成时间不能为空' }],
+        // finishTime: [{ required: true, message: '完成时间不能为空' }],
         borrowerName: [{ required: true, message: '姓名不能为空' }],
         borrowerPhone: [
           { required: true, message: '手机号不能为空' },
           { pattern: /^1[0-9]{10}$/, message: '手机号格式错误' }
         ],
-        borrowerCompany: [{ required: true, message: '工作单位不能为空' }],
-        borrowerCompanyPhone: [{ required: true, message: '单位电话不能为空' }],
+        // borrowerCompany: [{ required: true, message: '工作单位不能为空' }],
+        // borrowerCompanyPhone: [{ required: true, message: '单位电话不能为空' }],
         borrowerSalary: [
-          { required: true, message: '月均不能为空' },
+          // { required: true, message: '月均不能为空' },
           { type: 'number', message: '月均收入必须为数字值' }
         ],
-        borrowerAddress: [{ required: true, message: '联系地址不能为空' }],
-        borrowerResidentCity: [{ required: true, message: '户口所在地不能为空' }],
-        borrowerCertificateType: [{ required: true, message: '请选择证件类型' }],
+        // borrowerAddress: [{ required: true, message: '联系地址不能为空' }],
+        // borrowerResidentCity: [{ required: true, message: '户口所在地不能为空' }],
+        // borrowerCertificateType: [{ required: true, message: '请选择证件类型' }],
         borrowerCertificateNumber: [
-          { required: true, message: '证件号码不能为空' },
+          // { required: true, message: '证件号码不能为空' },
           { pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}[0-9Xx]$)/, message: '证件号码格式错误' }
         ],
         // borrowerSpouseName: [{ required: true, message: '姓名不能为空' }],
@@ -346,16 +346,16 @@ export default {
         // ],
         // guarantorCompany: [{ required: true, message: '工作单位不能为空' }],
         houseAddress: [{ required: true, message: '房屋地址不能为空' }],
-        houseCertificateNumber: [{ required: true, message: '房产证号不能为空' }],
-        houseLandCertificateNumber: [{ required: true, message: '土地证号不能为空' }],
+        // houseCertificateNumber: [{ required: true, message: '房产证号不能为空' }],
+        // houseLandCertificateNumber: [{ required: true, message: '土地证号不能为空' }],
         houseAffiliation: [{ required: true, message: '房屋所属区局不能为空' }],
-        houseBuiltTime: [{ required: true, message: '建成年份不能为空' }],
-        houseType: [{ required: true, message: '请选择房屋类型' }],
+        // houseBuiltTime: [{ required: true, message: '建成年份不能为空' }],
+        // houseType: [{ required: true, message: '请选择房屋类型' }],
         houseArea: [
           { required: true, message: '房屋建筑面积不能为空' },
           { type: 'number', message: '房屋建筑面积必须为数字值' }
         ],
-        houseLandType: [{ required: true, message: '请选择土地属性' }],
+        // houseLandType: [{ required: true, message: '请选择土地属性' }],
         loanBank: [{ required: true, message: '贷款银行不能为空' }],
         manager: [{ required: true, message: '客户经理不能为空' }],
         managerPhone: [
@@ -379,14 +379,14 @@ export default {
           { required: true, message: '贷款期限不能为空' },
           { type: 'number', message: '贷款期限必须为数字值' }
         ],
-        guaranteeType: [{ required: true, message: '担保方式不能为空' }],
-        payType: [{ required: true, message: '请选择还款方式' }],
+        // guaranteeType: [{ required: true, message: '担保方式不能为空' }],
+        // payType: [{ required: true, message: '请选择还款方式' }],
         loanType: [{ required: true, message: '请选择贷款类型' }],
-        downPayAmount: [{ required: true, message: '首付款交付金额不能为空' }],
-        downPayType: [{ required: true, message: '首付款交付方式不能为空' }],
-        isDealReal: [{ required: true, message: '请选择成交情况' }],
-        isClientSituationReal: [{ required: true, message: '请选择客户情况' }],
-        sellerHandle: [{ required: true, message: '请选择存折办理' }]
+        // downPayAmount: [{ required: true, message: '首付款交付金额不能为空' }],
+        // downPayType: [{ required: true, message: '首付款交付方式不能为空' }],
+        // isDealReal: [{ required: true, message: '请选择成交情况' }],
+        // isClientSituationReal: [{ required: true, message: '请选择客户情况' }],
+        // sellerHandle: [{ required: true, message: '请选择存折办理' }]
       },
       formLoading: false,
       loanId: '',
