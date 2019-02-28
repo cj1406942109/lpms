@@ -87,7 +87,7 @@ export default {
   },
   created () {
     this.loanLastStatus = this.currentFlow
-    getTransferById(this.transferId).then(data => {
+    getTransferById(this.transferId).then(({ data }) => {
       if (data) {
         this.finishTransfer = data.transferState.done
         this.finishReceipt = data.receiptState.done
@@ -117,7 +117,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            confirmTransfer(this.transferId, this.transferForm.time).then(data => {
+            confirmTransfer(this.transferId, this.transferForm.time).then(({ data }) => {
               if (data) {
                 this.finishTransfer = true
                 this.$message({
@@ -151,7 +151,7 @@ export default {
                 message: '正在处理...'
               })
               this.formLoading = true
-              confirmReceipt(this.transferId, this.receiptForm.time).then(data => {
+              confirmReceipt(this.transferId, this.receiptForm.time).then(({ data }) => {
                 this.$message.closeAll()
                 this.formLoading = false
                 if (data) {
@@ -168,7 +168,7 @@ export default {
               })
             } else {
               this.formLoading = true
-              confirmReceipt(this.transferId, this.receiptForm.time).then(data => {
+              confirmReceipt(this.transferId, this.receiptForm.time).then(({ data }) => {
                 this.formLoading = false
                 if (data) {
                   this.finishReceipt = true

@@ -149,7 +149,7 @@ export default {
     this.finishMortgage = this.$route.params.mortgageState === 'true'
     this.finishApprove = this.$route.params.guaranteeApprove === 'true'
     this.finishPublish = this.$route.params.guaranteePublish === 'true'
-    getMortgageById(this.mortgageId).then(data => {
+    getMortgageById(this.mortgageId).then(({ data }) => {
       this.finishMortgage = data.mortgageState.done
       this.finishApprove = data.guaranteeApprove.done
       this.finishPublish = data.guaranteePublish.done
@@ -179,7 +179,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            confirmMortgageStatus(this.mortgageId, this.mortgageStatusForm.time, this.mortgageStatusForm.isNeedGuarantee).then(data => {
+            confirmMortgageStatus(this.mortgageId, this.mortgageStatusForm.time, this.mortgageStatusForm.isNeedGuarantee).then(({ data }) => {
               if (data) {
                 this.finishMortgage = true
                 this.$message({
@@ -211,7 +211,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            guaranteeApprove(this.mortgageId, this.guaranteeApproveForm.approvePass, this.guaranteeApproveForm.approvePassTime).then(data => {
+            guaranteeApprove(this.mortgageId, this.guaranteeApproveForm.approvePass, this.guaranteeApproveForm.approvePassTime).then(({ data }) => {
               if (data) {
                 this.finishApprove = true
                 this.$message({
@@ -239,7 +239,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            guaranteePublish(this.mortgageId, this.guaranteePublishForm.approveResult, this.guaranteePublishForm.approvePassTime, this.guaranteePublishForm.guaranteePublishTime).then(data => {
+            guaranteePublish(this.mortgageId, this.guaranteePublishForm.approveResult, this.guaranteePublishForm.approvePassTime, this.guaranteePublishForm.guaranteePublishTime).then(({ data }) => {
               if (data) {
                 this.finishPublish = true
                 this.$message({
@@ -265,7 +265,7 @@ export default {
           type: 'info',
           message: '正在处理...'
         })
-        skipMortgage(this.mortgageId).then(data => {
+        skipMortgage(this.mortgageId).then(({ data }) => {
           this.$message.closeAll()
           if (data) {
             this.localFinishFlow = true
@@ -280,7 +280,7 @@ export default {
           }
         })
       } else {
-        skipMortgage(this.mortgageId).then(data => {
+        skipMortgage(this.mortgageId).then(({ data }) => {
           if (data) {
             this.localFinishFlow = true
             this.$message({

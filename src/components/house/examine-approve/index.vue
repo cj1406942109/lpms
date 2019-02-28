@@ -170,7 +170,7 @@ export default {
   },
   created () {
     this.loanLastStatus = this.currentFlow
-    getApproveById(this.approveId).then(data => {
+    getApproveById(this.approveId).then(({ data }) => {
       console.log(data)
       if (data) {
         this.finishSend = data.sendState.done
@@ -208,7 +208,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            completeApprove(this.approveId, this.approveForm.time).then(data => {
+            completeApprove(this.approveId, this.approveForm.time).then(({ data }) => {
               if (data) {
                 this.finishSend = true
                 this.$message({
@@ -242,7 +242,7 @@ export default {
                 message: '正在处理...'
               })
               this.formLoading = true
-              confirmApproveStatus(this.approveId, this.approveStatusForm).then(data => {
+              confirmApproveStatus(this.approveId, this.approveStatusForm).then(({ data }) => {
                 this.$message.closeAll()
                 this.formLoading = false
                 if (data) {
@@ -259,7 +259,7 @@ export default {
             } else {
               this.formLoading = true
               const saveMethod = this.finishApprove ? updateApproveStatus : confirmApproveStatus
-              saveMethod(this.approveId, this.approveStatusForm).then(data => {
+              saveMethod(this.approveId, this.approveStatusForm).then(({ data }) => {
                 this.formLoading = false
                 if (data) {
                   this.finishApprove = true
@@ -282,7 +282,7 @@ export default {
       })
     },
     getStaticIndex (staticIndex) {
-      getStaticIndexByKey(staticIndex.key).then(data => {
+      getStaticIndexByKey(staticIndex.key).then(({ data }) => {
         if (data) {
           staticIndex.value = data[staticIndex.key]
         } else {

@@ -205,7 +205,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            confirmOrder(this.orderId, this.orderStatusForm.time, this.orderStatusForm.company).then(data => {
+            confirmOrder(this.orderId, this.orderStatusForm.time, this.orderStatusForm.company).then(({ data }) => {
               if (data) {
                 this.finishOrder = true
                 this.$message({
@@ -271,7 +271,7 @@ export default {
                 message: '正在处理...'
               })
               this.formLoading = true
-              saveReport(this.orderId, this.reportForm.time, this.reportForm.type, this.reportForm.reports).then(data => {
+              saveReport(this.orderId, this.reportForm.time, this.reportForm.type, this.reportForm.reports).then(({ data }) => {
                 this.$message.closeAll()
                 this.formLoading = false
                 if (data) {
@@ -290,7 +290,7 @@ export default {
           } else {
             this.formLoading = true
             const saveMethod = this.finishReport ? updateReport : saveReport
-            saveMethod(this.orderId, this.reportForm.time, this.reportForm.type, this.reportForm.reports).then(data => {
+            saveMethod(this.orderId, this.reportForm.time, this.reportForm.type, this.reportForm.reports).then(({ data }) => {
               this.formLoading = false
               if (data) {
                 this.finishReport = true
@@ -312,7 +312,7 @@ export default {
       })
     },
     getStaticIndex (staticIndex) {
-      getStaticIndexByKey(staticIndex.key).then(data => {
+      getStaticIndexByKey(staticIndex.key).then(({ data }) => {
         if (data) {
           staticIndex.value = data[staticIndex.key]
         } else {
@@ -326,7 +326,7 @@ export default {
   },
   created () {
     this.loanLastStatus = this.currentFlow
-    getOrderById(this.orderId).then(data => {
+    getOrderById(this.orderId).then(({ data }) => {
       if (data) {
         this.finishOrder = data.orderState.done
         this.finishReport = data.reportState.done

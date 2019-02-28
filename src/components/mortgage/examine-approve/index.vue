@@ -627,7 +627,7 @@ export default {
   },
   created () {
     this.loanLastStatus = this.currentFlow
-    getApproveById(this.approveId).then(data => {
+    getApproveById(this.approveId).then(({ data }) => {
       if (data) {
         this.reportType = data.reportType === '预评' ? 1 : 2
         this.loanVariety = data.loanVariety
@@ -717,7 +717,7 @@ export default {
       }).catch(() => {})
     },
     updateCatalogHandler () {
-      updateCatalog(this.catalogForm).then(data => {
+      updateCatalog(this.catalogForm).then(({ data }) => {
         if (data) {
           this.$message({
             type: 'success',
@@ -739,7 +739,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            confirmCatalog(this.approveId, this.catalogForm).then(data => {
+            confirmCatalog(this.approveId, this.catalogForm).then(({ data }) => {
               if (data) {
                 this.finishCatalog = true
                 this.$message({
@@ -767,7 +767,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            completeApprove(this.approveId, this.approveForm.time).then(data => {
+            completeApprove(this.approveId, this.approveForm.time).then(({ data }) => {
               if (data) {
                 this.finishSend = true
                 this.$message({
@@ -795,7 +795,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            confirmApproveStatus(this.approveId, this.approveStatusForm).then(data => {
+            confirmApproveStatus(this.approveId, this.approveStatusForm).then(({ data }) => {
               if (data) {
                 this.finishApprove = true
                 this.$message({
@@ -826,7 +826,7 @@ export default {
           message: '正在处理...'
         })
         this.formLoading = true
-        skipApprove(this.$route.params.id).then(data => {
+        skipApprove(this.$route.params.id).then(({ data }) => {
           this.formLoading = false
           this.$message.closeAll()
           if (data) {
@@ -857,7 +857,7 @@ export default {
                 message: '正在处理...'
               })
               this.formLoading = true
-              saveFormalReport(this.approveId, this.reportForm.time, this.reportForm.reports).then(data => {
+              saveFormalReport(this.approveId, this.reportForm.time, this.reportForm.reports).then(({ data }) => {
                 this.$message.closeAll()
                 this.formLoading = false
                 if (data) {
@@ -875,7 +875,7 @@ export default {
             }).catch(() => {})
           } else {
             this.formLoading = true
-            saveFormalReport(this.approveId, this.reportForm.time, this.reportForm.reports).then(data => {
+            saveFormalReport(this.approveId, this.reportForm.time, this.reportForm.reports).then(({ data }) => {
               this.formLoading = false
               if (data) {
                 this.finishReport = true
@@ -921,7 +921,7 @@ export default {
       this.reportForm.reports[index1].reportFirst = parseInt(this.preReports[index1][index2].reportFirst)
     },
     getStaticIndex (staticIndex) {
-      getStaticIndexByKey(staticIndex.key).then(data => {
+      getStaticIndexByKey(staticIndex.key).then(({ data }) => {
         if (data) {
           staticIndex.value = data[staticIndex.key]
         } else {

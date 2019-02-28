@@ -2,23 +2,31 @@
   <el-menu class="navbar" mode="horizontal">
     <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
     <breadcrumb></breadcrumb>
-    <el-dropdown class="avatar-container" trigger="click">
-      <div class="avatar-wrapper">
-        <img class="user-avatar" src="./default-avatar.png">
-        <span class="username">{{username}}</span>
-        <i class="el-icon-caret-bottom"></i>
+
+    <div class="avatar-container">
+      <div class="avatar-container-patch">
+        <div class="todo-container">
+          <div class="todo-button success" @click="goTodo">完成 {{successCount}}</div>
+          <div class="todo-button" @click="goTodo">待办 {{todoCount}}</div>
+          <div class="todo-button warning" @click="goTodo">警告 {{warningCount}}</div>
+        </div>
+        <el-dropdown trigger="click">
+          <div class="avatar-wrapper">
+            <img class="user-avatar" src="./default-avatar.png">
+            <span class="username">{{username}}</span>
+            <i class="el-icon-caret-bottom"></i>
+          </div>
+          <el-dropdown-menu class="user-dropdown" slot="dropdown">
+            <router-link class="inlineBlock" to="/">
+              <el-dropdown-item>首页</el-dropdown-item>
+            </router-link>
+            <el-dropdown-item divided>
+              <span @click="logout" style="display:block;">注销登录</span>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
-      <el-dropdown-menu class="user-dropdown" slot="dropdown">
-        <router-link class="inlineBlock" to="/">
-          <el-dropdown-item>
-            首页
-          </el-dropdown-item>
-        </router-link>
-        <el-dropdown-item divided>
-          <span @click="logout" style="display:block;">注销登录</span>
-        </el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
+    </div>
   </el-menu>
 </template>
 
@@ -32,10 +40,20 @@ export default {
     Breadcrumb,
     Hamburger
   },
+  data () {
+    return {
+      getTodoListTimer: 0
+    }
+  },
   computed: {
     ...mapGetters([
       'sidebar',
-      'username'
+      'username',
+      'userId',
+      'successCount',
+      'todoCount',
+      'unreadTodoCount',
+      'warningCount'
     ])
   },
   methods: {
@@ -46,7 +64,17 @@ export default {
       this.$store.dispatch('Logout').then(() => {
         location.reload() // 为了重新实例化vue-router对象 避免bug
       })
+    },
+    goTodo () {
+      this.$router.push({ path: '/quickpath/todo' })
     }
+  },
+  created () {
+    this.$store.dispatch('getTodoList')
+    this.getTodoListTimer = window.setTimeout(() => { this.$store.dispatch('getTodoList') }, 1000 * 60 * 5)
+  },
+  beforeDestroy () {
+    window.clearTimeout(this.getTodoListTimer)
   }
 }
 </script>
@@ -73,6 +101,35 @@ export default {
     display: inline-block;
     position: absolute;
     right: 35px;
+    .avatar-container-patch {
+      display: flex;
+      align-items: center;
+      height: 100%;
+    }
+    .todo-container {
+      margin-right: 40px;
+      display: flex;
+      align-items: center;
+      .todo-button {
+        cursor: pointer;
+        height: 30px;
+        line-height: 30px;
+        font-size: 14px;
+        color: white;
+        padding: 0 10px;
+        background-color: #6397f8;
+        border-radius: 5px;
+        & + .todo-button {
+          margin-left: 10px;
+        }
+        &.warning {
+          background-color: #f86578;
+        }
+        &.success {
+          background-color: #62b837;
+        }
+      }
+    }
     .avatar-wrapper {
       cursor: pointer;
       margin-top: 5px;
@@ -92,7 +149,7 @@ export default {
       .el-icon-caret-bottom {
         position: absolute;
         right: -20px;
-        top: 20px;
+        top: 15px;
         font-size: 12px;
       }
     }

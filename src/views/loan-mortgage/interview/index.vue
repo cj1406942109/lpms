@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     getInterviewList () {
-      getViewListByEmployeeId(this.userId).then(data => {
+      getViewListByEmployeeId(this.userId).then(({ data }) => {
         this.interviewListLoading = false
         if (data) {
           this.interviewList = data

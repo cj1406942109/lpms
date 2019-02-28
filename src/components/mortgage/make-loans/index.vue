@@ -54,7 +54,7 @@ export default {
   },
   created () {
     this.loanLastStatus = this.currentFlow
-    getLoanById(this.makeLoanId).then(data => {
+    getLoanById(this.makeLoanId).then(({ data }) => {
       if (data) {
         this.finishLoan = data.done
         if (this.finishLoan) {
@@ -83,7 +83,7 @@ export default {
                 type: 'info',
                 message: '正在处理...'
               })
-              confirmLoan(this.makeLoanId, this.loanForm.time).then(data => {
+              confirmLoan(this.makeLoanId, this.loanForm.time).then(({ data }) => {
                 this.$message.closeAll()
                 this.formLoading = false
                 if (data) {
@@ -100,7 +100,7 @@ export default {
               })
             } else {
               this.formLoading = true
-              confirmLoan(this.makeLoanId, this.loanForm.time).then(data => {
+              confirmLoan(this.makeLoanId, this.loanForm.time).then(({ data }) => {
                 this.formLoading = false
                 if (data) {
                   this.finishLoan = true

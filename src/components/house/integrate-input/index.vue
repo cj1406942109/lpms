@@ -355,7 +355,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            confirmCheck(this.inputId, this.checkForm.houseTime, this.checkForm.creditTime).then(data => {
+            confirmCheck(this.inputId, this.checkForm.houseTime, this.checkForm.creditTime).then(({ data }) => {
               if (data) {
                 this.finishCheck = true
                 this.$message({
@@ -408,7 +408,7 @@ export default {
             type: 'warning'
           }).then(() => {
             const saveMethod = this.finishCatalog ? updateIntegrate : confirmIntegrate
-            saveMethod(this.inputId, this.catalogForm).then(data => {
+            saveMethod(this.inputId, this.catalogForm).then(({ data }) => {
               if (data) {
                 this.finishCatalog = true
                 this.$message({
@@ -442,7 +442,7 @@ export default {
                 type: 'info',
                 message: '正在处理...'
               })
-              confirmInput(this.inputId, this.inputForm.time).then(data => {
+              confirmInput(this.inputId, this.inputForm.time).then(({ data }) => {
                 this.$message.closeAll()
                 this.formLoading = false
                 if (data) {
@@ -459,7 +459,7 @@ export default {
               })
             } else {
               this.formLoading = true
-              confirmInput(this.inputId, this.inputForm.time).then(data => {
+              confirmInput(this.inputId, this.inputForm.time).then(({ data }) => {
                 this.formLoading = false
                 if (data) {
                   this.finishInput = true
@@ -484,7 +484,7 @@ export default {
   },
   created () {
     this.loanLastStatus = this.currentFlow
-    getInputById(this.inputId).then(data => {
+    getInputById(this.inputId).then(({ data }) => {
       console.log(data)
       if (data) {
         this.finishCheck = data.checkState.done

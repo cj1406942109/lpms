@@ -1,11 +1,22 @@
 <template>
   <div class="app-container">
-    <h2>部门列表</h2>
-    <el-table :data="departmentList" v-loading.body="departmentListLoading" style="width: 100%" border stripe>
+    <div class="table-header">
+      <h2>部门角色列表</h2>
+      <div>
+        <el-button type="success" @click="goCreate">新增角色</el-button>
+      </div>
+    </div>
+    <el-table
+      :data="departmentList"
+      v-loading.body="departmentListLoading"
+      style="width: 100%"
+      border
+      stripe
+    >
       <el-table-column type="index" label="序号" width="100"></el-table-column>
-      <el-table-column prop="id" label="部门编号" width="300"></el-table-column>
-      <el-table-column prop="name" label="部门名称"></el-table-column>
-      <el-table-column prop="description" label="描述信息"></el-table-column>
+      <el-table-column prop="id" label="部门角色编号" width="300"></el-table-column>
+      <el-table-column prop="name" label="部门角色名称"></el-table-column>
+      <el-table-column prop="note" label="描述信息"></el-table-column>
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="goDetail(scope.row)">查看</el-button>
@@ -20,7 +31,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import {
-  getDepartmentList
+  getRoleList,
+  deleteRoleById
 } from '@/api/system'
 export default {
   name: 'department',
@@ -31,7 +43,7 @@ export default {
     }
   },
   created () {
-    this.getDepartmentList()
+    this.getRoleList()
   },
   computed: {
     ...mapGetters([
@@ -40,8 +52,8 @@ export default {
     ])
   },
   methods: {
-    getDepartmentList () {
-      getDepartmentList().then(data => {
+    getRoleList () {
+      getRoleList().then(({ data }) => {
         this.departmentListLoading = false
         this.departmentList = data
       })
@@ -51,15 +63,34 @@ export default {
       this.$router.push({ path: `/system/department/edit-info/${item.id}` })
     },
     goDelete (item) {
-      console.log(item)
+      this.$confirm(`是否删除部门角色：${item.name}`, '提示', {
+        type: 'warning'
+      }).then(() => {
+        deleteRoleById(item.id).then(({ data }) => {
+          if (data) {
+            this.$message.success('删除成功')
+            this.getRoleList()
+          }
+        })
+      }).catch(() => {
+        return
+      })
+    },
+    goCreate () {
+      this.$router.push({ path: '/system/department/create-info' })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .app-container {
-    padding: 20px;
-    background-color: #fff;
-  }
+.app-container {
+  padding: 20px;
+  background-color: #fff;
+}
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 </style>

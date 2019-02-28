@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     getOrderList () {
-      getOrderListByEmployeeId(this.userId).then(data => {
+      getOrderListByEmployeeId(this.userId).then(({ data }) => {
         this.evaluateOrderListLoading = false
         if (data) {
           this.evaluateOrderList = data

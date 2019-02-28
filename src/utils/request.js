@@ -10,7 +10,8 @@ const service = axios.create({
   // baseURL: 'http://192.168.10.225:3000',
   // baseURL: 'http://192.168.10.211:8080',
   // baseURL: 'http://47.93.43.106:8090',
-  baseURL: 'http://aidr.vip:8080/loan',
+  // baseURL: 'http://aidr.vip:8080/loan',
+  baseURL: 'http://aidr.vip:8080/loan2',
   // baseURL: 'http://192.168.3.2:8080',
   // baseURL: 'http://192.168.3.6:8080',
   // baseURL: 'http://loan.ngrok.xiaomiqiu.cn',
@@ -19,17 +20,20 @@ const service = axios.create({
 })
 
 // request拦截器
-service.interceptors.request.use(config => {
-  if (store.getters.userId && getToken()) {
-    config.headers['token'] = getToken() // 让每个请求携带自定义token
-    config.headers['userId'] = getUserId() // 让每个请求携带自定义userId
+service.interceptors.request.use(
+  config => {
+    if (store.getters.userId && getToken()) {
+      config.headers['token'] = getToken() // 让每个请求携带自定义token
+      config.headers['userId'] = getUserId() // 让每个请求携带自定义userId
+    }
+    return config
+  },
+  error => {
+    // Do something with request error
+    console.log(error) // for debug
+    Promise.reject(error)
   }
-  return config
-}, error => {
-  // Do something with request error
-  console.log(error) // for debug
-  Promise.reject(error)
-})
+)
 
 // respone拦截器
 service.interceptors.response.use(
@@ -40,22 +44,31 @@ service.interceptors.response.use(
       return response
     } else {
       if (response.data.result) {
-        return response.data.data
+        return response.data
       } else {
         if (response.data.statusCode === 709) {
-          Notification({
-            title: '用户信息验证失败',
-            type: 'error',
-            message: response.data.data
-          })
-          return 709
+          // Notification({
+          //   title: '用户信息验证失败',
+          //   type: 'error',
+          //   message: response.data.data
+          // })
+          // store.dispatch('Logout').then(() => {
+          //   location.reload()
+          // })
+          return {}
+        }
+        if (response.data.statusCode === 800) {
+          // Message.error('用户登录过期，请重新登录')
+          // store.dispatch('Logout').then(() => {
+          //   location.reload()
+          // })
         } else {
           Notification({
             title: '请求出错',
             type: 'error',
             message: response.data.data
           })
-          return null
+          return {}
         }
       }
     }

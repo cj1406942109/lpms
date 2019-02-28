@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     getNoticeList () {
-      getNoticeList().then(data => {
+      getNoticeList().then(({ data }) => {
         this.noticeList = data
         this.noticeListLoading = false
       })

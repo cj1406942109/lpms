@@ -140,7 +140,7 @@ export default {
   },
   created () {
     this.loanLastStatus = this.currentFlow
-    getMortgageById(this.mortgageId).then(data => {
+    getMortgageById(this.mortgageId).then(({ data }) => {
       if (data) {
         this.finishMortgage = data.mortgageState.done
         this.finishTake = data.takeEvidence.done
@@ -167,7 +167,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            confirmMortgageStatus(this.mortgageId, this.mortgageStatusForm.time).then(data => {
+            confirmMortgageStatus(this.mortgageId, this.mortgageStatusForm.time).then(({ data }) => {
               if (data) {
                 this.finishMortgage = true
                 this.$message({
@@ -195,7 +195,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            takeEvidence(this.mortgageId, this.takeEvidenceForm.time).then(data => {
+            takeEvidence(this.mortgageId, this.takeEvidenceForm.time).then(({ data }) => {
               if (data) {
                 this.finishTake = true
                 this.$message({
@@ -229,7 +229,7 @@ export default {
                 message: '正在处理...'
               })
               this.formLoading = true
-              returnEvidence(this.mortgageId, this.returnEvidenceForm.time).then(data => {
+              returnEvidence(this.mortgageId, this.returnEvidenceForm.time).then(({ data }) => {
                 this.$message.closeAll()
                 this.formLoading = false
                 if (data) {
@@ -246,7 +246,7 @@ export default {
               })
             } else {
               this.formLoading = true
-              returnEvidence(this.mortgageId, this.returnEvidenceForm.time).then(data => {
+              returnEvidence(this.mortgageId, this.returnEvidenceForm.time).then(({ data }) => {
                 this.formLoading = false
                 if (data) {
                   this.finishReturn = true

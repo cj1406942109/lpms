@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     getNoticeList () {
-      getNoticeList().then(data => {
+      getNoticeList().then(({ data }) => {
         if (data) {
           this.noticeList = data
           this.noticeListLoading = false
@@ -97,7 +97,7 @@ export default {
     goEdit (id) {
       this.dialogVisible = true
       if (id) {
-        getNoticeById(id).then(data => {
+        getNoticeById(id).then(({ data }) => {
           if (data) {
             this.notice = JSON.parse(JSON.stringify(data))
           } else {
@@ -115,7 +115,7 @@ export default {
         if (valid) {
           this.formLoading = true
           if (!this.notice.id) {
-            saveNotice(this.notice.title, this.notice.content).then(data => {
+            saveNotice(this.notice.title, this.notice.content).then(({ data }) => {
               if (data) {
                 this.formLoading = false
                 this.$message({
@@ -132,7 +132,7 @@ export default {
               this.getNoticeList()
             })
           } else {
-            updateNoticeById(this.notice.id, this.notice.title, this.notice.content).then(data => {
+            updateNoticeById(this.notice.id, this.notice.title, this.notice.content).then(({ data }) => {
               if (data) {
                 this.formLoading = false
                 this.$message({
@@ -160,7 +160,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteNoticeById(row.id).then(data => {
+        deleteNoticeById(row.id).then(({ data }) => {
           if (data) {
             this.$message({
               type: 'success',

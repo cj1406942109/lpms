@@ -419,7 +419,7 @@ export default {
   },
   created () {
     this.loanLastStatus = this.currentFlow
-    getVisaById(this.visaId).then(data => {
+    getVisaById(this.visaId).then(({ data }) => {
       if (data) {
         this.finishCatalog = data.catalogState.done
         this.finishVisa = data.visaState.done
@@ -439,7 +439,7 @@ export default {
       this.$refs['catalogForm'].validate((valid) => {
         if (valid) {
           const saveMethod = this.finishCatalog ? updateCatalog : saveCatalog
-          saveMethod(this.catalogForm).then(data => {
+          saveMethod(this.catalogForm).then(({ data }) => {
             if (data) {
               this.finishCatalog = true
               this.$message({
@@ -496,7 +496,7 @@ export default {
                 type: 'info',
                 message: '正在处理...'
               })
-              confirmVisa(this.visaId, this.contractStatusForm.time, this.contractStatusForm.address).then(data => {
+              confirmVisa(this.visaId, this.contractStatusForm.time, this.contractStatusForm.address).then(({ data }) => {
                 this.$message.closeAll()
                 this.formLoading = false
                 if (data) {
@@ -519,7 +519,7 @@ export default {
               type: 'warning'
             }).then(() => {
               this.formLoading = true
-              confirmVisa(this.visaId, this.contractStatusForm.time, this.contractStatusForm.address).then(data => {
+              confirmVisa(this.visaId, this.contractStatusForm.time, this.contractStatusForm.address).then(({ data }) => {
                 this.formLoading = false
                 if (data) {
                   this.finishVisa = true
@@ -542,7 +542,7 @@ export default {
       })
     },
     getStaticIndex (staticIndex) {
-      getStaticIndexByKey(staticIndex.key).then(data => {
+      getStaticIndexByKey(staticIndex.key).then(({ data }) => {
         if (data) {
           staticIndex.value = data[staticIndex.key]
         } else {

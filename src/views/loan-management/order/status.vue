@@ -6,50 +6,125 @@
       <el-button type="info" @click="returnList()">返回列表</el-button>
     </div>
     <ul v-if="orderStatus" class="basic-info">
-      <li>贷款编号：<span>{{$route.params.orderId}}</span></li>
-      <li>贷款类型：<span>{{loanType == '1' ? '抵押贷款' : '二手房贷款' }}</span></li>
-      <li>客户姓名：<span>{{orderStatus[0].clientName}}</span></li>
-      <li>手机号：<span>{{orderStatus[0].clientPhone}}</span></li>
+      <li>
+        贷款编号：
+        <span>{{$route.params.orderId}}</span>
+      </li>
+      <li>
+        贷款类型：
+        <span>{{loanType == '1' ? '抵押贷款' : '二手房贷款' }}</span>
+      </li>
+      <li>
+        客户姓名：
+        <span>{{orderStatus[0].clientName}}</span>
+      </li>
+      <li>
+        手机号：
+        <span>{{orderStatus[0].clientPhone}}</span>
+      </li>
     </ul>
     <div class="step-wrapper">
-        <el-steps direction="vertical" :active="activeStep" finish-status="success" :align-center="true" v-if="!showTable" class="status-step">
-          <el-step :title="item.des" v-for="item in orderStatus" :key="item.id">
-            <div slot="description" class="step-desc">
-                <ul v-if="item.createTime">
-                  <li>开始时间：{{item.createTime | timeformat }}</li>
-                  <li>结束时间：{{item.state === 'open' ? '' : item.updateTime | timeformat }}</li>
-                  <template v-if="item.extra">
-                    <li v-if="item.extra.catalogState"><el-tag :type="item.extra.catalogState.done ? 'success' : 'primary'">{{item.extra.catalogState.message}}</el-tag></li>
-                    <li v-if="item.extra.formState"><el-tag :type="item.extra.formState.done ? 'success' : 'primary'">{{item.extra.formState.message}}</el-tag></li>
-                    <li v-if="item.extra.visaState"><el-tag :type="item.extra.visaState.done ? 'success' : 'primary'">{{item.extra.visaState.message}}</el-tag></li>
-                    <li v-if="item.extra.orderState"><el-tag :type="item.extra.orderState.done ? 'success' : 'primary'">{{item.extra.orderState.message}}</el-tag></li>
-                    <li v-if="item.extra.reportState"><el-tag :type="item.extra.reportState.done ? 'success' : 'primary'">{{item.extra.reportState.message}}</el-tag></li>
-                    <li v-if="item.extra.sendState"><el-tag :type="item.extra.sendState.done ? 'success' : 'primary'">{{item.extra.sendState.message}}</el-tag></li>
-                    <li v-if="item.extra.approveState"><el-tag :type="item.extra.approveState.done ? 'success' : 'primary'">{{item.extra.approveState.message}}</el-tag></li>
-                    <li v-if="item.extra.approveComment"><el-tag :type="item.extra.approveComment.done ? 'success' : 'primary'">{{item.extra.approveComment.message}}</el-tag></li>
-                    <li v-if="item.extra.mortgageState"><el-tag :type="item.extra.mortgageState.done ? 'success' : 'primary'">{{item.extra.mortgageState.message}}</el-tag></li>
-                    <li v-if="item.extra.guaranteeApprove"><el-tag :type="item.extra.guaranteeApprove.done ? 'success' : 'primary'">{{item.extra.guaranteeApprove.message}}</el-tag></li>
-                    <li v-if="item.extra.guaranteePublish"><el-tag :type="item.extra.guaranteePublish.done ? 'success' : 'primary'">{{item.extra.guaranteePublish.message}}</el-tag></li>
-                  </template>
-                </ul>
-                <template v-else>
-                  未开始
-                </template>
-            </div>
-          </el-step>
-        </el-steps>
-        <el-steps :active="activeStep" finish-status="success" :align-center="true" class="table-step" v-else>
-          <el-step :title="item.des" v-for="(item, index) in orderStatus" :key="item.id" @click.native="showStep(item, index)" :class="currentStep == index ? 'current' : ''">
-            <div slot="description">
-                <template v-if="item.createTime">
-                  {{item.createTime | timeformat }}
-                </template>
-                <template v-else>
-                  未开始
-                </template>
-            </div>
-          </el-step>
-        </el-steps>
+      <el-steps
+        direction="vertical"
+        :active="activeStep"
+        finish-status="success"
+        :align-center="true"
+        v-if="!showTable"
+        class="status-step"
+      >
+        <el-step :title="item.des" v-for="item in orderStatus" :key="item.id">
+          <div slot="description" class="step-desc">
+            <ul v-if="item.createTime">
+              <template v-if="userList && userList[item.employeeId]">
+                <li>{{userList[item.employeeId].name}}</li>
+                <li
+                  v-if="userList[item.employeeId].roles && userList[item.employeeId].roles[0]"
+                >{{userList[item.employeeId].roles[0].name}}</li>
+              </template>
+              <li>开始时间：{{item.createTime | timeformat }}</li>
+              <li>结束时间：{{item.state === 'open' ? '' : item.updateTime | timeformat }}</li>
+              <template v-if="item.extra">
+                <li v-if="item.extra.catalogState">
+                  <el-tag
+                    :type="item.extra.catalogState.done ? 'success' : 'primary'"
+                  >{{item.extra.catalogState.message}}</el-tag>
+                </li>
+                <li v-if="item.extra.formState">
+                  <el-tag
+                    :type="item.extra.formState.done ? 'success' : 'primary'"
+                  >{{item.extra.formState.message}}</el-tag>
+                </li>
+                <li v-if="item.extra.visaState">
+                  <el-tag
+                    :type="item.extra.visaState.done ? 'success' : 'primary'"
+                  >{{item.extra.visaState.message}}</el-tag>
+                </li>
+                <li v-if="item.extra.orderState">
+                  <el-tag
+                    :type="item.extra.orderState.done ? 'success' : 'primary'"
+                  >{{item.extra.orderState.message}}</el-tag>
+                </li>
+                <li v-if="item.extra.reportState">
+                  <el-tag
+                    :type="item.extra.reportState.done ? 'success' : 'primary'"
+                  >{{item.extra.reportState.message}}</el-tag>
+                </li>
+                <li v-if="item.extra.sendState">
+                  <el-tag
+                    :type="item.extra.sendState.done ? 'success' : 'primary'"
+                  >{{item.extra.sendState.message}}</el-tag>
+                </li>
+                <li v-if="item.extra.approveState">
+                  <el-tag
+                    :type="item.extra.approveState.done ? 'success' : 'primary'"
+                  >{{item.extra.approveState.message}}</el-tag>
+                </li>
+                <li v-if="item.extra.approveComment">
+                  <el-tag
+                    :type="item.extra.approveComment.done ? 'success' : 'primary'"
+                  >{{item.extra.approveComment.message}}</el-tag>
+                </li>
+                <li v-if="item.extra.mortgageState">
+                  <el-tag
+                    :type="item.extra.mortgageState.done ? 'success' : 'primary'"
+                  >{{item.extra.mortgageState.message}}</el-tag>
+                </li>
+                <li v-if="item.extra.guaranteeApprove">
+                  <el-tag
+                    :type="item.extra.guaranteeApprove.done ? 'success' : 'primary'"
+                  >{{item.extra.guaranteeApprove.message}}</el-tag>
+                </li>
+                <li v-if="item.extra.guaranteePublish">
+                  <el-tag
+                    :type="item.extra.guaranteePublish.done ? 'success' : 'primary'"
+                  >{{item.extra.guaranteePublish.message}}</el-tag>
+                </li>
+              </template>
+            </ul>
+            <template v-else>未开始</template>
+          </div>
+        </el-step>
+      </el-steps>
+      <el-steps
+        :active="activeStep"
+        finish-status="success"
+        :align-center="true"
+        class="table-step"
+        v-else
+      >
+        <el-step
+          :title="item.des"
+          v-for="(item, index) in orderStatus"
+          :key="item.id"
+          @click.native="showStep(item, index)"
+          :class="currentStep == index ? 'current' : ''"
+        >
+          <div slot="description">
+            <template v-if="item.createTime">{{item.createTime | timeformat }}</template>
+            <template v-else>未开始</template>
+          </div>
+        </el-step>
+      </el-steps>
     </div>
     <div class="table-wrapper" v-if="showTable">
       <order-taking-m v-if="loanType == '1' && currentStep == '0'" :checklistId="currentFlow.id"/>
@@ -57,11 +132,19 @@
       <visa-interview-m v-if="loanType == '1' && currentStep == '2'" :visaId="currentFlow.id"/>
       <evaluate-order-m v-if="loanType == '1' && currentStep == '3'" :orderId="currentFlow.id"/>
       <examine-approve-m v-if="loanType == '1' && currentStep == '4'" :approveId="currentFlow.id"/>
-      <mortgage-m v-if="loanType == '1' && currentStep == '5'" :mortgageId="currentFlow.id" :finishFlow="!(currentFlow.state == 'open')"/>
+      <mortgage-m
+        v-if="loanType == '1' && currentStep == '5'"
+        :mortgageId="currentFlow.id"
+        :finishFlow="!(currentFlow.state == 'open')"
+      />
       <charge-m v-if="loanType == '1' && currentStep == '6'" :chargeId="currentFlow.id"/>
       <make-loan-m v-if="loanType == '1' && currentStep == '7'" :makeLoanId="currentFlow.id"/>
 
-      <order-taking-h v-if="loanType == '2' && currentStep == '0'" :checklistId="currentFlow.id" :finishFlow="!(currentFlow.state == 'open')"/>
+      <order-taking-h
+        v-if="loanType == '2' && currentStep == '0'"
+        :checklistId="currentFlow.id"
+        :finishFlow="!(currentFlow.state == 'open')"
+      />
       <visa-interview-h v-if="loanType == '2' && currentStep == '1'" :visaId="currentFlow.id"/>
       <evaluate-order-h v-if="loanType == '2' && currentStep == '2'" :orderId="currentFlow.id"/>
       <integrate-input-h v-if="loanType == '2' && currentStep == '3'" :inputId="currentFlow.id"/>
@@ -79,6 +162,7 @@
 import moment from 'moment'
 import { getTaskById as getTaskMById } from '@/api/mortgage'
 import { getTaskById as getTaskHById } from '@/api/house'
+import { getUserById } from '@/api/system'
 
 import OrderTakingM from '@/components/mortgage/order-taking'
 import InterviewM from '@/components/mortgage/interview'
@@ -132,7 +216,9 @@ export default {
           { des: '收费', description: '未完成' },
           { des: '放款', description: '未完成' }
         ]
-      ]
+      ],
+      userList: {},
+      userListCache: []
     }
   },
   components: {
@@ -159,13 +245,13 @@ export default {
   filters: {
     timeformat: function (value) {
       if (!value) return '未结束'
-      return moment(value).format('YYYY-MM-DD')
+      return moment(value).format('YYYY-MM-DD HH:mm:ss')
     }
   },
   created () {
     this.loanType = parseInt(this.$route.params.orderId.substring(0, 1))
     const getOrderById = this.loanType === 1 ? getTaskMById : getTaskHById
-    getOrderById(this.$route.params.orderId).then(data => {
+    getOrderById(this.$route.params.orderId).then(({ data }) => {
       if (data) {
         this.orderStatus = data
         if (this.orderStatus[data.length - 1].state === 'finish') {
@@ -175,6 +261,11 @@ export default {
         }
         this.orderStatus = this.orderStatus.concat(this.stepList[this.loanType - 1].splice(this.orderStatus.length))
         this.currentFlow = this.orderStatus[0]
+        if (this.orderStatus && this.orderStatus.length) {
+          this.orderStatus.forEach((orderStatus) => {
+            this.getUserById(orderStatus.employeeId)
+          })
+        }
       } else {
         this.$message({
           type: 'error',
@@ -193,71 +284,87 @@ export default {
         this.currentFlow = item
         console.log(this.currentFlow)
       }
+    },
+    getUserById (id) {
+      if (id) {
+        const userListCacheIndex = this.userListCache.indexOf(id)
+        if (userListCacheIndex === -1) {
+          this.userListCache.push(id)
+          getUserById(id).then(({ data }) => {
+            if (data) {
+              this.userList = {
+                ...this.userList,
+                [id]: data
+              }
+            }
+          })
+        }
+      }
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .app-container {
-    padding: 20px;
-    background-color: #fff;
-    .option-wrapper {
-      margin: -55px 0 20px;
-      text-align: right;
-    }
-    .basic-info {
-      margin: 0;
-      padding: 10px;
-      border-radius: 5px;
+.app-container {
+  padding: 20px;
+  background-color: #fff;
+  .option-wrapper {
+    margin: -55px 0 20px;
+    text-align: right;
+  }
+  .basic-info {
+    margin: 0;
+    padding: 10px;
+    border-radius: 5px;
+    line-height: 40px;
+    list-style: none;
+    display: flex;
+    justify-content: flex-start;
+    background: #eee;
+    li {
       line-height: 40px;
-      list-style: none;
-      display: flex;
-      justify-content: flex-start;
-      background: #eee;
-      li {
-        line-height: 40px;
-        margin-right: 20px;
-        span {
-          color: #409eff;
-        }
+      margin-right: 20px;
+      span {
+        color: #409eff;
       }
     }
-    .step-wrapper {
-      margin: 20px 0;
-      .status-step {
+  }
+  .step-wrapper {
+    margin: 20px 0;
+    .status-step {
+      margin-left: 50px;
+      .step-desc {
         margin-left: 50px;
-        .step-desc {
-          margin-left: 50px;
-          height: 50px;
-          ul {
-            list-style: none;
-            padding: 0;
-            display: flex;
-            li {
-              margin-right: 20px;
-              line-height: 32px;
-              height: 32px;
-            }
+        height: 50px;
+        ul {
+          list-style: none;
+          padding: 0;
+          display: flex;
+          li {
+            margin-right: 20px;
+            line-height: 32px;
+            height: 32px;
           }
         }
       }
-      .table-step {
-        .el-step {
-          border: 1px solid transparent;
-          padding: 5px;
-          cursor: pointer;
-        }
-        & .current {
-          border-radius: 5px;
-          border: 1px solid #409EFF;
-          background-color: rgba(238, 238, 238, 0.404);
-        }
+    }
+    .table-step {
+      .el-step {
+        border: 1px solid transparent;
+        padding: 5px;
+        cursor: pointer;
+      }
+      & .current {
+        border-radius: 5px;
+        border: 1px solid #409eff;
+        background-color: rgba(238, 238, 238, 0.404);
       }
     }
-    .table-wrapper {
-      border-radius: 5px;
-      border: 1px solid #eee;
-    }
   }
+  .table-wrapper {
+    border-radius: 5px;
+    border: 1px solid #eee;
+  }
+}
 </style>

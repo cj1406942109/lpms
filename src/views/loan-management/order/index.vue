@@ -254,7 +254,7 @@ export default {
       this.$refs[formName].resetFields()
     },
     queryOrder () {
-      getOrderList(this.optionForm, this.pageNo, this.pageSize).then(data => {
+      getOrderList(this.optionForm, this.pageNo, this.pageSize).then(({ data }) => {
         this.orderListLoading = false
         if (data) {
           this.orderList = data.list
@@ -278,7 +278,7 @@ export default {
       this.$refs['deleteForm'].validate((valid) => {
         if (valid) {
           this.dialogFormVisible = false
-          deleteOrder(this.selectedOrder.rootId, this.selectedOrder.id, this.deleteform.comment).then(data => {
+          deleteOrder(this.selectedOrder.rootId, this.selectedOrder.id, this.deleteform.comment).then(({ data }) => {
             if (data) {
               this.$message({
                 type: 'success',

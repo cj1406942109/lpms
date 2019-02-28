@@ -157,7 +157,7 @@ export default {
   },
   created () {
     this.loanLastStatus = this.currentFlow
-    getGuaranteeById(this.guaranteeId).then(data => {
+    getGuaranteeById(this.guaranteeId).then(({ data }) => {
       if (data) {
         this.reportType = data.commentType === '预评' ? 1 : 2
         this.finishGuarantee = data.guaranteeState.done
@@ -213,7 +213,7 @@ export default {
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-              saveGuarantee(this.guaranteeId, this.guaranteeForm.isNeedStamp, this.guaranteeForm.stampTime, this.guaranteeForm.guaranteeTime).then(data => {
+              saveGuarantee(this.guaranteeId, this.guaranteeForm.isNeedStamp, this.guaranteeForm.stampTime, this.guaranteeForm.guaranteeTime).then(({ data }) => {
                 if (data) {
                   this.finishGuarantee = true
                   this.$message({
@@ -240,14 +240,14 @@ export default {
                   message: '正在处理...'
                 })
                 this.formLoading = true
-                saveGuarantee(this.guaranteeId, this.guaranteeForm.isNeedStamp, this.guaranteeForm.stampTime, this.guaranteeForm.guaranteeTime).then(data => {
+                saveGuarantee(this.guaranteeId, this.guaranteeForm.isNeedStamp, this.guaranteeForm.stampTime, this.guaranteeForm.guaranteeTime).then(({ data }) => {
                   if (data) {
                     this.finishGuarantee = true
                     this.$message({
                       type: 'success',
                       message: '担保流程提交成功'
                     })
-                    skipGuarantee(this.guaranteeId).then(data => {
+                    skipGuarantee(this.guaranteeId).then(({ data }) => {
                       this.formLoading = false
                       this.$message.closeAll()
                       if (data) {
@@ -270,14 +270,14 @@ export default {
                 })
               } else {
                 this.formLoading = true
-                saveGuarantee(this.guaranteeId, this.guaranteeForm.isNeedStamp, this.guaranteeForm.stampTime, this.guaranteeForm.guaranteeTime).then(data => {
+                saveGuarantee(this.guaranteeId, this.guaranteeForm.isNeedStamp, this.guaranteeForm.stampTime, this.guaranteeForm.guaranteeTime).then(({ data }) => {
                   if (data) {
                     this.finishGuarantee = true
                     this.$message({
                       type: 'success',
                       message: '担保流程提交成功'
                     })
-                    skipGuarantee(this.guaranteeId).then(data => {
+                    skipGuarantee(this.guaranteeId).then(({ data }) => {
                       this.formLoading = false
                       if (data) {
                         this.$message({
@@ -322,7 +322,7 @@ export default {
               this.formLoading = true
               // 给报告类型赋值
               this.reportForm.report.reportType = 2
-              saveFormalReport(this.guaranteeId, this.reportForm.time, this.reportForm.report).then(data => {
+              saveFormalReport(this.guaranteeId, this.reportForm.time, this.reportForm.report).then(({ data }) => {
                 this.$message.closeAll()
                 this.formLoading = false
                 if (data) {
@@ -342,7 +342,7 @@ export default {
               // 给报告类型赋值
               this.reportForm.report.reportType = 2
               const saveMethod = this.finishReport ? updateFormalReport : saveFormalReport
-              saveMethod(this.guaranteeId, this.reportForm.time, this.reportForm.report).then(data => {
+              saveMethod(this.guaranteeId, this.reportForm.time, this.reportForm.report).then(({ data }) => {
                 this.formLoading = false
                 if (data) {
                   this.finishReport = true

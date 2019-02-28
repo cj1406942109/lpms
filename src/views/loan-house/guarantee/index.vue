@@ -66,7 +66,7 @@ export default {
   },
   methods: {
     getGuaranteeList () {
-      getGuaranteeListByEmployeeId(this.userId).then(data => {
+      getGuaranteeListByEmployeeId(this.userId).then(({ data }) => {
         this.guaranteeListLoading = false
         if (data) {
           this.guaranteeList = data

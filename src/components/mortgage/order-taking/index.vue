@@ -232,11 +232,11 @@ export default {
                 message: '正在处理...'
               })
               this.formLoading = true
-              createTask(this.userId).then(data => {
+              createTask(this.userId).then(({ data }) => {
                 if (data) {
                   const checklistId = data.id
                   this.loanLastStatus = data.des
-                  saveChecklist(this.checklistForm, checklistId).then(data => {
+                  saveChecklist(this.checklistForm, checklistId).then(({ data }) => {
                     // 关闭所有消息
                     this.$message.closeAll()
                     this.formLoading = false
@@ -264,7 +264,7 @@ export default {
           } else {
             // 不显示流程弹窗，表明是在订单管理中引用
             this.formLoading = true
-            saveChecklist(this.checklistForm, this.checklistId).then(data => {
+            saveChecklist(this.checklistForm, this.checklistId).then(({ data }) => {
               this.formLoading = false
               if (data) {
                 this.$message({
@@ -288,7 +288,7 @@ export default {
       this.$refs[formName].resetFields()
     },
     getStaticIndex (staticIndex) {
-      getStaticIndexByKey(staticIndex.key).then(data => {
+      getStaticIndexByKey(staticIndex.key).then(({ data }) => {
         if (data) {
           staticIndex.value = data[staticIndex.key]
         } else {
@@ -306,7 +306,7 @@ export default {
     this.getStaticIndex(this.loanVariety)
     this.getStaticIndex(this.listSource)
     if (this.checklistId) {
-      getChecklistById(this.checklistId).then(data => {
+      getChecklistById(this.checklistId).then(({ data }) => {
         if (data) {
           // console.log(data)
           this.checklistForm = JSON.parse(JSON.stringify(data))

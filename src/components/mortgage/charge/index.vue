@@ -3,9 +3,54 @@
     <div class="form-wrapper">
       <h2>确定收费状态</h2>
       <el-form :model="chargeForm" ref="chargeForm" label-width="200px" :rules="chargeFormRules">
-        <el-form-item label="收费时间" prop="time">
-          <el-date-picker type="date" placeholder="选择日期" v-model="chargeForm.time" value-format="timestamp" :disabled="finishCharge"></el-date-picker>
-        </el-form-item>
+        <!-- <el-form-item label="收费时间" prop="time">
+          <el-date-picker
+            type="date"
+            placeholder="选择日期"
+            v-model="chargeForm.time"
+            value-format="timestamp"
+            :disabled="finishCharge"
+          ></el-date-picker>
+        </el-form-item> -->
+        <el-row>
+          <el-col :span="10">
+            <el-form-item label="回款时间" prop="time">
+              <el-date-picker
+                type="date"
+                placeholder="选择日期"
+                v-model="chargeForm.time"
+                value-format="timestamp"
+                :disabled="finishCharge"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="10">
+            <el-form-item label="回款类型">
+              <el-input :disabled="finishCharge"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="10">
+            <el-form-item label="回款金额">
+              <el-input :disabled="finishCharge">
+                <template slot="append">元</template>
+              </el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="10">
+            <el-form-item label="转账银行">
+              <el-input :disabled="finishCharge"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="10">
+            <el-form-item label="转账人">
+              <el-input :disabled="finishCharge"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item>
           <el-button type="info" disabled v-if="finishCharge">已收费</el-button>
           <el-button type="primary" :loading="formLoading" @click="confirmCharge" v-else>提交</el-button>
@@ -53,7 +98,7 @@ export default {
   },
   created () {
     this.loanLastStatus = this.currentFlow
-    getChargeById(this.chargeId).then(data => {
+    getChargeById(this.chargeId).then(({ data }) => {
       if (data) {
         this.finishCharge = data.done
         if (this.finishCharge) {
@@ -82,7 +127,7 @@ export default {
                 type: 'info',
                 message: '正在处理...'
               })
-              confirmCharge(this.chargeId, this.chargeForm.time).then(data => {
+              confirmCharge(this.chargeId, this.chargeForm.time).then(({ data }) => {
                 this.$message.closeAll()
                 this.formLoading = false
                 if (data) {
@@ -99,7 +144,7 @@ export default {
               })
             } else {
               this.formLoading = true
-              confirmCharge(this.chargeId, this.chargeForm.time).then(data => {
+              confirmCharge(this.chargeId, this.chargeForm.time).then(({ data }) => {
                 this.formLoading = false
                 if (data) {
                   this.finishCharge = true
@@ -115,7 +160,7 @@ export default {
                 }
               })
             }
-          }).catch(() => {})
+          }).catch(() => { })
         } else {
           return false
         }
@@ -126,18 +171,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .app-container {
-    .form-wrapper {
-      padding: 20px;
-      margin-bottom: 20px;
-      background-color: #fff;
-    }
-    .option {
-      text-align: center;
-      margin: 50px;
-      button {
-        width: 200px;
-      }
+.app-container {
+  .form-wrapper {
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #fff;
+  }
+  .option {
+    text-align: center;
+    margin: 50px;
+    button {
+      width: 200px;
     }
   }
+}
 </style>

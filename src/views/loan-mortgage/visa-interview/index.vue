@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     getVisaInterviewList () {
-      getVisaListByEmployeeId(this.userId).then(data => {
+      getVisaListByEmployeeId(this.userId).then(({ data }) => {
         this.visaInterviewListLoading = false
         if (data) {
           this.visaInterviewList = data
