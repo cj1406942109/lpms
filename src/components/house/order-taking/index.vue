@@ -40,29 +40,37 @@
         </el-col>
         <el-col :span="10">
           <h3>借款人配偶基本信息</h3>
-          <el-form-item label="姓名" prop="borrowerSpouseName">
-            <el-input clearable v-model="checklistForm.borrowerSpouseName"></el-input>
+          <el-form-item label="有无配偶" prop="borrowerHaveSpouse">
+            <el-radio-group v-model="checklistForm.borrowerHaveSpouse">
+              <el-radio label="1" >有</el-radio>
+              <el-radio label="0">无</el-radio>
+            </el-radio-group>
           </el-form-item>
-          <el-form-item label="联系方式" prop="borrowerSpousePhone">
-            <el-input clearable v-model="checklistForm.borrowerSpousePhone"></el-input>
-          </el-form-item>
-          <el-form-item label="工作单位" prop="borrowerSpouseCompany">
-            <el-input clearable v-model="checklistForm.borrowerSpouseCompany"></el-input>
-          </el-form-item>
-          <el-form-item label="单位电话" prop="borrowerSpouseCompanyPhone">
-            <el-input clearable v-model="checklistForm.borrowerSpouseCompanyPhone"></el-input>
-          </el-form-item>
-          <el-form-item label="户口所在地" prop="borrowerSpouseResidentCity">
-            <el-input clearable v-model="checklistForm.borrowerSpouseResidentCity"></el-input>
-          </el-form-item>
-          <el-form-item label="证件类型" prop="borrowerSpouseCertificateType">
-            <el-select placeholder="请选择" v-model="checklistForm.borrowerSpouseCertificateType">
-              <el-option v-for="item in cardType.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="证件号码" prop="borrowerSpouseCertificateNumber">
-            <el-input clearable v-model="checklistForm.borrowerSpouseCertificateNumber"></el-input>
-          </el-form-item>
+          <template v-if="checklistForm.borrowerHaveSpouse==1">
+            <el-form-item label="姓名" prop="borrowerSpouseName">
+              <el-input clearable v-model="checklistForm.borrowerSpouseName"></el-input>
+            </el-form-item>
+            <el-form-item label="联系方式" prop="borrowerSpousePhone">
+              <el-input clearable v-model="checklistForm.borrowerSpousePhone"></el-input>
+            </el-form-item>
+            <el-form-item label="工作单位" prop="borrowerSpouseCompany">
+              <el-input clearable v-model="checklistForm.borrowerSpouseCompany"></el-input>
+            </el-form-item>
+            <el-form-item label="单位电话" prop="borrowerSpouseCompanyPhone">
+              <el-input clearable v-model="checklistForm.borrowerSpouseCompanyPhone"></el-input>
+            </el-form-item>
+            <el-form-item label="户口所在地" prop="borrowerSpouseResidentCity">
+              <el-input clearable v-model="checklistForm.borrowerSpouseResidentCity"></el-input>
+            </el-form-item>
+            <el-form-item label="证件类型" prop="borrowerSpouseCertificateType">
+              <el-select placeholder="请选择" v-model="checklistForm.borrowerSpouseCertificateType">
+                <el-option v-for="item in cardType.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="证件号码" prop="borrowerSpouseCertificateNumber">
+              <el-input clearable v-model="checklistForm.borrowerSpouseCertificateNumber"></el-input>
+            </el-form-item>
+          </template>
         </el-col>
       </el-row>
       <el-row :gutter="20">
@@ -80,15 +88,23 @@
         </el-col>
         <el-col :span="10">
           <h3>产权人配偶基本信息</h3>
-          <el-form-item label="姓名" prop="ownerSpouseName">
-            <el-input clearable v-model="checklistForm.ownerSpouseName"></el-input>
+          <el-form-item label="有无配偶" prop="ownerHaveSpouse">
+            <el-radio-group v-model="checklistForm.ownerHaveSpouse">
+              <el-radio label="1" >有</el-radio>
+              <el-radio label="0">无</el-radio>
+            </el-radio-group>
           </el-form-item>
-          <el-form-item label="联系方式" prop="ownerSpousePhone">
-            <el-input clearable v-model="checklistForm.ownerSpousePhone"></el-input>
-          </el-form-item>
-          <el-form-item label="身份证号" prop="ownerSpouseIdCard">
-            <el-input clearable v-model="checklistForm.ownerSpouseIdCard"></el-input>
-          </el-form-item>
+          <template v-if="checklistForm.ownerHaveSpouse==1">
+            <el-form-item label="姓名" prop="ownerSpouseName">
+              <el-input clearable v-model="checklistForm.ownerSpouseName"></el-input>
+            </el-form-item>
+            <el-form-item label="联系方式" prop="ownerSpousePhone">
+              <el-input clearable v-model="checklistForm.ownerSpousePhone"></el-input>
+            </el-form-item>
+            <el-form-item label="身份证号" prop="ownerSpouseIdCard">
+              <el-input clearable v-model="checklistForm.ownerSpouseIdCard"></el-input>
+            </el-form-item>
+          </template>
         </el-col>
       </el-row>
       <el-row :gutter="20">
@@ -160,18 +176,26 @@
         </el-col>
         <el-col :span="10">
           <h3>保证人基本信息</h3>
-          <el-form-item label="姓名" prop="guarantorName">
-            <el-input clearable v-model="checklistForm.guarantorName"></el-input>
+          <el-form-item label="有无保证人" prop="haveGuarantor">
+            <el-radio-group v-model="checklistForm.haveGuarantor">
+              <el-radio label="1" >有</el-radio>
+              <el-radio label="0">无</el-radio>
+            </el-radio-group>
           </el-form-item>
-          <el-form-item label="联系方式" prop="guarantorPhone">
-            <el-input clearable v-model="checklistForm.guarantorPhone"></el-input>
-          </el-form-item>
-          <el-form-item label="身份证号" prop="guarantorIdCard">
-            <el-input clearable v-model="checklistForm.guarantorIdCard"></el-input>
-          </el-form-item>
-          <el-form-item label="工作单位" prop="guarantorCompany">
-            <el-input clearable v-model="checklistForm.guarantorCompany"></el-input>
-          </el-form-item>
+          <template v-if="checklistForm.haveGuarantor==1">
+            <el-form-item label="姓名" prop="guarantorName">
+              <el-input clearable v-model="checklistForm.guarantorName"></el-input>
+            </el-form-item>
+            <el-form-item label="联系方式" prop="guarantorPhone">
+              <el-input clearable v-model="checklistForm.guarantorPhone"></el-input>
+            </el-form-item>
+            <el-form-item label="身份证号" prop="guarantorIdCard">
+              <el-input clearable v-model="checklistForm.guarantorIdCard"></el-input>
+            </el-form-item>
+            <el-form-item label="工作单位" prop="guarantorCompany">
+              <el-input clearable v-model="checklistForm.guarantorCompany"></el-input>
+            </el-form-item>
+          </template>
         </el-col>
         <el-col :span="10">
           <h3>房屋基本信息</h3>
@@ -202,6 +226,20 @@
             <el-select placeholder="请选择" v-model="checklistForm.houseLandType">
               <el-option v-for="item in landType.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
             </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <h3>&nbsp;</h3>
+          <el-form-item label="单子来源渠道" prop="source">
+            <el-select v-model="checklistForm.source" placeholder="请选择">
+              <el-option v-for="item in listSource.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="中介名称" prop="agentName">
+            <el-input clearable v-model="checklistForm.agentName"></el-input>
+          </el-form-item>
+          <el-form-item label="其他备注事项" prop="otherRemark">
+            <el-input clearable type="textarea" v-model="checklistForm.otherRemark" :autosize="{ minRows: 4, maxRows: 6}"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -241,6 +279,7 @@ export default {
         borrowerResidentCity: null,
         borrowerCertificateType: null,
         borrowerCertificateNumber: null,
+        borrowerHaveSpouse: null,
         borrowerSpouseName: null,
         borrowerSpousePhone: null,
         borrowerSpouseCompany: null,
@@ -251,10 +290,12 @@ export default {
         ownerName: null,
         ownerPhone: null,
         ownerIdCard: null,
+        ownerHaveSpouse: null,
         ownerSpouseName: null,
         ownerSpousePhone: null,
         ownerSpouseIdCard: null,
         guarantorName: null,
+        haveGuarantor: null,
         guarantorPhone: null,
         guarantorIdCard: null,
         guarantorCompany: null,
@@ -282,7 +323,10 @@ export default {
         isDealReal: null,
         isClientSituationReal: null,
         sellerHandle: null,
-        remark: null
+        remark: null,
+        source: null,
+        agentName: null,
+        otherRemark: null
       },
       rules: {
         // finishTime: [{ required: true, message: '完成时间不能为空' }],
@@ -323,7 +367,7 @@ export default {
           { pattern: /^1[0-9]{10}$/, message: '手机号格式错误' }
         ],
         ownerIdCard: [
-          { required: true, message: '身份证号不能为空' },
+          // { required: true, message: '身份证号不能为空' },
           { pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}[0-9Xx]$)/, message: '证件号码格式错误' }
         ],
         // ownerSpouseName: [{ required: true, message: '姓名不能为空' }],
@@ -381,12 +425,15 @@ export default {
         ],
         // guaranteeType: [{ required: true, message: '担保方式不能为空' }],
         // payType: [{ required: true, message: '请选择还款方式' }],
-        loanType: [{ required: true, message: '请选择贷款类型' }]
+        loanType: [{ required: true, message: '请选择贷款类型' }],
         // downPayAmount: [{ required: true, message: '首付款交付金额不能为空' }],
         // downPayType: [{ required: true, message: '首付款交付方式不能为空' }],
         // isDealReal: [{ required: true, message: '请选择成交情况' }],
         // isClientSituationReal: [{ required: true, message: '请选择客户情况' }],
         // sellerHandle: [{ required: true, message: '请选择存折办理' }]
+        source: [{ required: true, message: '请选择单子来源渠道' }],
+        agentName: [{ required: true, message: '中介名称不能为空' }],
+        otherRemark: [{ required: true, message: '其他备注事项不能为空' }]
       },
       formLoading: false,
       loanId: '',
@@ -417,6 +464,10 @@ export default {
       },
       sellerHandle: {
         key: 'sechandregisterlistpassbooktrans',
+        value: []
+      },
+      listSource: {
+        key: 'mortgagechecklistsource',
         value: []
       }
     }
@@ -541,6 +592,7 @@ export default {
     this.getStaticIndex(this.payType)
     this.getStaticIndex(this.loanType)
     this.getStaticIndex(this.sellerHandle)
+    this.getStaticIndex(this.listSource)
   }
 }
 </script>
