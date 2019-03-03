@@ -381,7 +381,7 @@ export default {
         ],
         // guaranteeType: [{ required: true, message: '担保方式不能为空' }],
         // payType: [{ required: true, message: '请选择还款方式' }],
-        loanType: [{ required: true, message: '请选择贷款类型' }],
+        loanType: [{ required: true, message: '请选择贷款类型' }]
         // downPayAmount: [{ required: true, message: '首付款交付金额不能为空' }],
         // downPayType: [{ required: true, message: '首付款交付方式不能为空' }],
         // isDealReal: [{ required: true, message: '请选择成交情况' }],

@@ -63,7 +63,7 @@ service.interceptors.response.use(
         }
         if (response.data.statusCode === 800) {
           Message.error('用户登录过期，请重新登录，即将跳转到登录页...')
-          setTimeout(()=> {
+          setTimeout(() => {
             store.dispatch('Logout').then(() => {
               location.reload()
             })
