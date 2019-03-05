@@ -8,10 +8,12 @@
       <h3>资料目录表</h3>
       <el-form :model="catalogForm" ref="catalogForm" label-width="200px" :rules="catalogFormRules" v-if="catalogForm" key="catalogForm">
         <el-row>
-          <el-col :span="10">
+          <el-col>
             <el-form-item label="完成时间" prop="finishTime">
               <el-date-picker type="date" placeholder="选择日期" v-model="catalogForm.finishTime" value-format="timestamp"></el-date-picker>
             </el-form-item>
+          </el-col>
+          <el-col :span="10">
             <el-form-item label="贷款人姓名" prop="borrowerName">
               <el-input clearable v-model="catalogForm.borrowerName"></el-input>
             </el-form-item>
@@ -259,6 +261,15 @@
         </el-form-item>
       </el-form>
     </div>
+    <el-collapse v-if="activeStep=='1'">
+      <el-alert title="提交面签状态前请先将客户情况登记明细表补充完整！" type="warning"></el-alert>
+      <el-collapse-item>
+        <template slot="title">
+          <span style="padding-left:20px">客户情况登记明细表（点击展开/折叠）</span>
+        </template>
+        <order-taking :finishFlow="true" :checklistId="checklistForm.id" v-on:checklist-updated="handleConfirmChecklist" />
+      </el-collapse-item>
+    </el-collapse>
     <div class="option">
       <el-button @click="activeStep--" v-if="activeStep > 0">上一步</el-button>
       <el-button type="primary" @click="activeStep++" v-if="activeStep < 1" :disabled="!finishCatalog">下一步</el-button>
@@ -276,12 +287,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import OrderTaking from '@/components/house/order-taking'
 import {
   getStaticIndexByKey,
   getVisaById,
   saveCatalog,
   updateCatalog,
-  confirmVisa
+  confirmVisa,
+  confirmChecklist
 } from '@/api/house'
 
 export default {
@@ -372,6 +385,7 @@ export default {
       //   catalogOther: []
       // },
       catalogForm: null,
+      checklistForm: null,
       catalogFormRules: {
         finishTime: [{ required: true, message: '完成时间不能为空' }],
         borrowerName: [{ required: true, message: '贷款人姓名不能为空' }],
@@ -391,6 +405,7 @@ export default {
       },
       finishCatalog: false,
       finishVisa: false,
+      finishChecklist: false,
       formLoading: false,
       loanId: '',
       loanStatus: '',
@@ -404,6 +419,9 @@ export default {
         value: []
       }
     }
+  },
+  components: {
+    OrderTaking
   },
   computed: {
     ...mapGetters([
@@ -423,8 +441,16 @@ export default {
       if (data) {
         this.finishCatalog = data.catalogState.done
         this.finishVisa = data.visaState.done
+        this.finishChecklist = data.checklistState.done
         this.catalogForm = JSON.parse(JSON.stringify(data.catalog))
         this.contractStatusForm = JSON.parse(JSON.stringify(data.visa))
+        this.checklistForm = JSON.parse(JSON.stringify(data.checklist))
+
+        // 资料目录表数据自动提取
+        this.catalogForm.borrowerName = this.checklistForm.borrowerName
+        this.catalogForm.loanAmount = this.checklistForm.loanAmount
+        this.catalogForm.clerkName = data.name || null
+        this.catalogForm.clerkPhone = data.phone || null
       } else {
         this.$message({
           type: 'error',
@@ -482,11 +508,15 @@ export default {
         this.catalogForm.catalogOther.splice(index, 1)
       }).catch(() => {})
     },
+    handleConfirmChecklist (id) {
+      // 确认更新 checklist
+      confirmChecklist(this.visaId)
+    },
     confirmVisaStatus () {
       this.$refs['contractStatusForm'].validate((valid) => {
         if (valid) {
           if (this.showFlowDialog) {
-            this.$confirm('请确认信息填写无误，是否提交？', '提示', {
+            this.$confirm('提交后将跳转到评估下单环节，请确认客户情况登记明细表已补充完整，是否继续？', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning'
@@ -578,7 +608,7 @@ export default {
           background-color: #fafafa;
         }
         tr {
-          
+
           td, th {
             padding: 10px 5px;
             text-align: center;

@@ -536,6 +536,9 @@ export default {
             saveMethod(this.checklistId, this.checklistForm).then(({ data }) => {
               this.formLoading = false
               if (data) {
+                if (this.finishFlow) {
+                  this.$emit('checklist-updated', this.checklistId)
+                }
                 this.$message({
                   type: 'success',
                   message: '客户交接表保存成功'

@@ -12,11 +12,14 @@
         filter-placement="bottom-end">
         <template slot-scope="scope">
           <template v-if="scope.row.state == 'open'">
-            <el-tag :type="scope.row.extra.catalogState.done ? 'success' : 'primary'">
+            <el-tag v-if="scope.row.extra.catalogState" :type="scope.row.extra.catalogState.done ? 'success' : 'primary'">
               {{scope.row.extra.catalogState.message}}
             </el-tag>
-            <el-tag :type="scope.row.extra.visaState.done ? 'success' : 'primary'">
+            <el-tag v-if="scope.row.extra.visaState" :type="scope.row.extra.visaState.done ? 'success' : 'primary'">
               {{scope.row.extra.visaState.message}}
+            </el-tag>
+            <el-tag v-if="scope.row.extra.checklistState" :type="scope.row.extra.checklistState.done ? 'success' : 'primary'">
+              {{scope.row.extra.checklistState.message || '未知状态'}}
             </el-tag>
           </template>
           <el-tag :type="tagState(scope.row.state)" v-else>

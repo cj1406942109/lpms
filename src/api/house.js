@@ -206,6 +206,20 @@ export function confirmVisa (visaId, time, address) {
   })
 }
 
+/**
+ * 面签环节更新接单表
+ * @param {*} visaId id
+ */
+export function confirmChecklist (visaId) {
+  return request({
+    url: '/house/visa/checklist/confirm',
+    method: 'post',
+    data: qs.stringify({
+      visaId
+    })
+  })
+}
+
 // ************************* 面签结束 *******************************
 
 // ************************* 评估下单开始 *******************************
