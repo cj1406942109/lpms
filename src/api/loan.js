@@ -83,9 +83,9 @@ export function assinTaskToUser (rootId, employeeId) {
 }
 
 /**
- * 报表相关接口
+ * 报表相关接口，获取二手房贷款报表
  */
-export function getOutputList () {
+export function getHouseOutputList () {
   return request({
     url: '/output',
     method: 'get'
@@ -93,11 +93,31 @@ export function getOutputList () {
 }
 
 /**
- * 二手房报表相关接口
+ * 二手房报表相关接口，重新生成二手房贷款报表
  */
-export function getHouseOutputList () {
+export function generateHouseOutputList () {
   return request({
     url: '/output/createHouse',
+    method: 'get'
+  })
+}
+
+/**
+ * 报表相关接口，获取抵押贷款报表
+ */
+export function getMortgageOutputList () {
+  return request({
+    url: '/output/mortgage',
+    method: 'get'
+  })
+}
+
+/**
+ * 二手房报表相关接口，重新生成抵押贷款报表
+ */
+export function generateMortgageOutputList () {
+  return request({
+    url: '/output/createMortgage',
     method: 'get'
   })
 }
