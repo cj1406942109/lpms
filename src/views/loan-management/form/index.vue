@@ -91,36 +91,92 @@
             <el-table-column width="150" prop="reportTotal" label="报告评估总额"></el-table-column>
             <el-table-column width="150" prop="reportSingle" label="报告单价"></el-table-column>
             <el-table-column width="150" prop label="担保函编号"></el-table-column>
-            <el-table-column width="150" prop="guaranteeTime" label="担保函日期"></el-table-column>
+            <el-table-column width="150" prop="guaranteeTime" label="担保函日期">
+              <template slot-scope="scope">
+                {{formatTime(scope.row.guaranteeTime)}}
+              </template>
+            </el-table-column>
             <el-table-column width="150" prop="loanTotal" label="贷款金额"></el-table-column>
             <el-table-column width="150" prop="loanYear" label="贷款年限"></el-table-column>
             <el-table-column width="200" prop="idcard" label="身份证号码"></el-table-column>
-            <el-table-column width="150" prop="visaTime" label="签约时间"></el-table-column>
+            <el-table-column width="150" prop="visaTime" label="签约时间">
+              <template slot-scope="scope">
+                {{formatTime(scope.row.visaTime)}}
+              </template>
+            </el-table-column>
             <el-table-column width="150" prop label="面签费时间"></el-table-column>
             <el-table-column width="150" prop label="面签费金额"></el-table-column>
             <el-table-column width="150" prop label="询价编号"></el-table-column>
             <el-table-column width="150" prop label="业务编号"></el-table-column>
-            <el-table-column width="150" prop="orderTime" label="下单时间"></el-table-column>
+            <el-table-column width="150" prop="orderTime" label="下单时间">
+              <template slot-scope="scope">
+                {{formatTime(scope.row.orderTime)}}
+              </template>
+            </el-table-column>
             <el-table-column width="150" prop="isUpReport" label="上报"></el-table-column>
-            <el-table-column width="150" prop="approveTime" label="审批通过时间"></el-table-column>
+            <el-table-column width="150" prop="approveTime" label="审批通过时间">
+              <template slot-scope="scope">
+                {{formatTime(scope.row.approveTime)}}
+              </template>
+            </el-table-column>
             <el-table-column width="150" prop="guaranteeCost" label="担保函结费"></el-table-column>
-            <el-table-column width="150" prop="formalReportTime" label="正式报告时间"></el-table-column>
-            <el-table-column width="150" prop="mortgageFileCompanyTime" label="抵押资料回公司时间"></el-table-column>
-            <el-table-column width="150" prop="mortgageTime" label="进抵押时间"></el-table-column>
+            <el-table-column width="150" prop="formalReportTime" label="正式报告时间">
+              <template slot-scope="scope">
+                {{formatTime(scope.row.formalReportTime)}}
+              </template>
+            </el-table-column>
+            <el-table-column width="150" prop="mortgageFileCompanyTime" label="抵押资料回公司时间">
+              <template slot-scope="scope">
+                {{formatTime(scope.row.mortgageFileCompanyTime)}}
+              </template>
+            </el-table-column>
+            <el-table-column width="150" prop="mortgageTime" label="进抵押时间">
+              <template slot-scope="scope">
+                {{formatTime(scope.row.mortgageTime)}}
+              </template>
+            </el-table-column>
             <el-table-column width="150" prop="mortgageOperator" label="抵押办理人"></el-table-column>
-            <el-table-column width="150" prop="loanTime" label="放款时间"></el-table-column>
-            <el-table-column width="150" prop="certificateCompanyTime" label="证回公司时间"></el-table-column>
+            <el-table-column width="150" prop="loanTime" label="放款时间">
+              <template slot-scope="scope">
+                {{formatTime(scope.row.loanTime)}}
+              </template>
+            </el-table-column>
+            <el-table-column width="150" prop="certificateCompanyTime" label="证回公司时间">
+              <template slot-scope="scope">
+                {{formatTime(scope.row.certificateCompanyTime)}}
+              </template>
+            </el-table-column>
             <el-table-column width="150" prop="charge" label="回款"></el-table-column>
-            <el-table-column width="150" prop="chargeTime" label="回款时间"></el-table-column>
+            <el-table-column width="150" prop="chargeTime" label="回款时间">
+              <template slot-scope="scope">
+                {{formatTime(scope.row.chargeTime)}}
+              </template>
+            </el-table-column>
             <el-table-column width="150" prop="chargeAmount" label="回款金额"></el-table-column>
             <el-table-column width="150" prop="chargeType" label="回款类型"></el-table-column>
             <el-table-column width="150" prop="chargeBank" label="转账银行"></el-table-column>
             <el-table-column width="150" prop="chargeMan" label="转账人"></el-table-column>
-            <el-table-column width="150" prop="nominalFeeTime" label="工本费时间"></el-table-column>
+            <el-table-column width="150" prop="nominalFeeTime" label="工本费时间">
+              <template slot-scope="scope">
+                {{formatTime(scope.row.nominalFeeTime)}}
+              </template>
+            </el-table-column>
             <el-table-column width="200" prop="nominalFee" label="工本费金额（100元 / 单）"></el-table-column>
-            <el-table-column width="200" prop="mortgageFileTransferTime" label="抵押资料回房交所时间"></el-table-column>
-            <el-table-column width="200" prop="otherCardTransferTime" label="他项 + 证回房交所时间"></el-table-column>
-            <el-table-column width="150" prop="caseBackToBankTime" label="案子回行里时间"></el-table-column>
+            <el-table-column width="200" prop="mortgageFileTransferTime" label="抵押资料回房交所时间">
+              <template slot-scope="scope">
+                {{formatTime(scope.row.mortgageFileTransferTime)}}
+              </template>
+            </el-table-column>
+            <el-table-column width="200" prop="otherCardTransferTime" label="他项 + 证回房交所时间">
+              <template slot-scope="scope">
+                {{formatTime(scope.row.otherCardTransferTime)}}
+              </template>
+            </el-table-column>
+            <el-table-column width="150" prop="caseBackToBankTime" label="案子回行里时间">
+              <template slot-scope="scope">
+                {{formatTime(scope.row.caseBackToBankTime)}}
+              </template>
+            </el-table-column>
             <el-table-column width="150" prop="remark" label="备注"></el-table-column>
           </el-table>
         </div>
