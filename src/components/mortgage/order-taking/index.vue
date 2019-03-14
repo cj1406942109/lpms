@@ -72,7 +72,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="申请贷款金额" prop="loanAmount">
-            <el-input clearable v-model.number="checklistForm.loanAmount" type="number"><template slot="append">元</template></el-input>
+            <el-input clearable v-model.number="checklistForm.loanAmount" type="number"><template slot="append">万元</template></el-input>
           </el-form-item>
           <el-form-item label="申请贷款期限" prop="loanPeriod">
             <el-input clearable v-model.number="checklistForm.loanPeriod" type="number"><template slot="append">月</template></el-input>
