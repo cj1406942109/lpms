@@ -120,7 +120,9 @@
             <el-input clearable v-model="checklistForm.managerPhone"></el-input>
           </el-form-item>
           <el-form-item label="评估公司" prop="evaluationCompany">
-            <el-input clearable v-model="checklistForm.evaluationCompany"></el-input>
+            <el-select placeholder="请选择" v-model="checklistForm.evaluationCompany">
+              <el-option v-for="item in evaluationCompany.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="房屋成交价" prop="houseTransactionPrice">
             <el-input clearable v-model.number="checklistForm.houseTransactionPrice" type="number" min="0"><template slot="append">万元</template></el-input>
@@ -406,7 +408,7 @@ export default {
           { required: true, message: '客户经理电话不能为空' },
           { pattern: /^1[0-9]{10}$/, message: '手机号格式错误' }
         ],
-        evaluationCompany: [{ required: true, message: '评估公司不能为空' }],
+        evaluationCompany: [{ required: true, message: '请选择评估公司' }],
         houseTransactionPrice: [
           { required: true, message: '成交价不能为空' },
           { type: 'number', message: '成交价必须为数字值' }
@@ -468,6 +470,10 @@ export default {
       },
       listSource: {
         key: 'mortgagechecklistsource',
+        value: []
+      },
+      evaluationCompany: {
+        key: 'mortgageOrderCompany',
         value: []
       }
     }
@@ -596,6 +602,7 @@ export default {
     this.getStaticIndex(this.loanType)
     this.getStaticIndex(this.sellerHandle)
     this.getStaticIndex(this.listSource)
+    this.getStaticIndex(this.evaluationCompany)
   }
 }
 </script>
