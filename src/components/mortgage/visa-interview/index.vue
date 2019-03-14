@@ -406,7 +406,9 @@
                 <el-input clearable v-model="applicationForm.proposerIdCard" placeholder="二代居民身份证号码"></el-input>
               </el-form-item>
               <el-form-item label="居住情况" prop="proposerInhabitingInfo">
-                <el-input clearable v-model="applicationForm.proposerInhabitingInfo"></el-input>
+                <el-select v-model="applicationForm.proposerInhabitingInfo" placeholder="请选择">
+                  <el-option v-for="item in livingSituation.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
+                </el-select>
               </el-form-item>
               <el-form-item label="居住地址" prop="proposerAddress">
                 <el-input clearable v-model="applicationForm.proposerAddress"></el-input>
@@ -863,6 +865,10 @@ export default {
       visaPlace: {
         key: 'mortgageviewplace',
         value: []
+      },
+      livingSituation: {
+        key: 'livingSituation',
+        value: []
       }
     }
   },
@@ -908,6 +914,7 @@ export default {
     this.getStaticIndex(this.paymentMethod)
     this.getStaticIndex(this.isYour)
     this.getStaticIndex(this.visaPlace)
+    this.getStaticIndex(this.livingSituation)
   },
   methods: {
     saveCatalogHandler () {
@@ -1070,7 +1077,7 @@ export default {
           background-color: #fafafa;
         }
         tr {
-          
+
           td, th {
             padding: 10px 5px;
             text-align: center;
