@@ -769,7 +769,7 @@ export default {
           { required: true, message: '身份证号码不能为空' },
           { pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}[0-9Xx]$)/, message: '身份证号码格式错误' }
         ],
-        proposerInhabitingInfo: [{ required: true, message: '居住情况不能为空' }],
+        proposerInhabitingInfo: [{ required: true, message: '请选择居住情况' }],
         proposerAddress: [{ required: true, message: '居住地址不能为空' }],
         proposerLocalResident: [{ required: true, message: '居住年限不能为空' }],
         proposerLodgingInfo: [{ required: true, message: '请选择住房情况' }],
