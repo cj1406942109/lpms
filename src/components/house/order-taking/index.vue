@@ -111,7 +111,10 @@
         <el-col :span="10">
           <h3>客户借款基本信息</h3>
           <el-form-item label="贷款银行" prop="loanBank">
-            <el-input clearable v-model="checklistForm.loanBank"></el-input>
+            <el-select placeholder="请选择" v-model="checklistForm.loanBank">
+              <el-option v-for="item in loanBank.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
+            </el-select>
+            <!-- <el-input clearable v-model="checklistForm.loanBank"></el-input> -->
           </el-form-item>
           <el-form-item label="客户经理姓名" prop="manager">
             <el-input clearable v-model="checklistForm.manager"></el-input>
@@ -238,7 +241,10 @@
             </el-select>
           </el-form-item>
           <el-form-item label="中介名称" prop="agentName">
-            <el-input clearable v-model="checklistForm.agentName"></el-input>
+            <el-select v-model="checklistForm.agentName" placeholder="请选择">
+              <el-option v-for="item in agentSource.value" :key="item.id" :label="item.value" :value="item.id"></el-option>
+            </el-select>
+            <!-- <el-input clearable v-model="checklistForm.agentName"></el-input> -->
           </el-form-item>
           <el-form-item label="其他备注事项" prop="otherRemark">
             <el-input clearable type="textarea" v-model="checklistForm.otherRemark" :autosize="{ minRows: 4, maxRows: 6}"></el-input>
@@ -448,6 +454,10 @@ export default {
         key: 'mortgagechecklistcardtype',
         value: []
       },
+      loanBank: {
+        key: 'loanBank',
+        value: []
+      },
       houseType: {
         key: 'sechandregisterlisthousetype',
         value: []
@@ -470,6 +480,10 @@ export default {
       },
       listSource: {
         key: 'mortgagechecklistsource',
+        value: []
+      },
+      agentSource: {
+        key: 'agentSource',
         value: []
       },
       evaluationCompany: {
@@ -603,6 +617,8 @@ export default {
     this.getStaticIndex(this.sellerHandle)
     this.getStaticIndex(this.listSource)
     this.getStaticIndex(this.evaluationCompany)
+    this.getStaticIndex(this.loanBank)
+    this.getStaticIndex(this.agentSource)
   }
 }
 </script>
