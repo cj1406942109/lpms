@@ -261,6 +261,33 @@ export const constantRouterMap = [
       component: () => import('@/views/loan-house/charge/editInfo')
     }]
   },
+  // TODO: 新添加的奇怪需求
+  {
+    path: '/mortgage',
+    component: Layout,
+    redirect: 'noredirect',
+    name: '抵押',
+    meta: { title: '抵押', icon: 'mortgage' },
+    children: [{
+      path: 'mortgage',
+      component: () => import('@/views/loan-house/mortgage'),
+      name: '二手房贷款-抵押',
+      meta: { title: '抵押', icon: 'mortgage' }
+    }]
+  },
+  {
+    path: '/guarantee',
+    component: Layout,
+    redirect: 'noredirect',
+    name: '抵押',
+    meta: { title: '抵押', icon: 'guarantee' },
+    children: [{
+      path: 'guarantee',
+      component: () => import('@/views/loan-house/guarantee'),
+      name: '二手房贷款-担保',
+      meta: { title: '担保', icon: 'guarantee' }
+    }]
+  },
   {
     path: '/loan-management',
     component: Layout,
